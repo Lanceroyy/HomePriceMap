@@ -1,0 +1,38 @@
+name: Daily home price data refresh
+
+on:
+  schedule:
+    # Runs once a day at 13:00 UTC (~6am Pacific / 9am Eastern).
+    # Zillow only republishes ZHVI around the 16th of each month, so most
+    # days this just re-confirms the numbers haven't changed -- cheap and
+    # keeps the "last updated" timestamp honest.
+    - cron: "0 13 * * *"
+  workflow_dispatch: {}  # lets you trigger a manual refresh from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch latest Zillow ZHVI data
+        run: python scripts/fetch_data.py
+
+      - name: Commit updated data if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- data/county_prices.json data/city_prices.json; then
+            git add data/county_prices.json data/city_prices.json
+            git commit -m "chore: daily home price data refresh"
+            git push
+          else
+            echo "No data changes today."
+          fi
