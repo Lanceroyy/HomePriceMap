@@ -76,6 +76,7 @@ HomePriceMap/
 ├── scripts/
 │   ├── fetch_data.py       daily data refresh
 │   └── build_city_coords.py  one-time/yearly coordinate builder
-├── .github/workflows/update-data.yml
-└── MONETIZATION.md          revenue ideas for this project
+└── .github/workflows/update-data.yml
 ```
+
+(`MONETIZATION.md` exists locally as a private planning doc but is gitignored — not pushed to the repo.)

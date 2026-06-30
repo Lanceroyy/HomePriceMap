@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Price Map — Median Home Values by County &amp; City</title>
+<meta name="description" content="Interactive map of median U.S. home prices by county and city, refreshed daily from Zillow Research data.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Home<span>Price</span>Map</div>
+  <nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="counties.html">Counties</a>
+    <a href="cities.html">Cities</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Median home prices, <span>mapped</span>.</h1>
+  <p>Explore current median home values across every U.S. county and thousands of cities. Data refreshes automatically every day from Zillow's public research data.</p>
+</div>
+
+<div class="choice-grid">
+  <a class="choice-card" href="counties.html">
+    <span class="icon">🗺️</span>
+    <h2>County Map</h2>
+    <p>A color-coded choropleth of median home values across all U.S. counties. Good for spotting regional trends and comparing metro areas.</p>
+  </a>
+  <a class="choice-card" href="cities.html">
+    <span class="icon">📍</span>
+    <h2>City Map</h2>
+    <p>Drill down to individual cities and towns. Search by name, click a marker for the median price and year-over-year change.</p>
+  </a>
+</div>
+
+<div class="stat-strip" id="statStrip">
+  <div><b id="statCounties">—</b>counties tracked</div>
+  <div><b id="statCities">—</b>cities tracked</div>
+  <div><b id="statUpdated">—</b>last data refresh</div>
+</div>
+
+<footer class="site-footer">
+  Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
+  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+</footer>
+
+<script>
+async function loadStats() {
+  try {
+    const [c, ci] = await Promise.all([
+      fetch('data/county_prices.json').then(r => r.json()),
+      fetch('data/city_prices.json').then(r => r.json()),
+    ]);
+    document.getElementById('statCounties').textContent = c.count.toLocaleString();
+    document.getElementById('statCities').textContent = ci.count.toLocaleString();
+    const d = new Date(c.updated);
+    document.getElementById('statUpdated').textContent = isNaN(d) ? c.updated : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  } catch (e) {
+    console.error('Failed to load stats', e);
+  }
+}
+loadStats();
+</script>
+</body>
+</html>

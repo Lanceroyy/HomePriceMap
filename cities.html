@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Map — Home Price Map</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Home<span>Price</span>Map</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="counties.html">Counties</a>
+    <a href="cities.html" class="active">Cities</a>
+  </nav>
+</header>
+
+<div class="map-wrap">
+  <div id="map"></div>
+
+  <div class="panel">
+    <h3>Search cities</h3>
+    <input type="search" id="searchBox" list="cityList" placeholder="e.g. Austin, TX">
+    <datalist id="cityList"></datalist>
+    <div class="ad-slot">Ad space — see MONETIZATION.md</div>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <div class="placeholder">Click a marker to see its median home value.</div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/common.js"></script>
+<script src="js/cities.js"></script>
+</body>
+</html>
