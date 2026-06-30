@@ -31,6 +31,8 @@ GAZETTEER_URL = (
 ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = ROOT / "data" / "city_coords.json"
 
+BOM = "﻿"
+
 # Census "place" names carry a legal/statistical suffix (e.g. "Springfield city",
 # "Cary town") that Zillow's RegionName usually omits. Strip it so the two
 # datasets join cleanly.
@@ -46,6 +48,10 @@ def normalize(name: str) -> str:
     return name
 
 
+def clean_key(k: str) -> str:
+    return k.strip().lstrip(BOM)
+
+
 def main():
     print(f"Downloading {GAZETTEER_URL} ...")
     req = urllib.request.Request(GAZETTEER_URL, headers={"User-Agent": "Mozilla/5.0"})
@@ -54,19 +60,34 @@ def main():
 
     zf = zipfile.ZipFile(io.BytesIO(raw))
     txt_name = next(n for n in zf.namelist() if n.lower().endswith(".txt"))
-    data = zf.read(txt_name).decode("latin-1")
+    raw_bytes = zf.read(txt_name)
+    # utf-8-sig strips a leading UTF-8 byte-order-mark if present (Census's
+    # gazetteer files often have one). Decoding that BOM as latin-1 instead
+    # glues garbage characters onto the first header name ("USPS" becomes
+    # unmatchable), which silently produces zero matches with no error.
+    try:
+        data = raw_bytes.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        data = raw_bytes.decode("latin-1").lstrip(BOM)
 
     reader = csv.DictReader(io.StringIO(data), delimiter="\t")
+    fieldnames = [clean_key(f) for f in (reader.fieldnames or [])]
+    print(f"Detected columns: {fieldnames}")
+    if "USPS" not in fieldnames or "NAME" not in fieldnames:
+        print("WARNING: expected columns USPS/NAME not found - check delimiter/encoding.")
+
     # Gazetteer columns include: USPS (state abbr), NAME, INTPTLAT, INTPTLONG
     lookup = {}
     count = 0
+    skipped = 0
     for row in reader:
-        row = {k.strip(): v.strip() for k, v in row.items() if k}
+        row = {clean_key(k): (v.strip() if v else v) for k, v in row.items() if k}
         state = row.get("USPS")
         name = row.get("NAME")
         lat = row.get("INTPTLAT")
         lon = row.get("INTPTLONG")
         if not (state and name and lat and lon):
+            skipped += 1
             continue
         key = f"{state}|{normalize(name)}"
         lookup[key] = {
@@ -81,7 +102,10 @@ def main():
     with open(OUT_PATH, "w") as f:
         json.dump(lookup, f, separators=(",", ":"))
 
-    print(f"Wrote {count} places to {OUT_PATH}")
+    print(f"Wrote {count} places to {OUT_PATH} ({skipped} rows skipped as incomplete)")
+    if count == 0:
+        print("ERROR: 0 places written - something is still wrong with parsing. "
+              "Check the 'Detected columns' line above against USPS/NAME/INTPTLAT/INTPTLONG.")
 
 
 if __name__ == "__main__":
