@@ -53,7 +53,7 @@ def clean_key(k: str) -> str:
 
 
 def main():
-    print(f"Downloading {GAZETTEER_URL} ...")
+    print("Downloading " + GAZETTEER_URL + " ...")
     req = urllib.request.Request(GAZETTEER_URL, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=60) as resp:
         raw = resp.read()
@@ -61,22 +61,19 @@ def main():
     zf = zipfile.ZipFile(io.BytesIO(raw))
     txt_name = next(n for n in zf.namelist() if n.lower().endswith(".txt"))
     raw_bytes = zf.read(txt_name)
-    # utf-8-sig strips a leading UTF-8 byte-order-mark if present (Census's
-    # gazetteer files often have one). Decoding that BOM as latin-1 instead
-    # glues garbage characters onto the first header name ("USPS" becomes
-    # unmatchable), which silently produces zero matches with no error.
+    # utf-8-sig strips a leading UTF-8 byte-order-mark if present.
     try:
         data = raw_bytes.decode("utf-8-sig")
     except UnicodeDecodeError:
         data = raw_bytes.decode("latin-1").lstrip(BOM)
 
-    reader = csv.DictReader(io.StringIO(data), delimiter="\t")
+    # Census gazetteer files are pipe-delimited, not tab-delimited.
+    reader = csv.DictReader(io.StringIO(data), delimiter="|")
     fieldnames = [clean_key(f) for f in (reader.fieldnames or [])]
-    print(f"Detected columns: {fieldnames}")
+    print("Detected columns: " + str(fieldnames))
     if "USPS" not in fieldnames or "NAME" not in fieldnames:
         print("WARNING: expected columns USPS/NAME not found - check delimiter/encoding.")
 
-    # Gazetteer columns include: USPS (state abbr), NAME, INTPTLAT, INTPTLONG
     lookup = {}
     count = 0
     skipped = 0
@@ -89,7 +86,7 @@ def main():
         if not (state and name and lat and lon):
             skipped += 1
             continue
-        key = f"{state}|{normalize(name)}"
+        key = state + "|" + normalize(name)
         lookup[key] = {
             "name": PLACE_SUFFIXES.sub("", name).strip(),
             "state": state,
@@ -102,10 +99,9 @@ def main():
     with open(OUT_PATH, "w") as f:
         json.dump(lookup, f, separators=(",", ":"))
 
-    print(f"Wrote {count} places to {OUT_PATH} ({skipped} rows skipped as incomplete)")
+    print("Wrote " + str(count) + " places to " + str(OUT_PATH) + " (" + str(skipped) + " rows skipped as incomplete)")
     if count == 0:
-        print("ERROR: 0 places written - something is still wrong with parsing. "
-              "Check the 'Detected columns' line above against USPS/NAME/INTPTLAT/INTPTLONG.")
+        print("ERROR: 0 places written - check the Detected columns line above against USPS/NAME/INTPTLAT/INTPTLONG.")
 
 
 if __name__ == "__main__":
