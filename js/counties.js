@@ -12,6 +12,7 @@ const searchBox = document.getElementById("searchBox");
 const countyListEl = document.getElementById("countyList");
 
 const layerByKey = {};
+const layerByFips = {};
 
 Promise.all([
   fetch("data/county_prices.json").then(r => r.json()),
@@ -42,6 +43,7 @@ Promise.all([
 
       const key = `${rec.name}, ${rec.state}`;
       layerByKey[key] = lyr;
+      layerByFips[fips] = lyr;
 
       lyr.bindTooltip(`${rec.name}, ${rec.state}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
 
@@ -72,6 +74,18 @@ Promise.all([
       if (rec) showInfo(infoBox, { title: searchBox.value, value: rec.value, yoy: rec.yoy_pct });
     }
   });
+
+  // Deep link support: /counties.html?fips=06037 flies to and highlights that county.
+  // Used by the SEO county pages' "View on interactive map" links.
+  const params = new URLSearchParams(window.location.search);
+  const linkedFips = params.get("fips");
+  if (linkedFips && layerByFips[linkedFips]) {
+    const lyr = layerByFips[linkedFips];
+    const rec = counties[linkedFips];
+    map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
+    lyr.setStyle({ weight: 3, color: "#ffffff" });
+    if (rec) showInfo(infoBox, { title: `${rec.name}, ${rec.state}`, value: rec.value, yoy: rec.yoy_pct });
+  }
 }).catch(err => {
   console.error(err);
   infoBox.innerHTML = `<div class="placeholder">Couldn't load map data. Check your connection and try again.</div>`;
