@@ -2,6 +2,18 @@
 
 const COLOR_RAMP = ["#1a3a5c", "#1e5f8a", "#2389b0", "#34b3a8", "#4fcf8b", "#a8e063", "#f4d35e", "#f4a259", "#ef6461", "#d63d5e"];
 
+// --- Mortgage-rate affiliate CTA -----------------------------------------
+// Set AFFILIATE_URL once you're approved for an affiliate program (e.g.
+// LendingTree, Credible, Rocket Mortgage). Leave it null and the CTA simply
+// won't render anywhere -- no broken/placeholder links go live by accident.
+const AFFILIATE_URL = null; // e.g. "https://www.lendingtree.com/your-affiliate-id"
+const AFFILIATE_LABEL = "Check today's mortgage rates";
+
+function affiliateCta(regionLabel) {
+  if (!AFFILIATE_URL) return "";
+  return `<a class="mortgage-cta" href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
+}
+
 function fmtMoney(v) {
   if (v == null) return "n/a";
   return "$" + Math.round(v).toLocaleString();
@@ -49,5 +61,6 @@ function showInfo(el, { title, value, yoy }) {
     <div class="region-name">${title}</div>
     <div class="region-value">${fmtMoney(value)}</div>
     <div class="region-yoy ${cls}">${fmtYoy(yoy)} year-over-year</div>
+    ${affiliateCta(title)}
   `;
 }
