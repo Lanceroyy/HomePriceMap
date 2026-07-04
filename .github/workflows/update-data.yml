@@ -32,7 +32,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/county_prices.json data/city_prices.json counties/ sitemap.xml robots.txt
+          git add data/county_prices.json data/city_prices.json data/history/ counties/ sitemap.xml robots.txt
           if ! git diff --cached --quiet; then
             git commit -m "chore: daily home price data + SEO page refresh"
             git push

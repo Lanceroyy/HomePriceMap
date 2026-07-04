@@ -39,6 +39,7 @@ CITY_CSV_URL = (
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
+HISTORY_DIR = DATA_DIR / "history"
 CITY_COORDS_PATH = DATA_DIR / "city_coords.json"
 
 DATE_COL_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -172,6 +173,43 @@ def build_city_data(rows: list[dict], cols: list[str], coords: dict) -> list:
     return out
 
 
+def load_history(path: Path) -> dict:
+    if path.exists():
+        try:
+            return json.loads(path.read_text())
+        except json.JSONDecodeError:
+            print(f"  WARNING: {path} was unreadable, starting fresh history file.")
+    return {}
+
+
+def update_history(history_path: Path, keyed_data: dict) -> None:
+    """Append one time-series point per region, but only when the underlying
+    Zillow data month (as_of) actually advances. Zillow republishes monthly,
+    so this keeps history at ~12 points/year/region instead of 365 identical
+    daily copies.
+    """
+    history = load_history(history_path)
+    series = history.setdefault("series", {})
+    changed = False
+    for key, rec in keyed_data.items():
+        as_of = rec.get("as_of")
+        value = rec.get("value")
+        if as_of is None or value is None:
+            continue
+        points = series.setdefault(key, [])
+        if points and points[-1]["as_of"] == as_of:
+            continue  # already have this month recorded
+        points.append({"as_of": as_of, "value": value, "yoy_pct": rec.get("yoy_pct")})
+        changed = True
+    if changed:
+        history["updated"] = datetime.utcnow().isoformat() + "Z"
+        history_path.parent.mkdir(parents=True, exist_ok=True)
+        history_path.write_text(json.dumps(history, separators=(",", ":")))
+        print(f"  history: appended new monthly snapshot -> {history_path.name}")
+    else:
+        print(f"  history: no new Zillow month yet, {history_path.name} unchanged")
+
+
 def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -212,6 +250,12 @@ def main():
     (DATA_DIR / "city_prices.json").write_text(json.dumps(city_out, separators=(",", ":")))
 
     print(f"Wrote {len(county_data)} counties and {len(city_data)} cities.")
+
+    # Archive a time-series point per region (skipped automatically if this
+    # month's Zillow numbers haven't changed since the last recorded point).
+    update_history(HISTORY_DIR / "county_history.json", county_data)
+    city_keyed = {f"{d['state']}|{normalize(d['name'])}": d for d in city_data}
+    update_history(HISTORY_DIR / "city_history.json", city_keyed)
 
 
 if __name__ == "__main__":
