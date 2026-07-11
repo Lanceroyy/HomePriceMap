@@ -182,6 +182,32 @@ footer.site-footer {
 .info-box .region-yoy.down { color: var(--warn); }
 .info-box .placeholder { color: var(--text-dim); }
 
+.crime-block {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.crime-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: 5px;
+}
+.crime-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin: 2px 0;
+}
+.crime-row b { color: var(--text); font-weight: 600; }
+.crime-coverage {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
 .mortgage-cta {
   display: block;
   margin-top: 12px;

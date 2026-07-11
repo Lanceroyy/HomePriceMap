@@ -14,11 +14,15 @@ const countyListEl = document.getElementById("countyList");
 const layerByKey = {};
 const layerByFips = {};
 
+let crimeByFips = {};
+
 Promise.all([
   fetch("data/county_prices.json").then(r => r.json()),
   fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json").then(r => r.json()),
-]).then(([priceData, topo]) => {
+  fetch("data/crime_data_county.json").then(r => r.ok ? r.json() : null).catch(() => null),
+]).then(([priceData, topo, crimeData]) => {
   const counties = priceData.counties;
+  if (crimeData) crimeByFips = crimeData.counties;
   const values = Object.values(counties).map(c => c.value);
   const breaks = quantileBreaks(values, COLOR_RAMP.length);
   renderLegend(legendEl, breaks);
@@ -49,14 +53,14 @@ Promise.all([
 
       lyr.on("mouseover", () => {
         lyr.setStyle({ weight: 2, color: "#ffffff" });
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct });
+        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
       });
       lyr.on("mouseout", () => {
         lyr.setStyle({ weight: 0.5, color: "#0f1419" });
       });
       lyr.on("click", () => {
         map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct });
+        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
       });
     },
   }).addTo(map);
@@ -71,7 +75,7 @@ Promise.all([
       map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
       const fips = Object.keys(counties).find(f => `${counties[f].name}, ${counties[f].state}` === searchBox.value);
       const rec = counties[fips];
-      if (rec) showInfo(infoBox, { title: searchBox.value, value: rec.value, yoy: rec.yoy_pct });
+      if (rec) showInfo(infoBox, { title: searchBox.value, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
     }
   });
 
@@ -84,7 +88,7 @@ Promise.all([
     const rec = counties[linkedFips];
     map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
     lyr.setStyle({ weight: 3, color: "#ffffff" });
-    if (rec) showInfo(infoBox, { title: `${rec.name}, ${rec.state}`, value: rec.value, yoy: rec.yoy_pct });
+    if (rec) showInfo(infoBox, { title: `${rec.name}, ${rec.state}`, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[linkedFips] });
   }
 }).catch(err => {
   console.error(err);

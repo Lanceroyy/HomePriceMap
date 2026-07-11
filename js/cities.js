@@ -12,10 +12,15 @@ const searchBox = document.getElementById("searchBox");
 const cityListEl = document.getElementById("cityList");
 
 const markerByKey = {};
+let crimeByCityKey = {};
 
-fetch("data/city_prices.json")
-  .then(r => r.json())
-  .then(priceData => {
+Promise.all([
+  fetch("data/city_prices.json").then(r => r.json()),
+  fetch("data/crime_data_city.json").then(r => r.ok ? r.json() : null).catch(() => null),
+])
+  .then(([priceData, crimeData]) => {
+    if (crimeData) crimeByCityKey = crimeData.cities;
+
     const cities = priceData.cities;
     const values = cities.map(c => c.value);
     const breaks = quantileBreaks(values, COLOR_RAMP.length);
@@ -25,6 +30,7 @@ fetch("data/city_prices.json")
 
     cities.forEach(rec => {
       const key = `${rec.name}, ${rec.state}`;
+      const crimeKey = `${rec.state}|${normalizePlace(rec.name)}`;
       const radius = 4 + Math.min(10, Math.sqrt(rec.value) / 120);
       const marker = L.circleMarker([rec.lat, rec.lon], {
         radius,
@@ -37,11 +43,11 @@ fetch("data/city_prices.json")
       marker.bindTooltip(`${key}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
       marker.on("click", () => {
         map.setView([rec.lat, rec.lon], Math.max(map.getZoom(), 9));
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct });
+        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByCityKey[crimeKey] });
       });
 
       marker.addTo(cluster);
-      markerByKey[key] = { marker, rec };
+      markerByKey[key] = { marker, rec, crimeKey };
     });
 
     const names = Object.keys(markerByKey).sort();
@@ -51,7 +57,7 @@ fetch("data/city_prices.json")
       const hit = markerByKey[searchBox.value];
       if (hit) {
         map.setView([hit.rec.lat, hit.rec.lon], 10);
-        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct });
+        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct, crime: crimeByCityKey[hit.crimeKey] });
         hit.marker.openTooltip();
       }
     });

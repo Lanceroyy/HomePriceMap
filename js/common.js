@@ -14,6 +14,35 @@ function affiliateCta(regionLabel) {
   return `<a class="mortgage-cta" href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
 }
 
+// Mirrors normalize_place() in scripts/process_crime_data.py / fetch_data.py
+// so city names produce the same lookup key client-side as the crime/history
+// JSON files were keyed with server-side.
+const PLACE_SUFFIX_RE = /\s+(city|town|village|township|CDP|borough|municipality)\s*$/i;
+function normalizePlace(name) {
+  if (!name) return "";
+  return name.replace(PLACE_SUFFIX_RE, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function fmtRate(v) {
+  if (v == null) return "n/a";
+  return Math.round(v).toLocaleString();
+}
+
+function crimeBlock(crime) {
+  if (!crime) return "";
+  const coverage = crime.cities_matched
+    ? `<div class="crime-coverage">Based on ${crime.cities_matched} reporting ${crime.cities_matched === 1 ? "city" : "cities"} in this county</div>`
+    : "";
+  return `
+    <div class="crime-block">
+      <div class="crime-title">Crime (${crime.year}, per 100k residents)</div>
+      <div class="crime-row"><span>Violent crime</span><b>${fmtRate(crime.violent_crime_rate)}</b></div>
+      <div class="crime-row"><span>Property crime</span><b>${fmtRate(crime.property_crime_rate)}</b></div>
+      ${coverage}
+    </div>
+  `;
+}
+
 function fmtMoney(v) {
   if (v == null) return "n/a";
   return "$" + Math.round(v).toLocaleString();
@@ -55,12 +84,13 @@ function renderLegend(el, breaks) {
   el.innerHTML = html;
 }
 
-function showInfo(el, { title, value, yoy }) {
+function showInfo(el, { title, value, yoy, crime }) {
   const cls = yoy > 0 ? "up" : yoy < 0 ? "down" : "";
   el.innerHTML = `
     <div class="region-name">${title}</div>
     <div class="region-value">${fmtMoney(value)}</div>
     <div class="region-yoy ${cls}">${fmtYoy(yoy)} year-over-year</div>
+    ${crimeBlock(crime)}
     ${affiliateCta(title)}
   `;
 }
