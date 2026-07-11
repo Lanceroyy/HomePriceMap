@@ -122,9 +122,13 @@ def parse_table8(path: Path):
         state_abbr = STATE_ABBR.get(state_raw)
         if not state_abbr:
             continue
+        # The FBI appends footnote markers directly onto some city names
+        # (e.g. "Los Angeles2" pointing at footnote 2), which would otherwise
+        # break name matching against city_prices.json.
+        city_clean = re.sub(r"\d+$", "", str(city_cell)).strip()
         rows.append({
             "state": state_abbr,
-            "city": str(city_cell).strip(),
+            "city": city_clean,
             "population": num(population),
             "violent_crime": num(row[3]),
             "murder": num(row[4]),
@@ -140,7 +144,7 @@ def parse_table8(path: Path):
     return rows
 
 
-def rate_per_100k(count: float, population: float):
+def rate_per_100k(count, population):
     if not population:
         return None
     return round((count / population) * 100000, 1)
@@ -191,7 +195,6 @@ def main():
 
     city_out = {}
     matched_cities = 0
-    # per-fips accumulators for the population-weighted county rollup
     county_acc = {}
 
     for r in crime_rows:
