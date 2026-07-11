@@ -32,6 +32,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Sync with any commits made since this job checked out (e.g. a
+          # human push in the few minutes this job took to run), so we never
+          # end up needing a force-push to get our changes in. --autostash
+          # temporarily shelves the just-generated data files so the pull
+          # can apply cleanly, then restores them.
+          git pull --rebase --autostash origin main
           git add data/county_prices.json data/city_prices.json data/history/ counties/ sitemap.xml robots.txt
           if ! git diff --cached --quiet; then
             git commit -m "chore: daily home price data + SEO page refresh"
