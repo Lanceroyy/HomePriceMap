@@ -13,6 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>County Map — Home Price Map</title>
+<meta name="description" content="Interactive choropleth map of median home values across every U.S. county, with crime data and year-over-year price trends.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -44,6 +45,17 @@
 
   <div class="legend" id="legend"></div>
 </div>
+
+<section class="content-section">
+  <h2>About the county map</h2>
+  <p>This map colors every county in the United States by its current median home value, using Zillow Research's Home Value Index (ZHVI). Darker, cooler colors indicate lower-priced counties; brighter, warmer colors indicate higher-priced ones. Hover over any county for a quick preview, or click one to lock in its details — median value, year-over-year price change, and local crime statistics where available — in the panel at the bottom of the screen.</p>
+
+  <h3>Data source and methodology</h3>
+  <p>Home price figures are pulled directly from Zillow Research's public ZHVI dataset via an automated job that runs daily, so the numbers here stay current with Zillow's own monthly releases. County boundaries are rendered from the U.S. Census Bureau's TIGER/Line geographic data via the open-source us-atlas project. Crime figures are sourced from the FBI's Uniform Crime Reporting Program and are shown as a population-weighted average of that county's reporting cities, since the FBI's own county-level table excludes crimes handled by any city police department within the county.</p>
+
+  <h3>Reading the map</h3>
+  <p>A county with no visible color fill, or shown in the darkest gray tone, simply means Zillow doesn't publish ZHVI data for that county — typically very rural counties with too few home sales to produce a statistically reliable estimate. This is a limitation of the underlying data, not an error in the map itself.</p>
+</section>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>

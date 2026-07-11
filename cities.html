@@ -13,6 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>City Map — Home Price Map</title>
+<meta name="description" content="Interactive map of median home values across thousands of U.S. cities and towns, with crime data and year-over-year price trends.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -44,6 +45,17 @@
 
   <div class="legend" id="legend"></div>
 </div>
+
+<section class="content-section">
+  <h2>About the city map</h2>
+  <p>Every marker on this map represents an individual city or town, colored by its current median home value from Zillow Research's Home Value Index (ZHVI). Use the search box to jump straight to a specific city, or click any marker to see its median value, year-over-year price change, and local crime statistics where the FBI has reporting data available for that city.</p>
+
+  <h3>Data source and methodology</h3>
+  <p>Home price figures come from Zillow Research's public ZHVI dataset, refreshed automatically every day. City coordinates are matched against the U.S. Census Bureau's Gazetteer place files. Crime statistics are sourced directly from the FBI's Uniform Crime Reporting Program's "Offenses Known to Law Enforcement by City" table, reflecting crimes reported by that city's own police department.</p>
+
+  <h3>Why some cities don't show a marker or crime data</h3>
+  <p>Not every city or town in the country is covered. Zillow's ZHVI only publishes estimates for places with enough recorded home sales to be statistically reliable, and the FBI only reports crime data for agencies that submitted a complete year of records. Smaller towns, especially ones without their own police department, are the most likely to be missing one or both figures — that's a gap in the underlying public data, not an error on this site.</p>
+</section>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/common.js"></script>

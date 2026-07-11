@@ -254,3 +254,37 @@ footer.site-footer {
   text-align: center;
   margin-top: 14px;
 }
+
+/* ---------- Content sections (About/methodology/FAQ text) ---------- */
+.content-section {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 20px 60px;
+}
+.content-section h2 {
+  font-size: 24px;
+  color: var(--text);
+  margin: 0 0 14px;
+}
+.content-section h3 {
+  font-size: 16px;
+  color: var(--text);
+  margin: 28px 0 8px;
+}
+.content-section p {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 12px;
+}
+.faq-item {
+  margin-bottom: 16px;
+}
+.faq-item h4 {
+  font-size: 14px;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.faq-item p {
+  margin: 0;
+}
