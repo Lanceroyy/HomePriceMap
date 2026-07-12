@@ -1,0 +1,377 @@
+#!/usr/bin/env python3
+"""
+Generates one static SEO listicle page per state from data/county_prices.json
+("most expensive / most affordable counties in <State>"), plus a states.html
+hub page linking to all of them, and rewrites sitemap.xml to include every
+county page (recomputed the same way seo_pages_builder.py builds them) plus
+every state page and static page.
+
+Runs as part of the daily GitHub Actions workflow, right after
+seo_pages_builder.py, so it always reflects the latest committed data with
+zero manual steps. It intentionally re-derives county page URLs itself
+(rather than importing seo_pages_builder) so it stays a simple, independent
+script -- the slugify convention is duplicated by design, not by accident.
+
+Output:
+    states/<slug>.html   one listicle page per state
+    states.html           hub page linking to every state
+    sitemap.xml            rewritten to include static + county + state URLs
+
+Usage:
+    python scripts/state_pages_builder.py
+"""
+import json
+import re
+import statistics
+import sys
+import unicodedata
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DATA_PATH = ROOT / "data" / "county_prices.json"
+OUT_DIR = ROOT / "states"
+SITE_URL = "https://homepricemap.us"
+
+GA_SNIPPET = "\n".join([
+    '<!-- Google tag (gtag.js) -->',
+    '<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>',
+    '<script>',
+    '  window.dataLayer = window.dataLayer || [];',
+    "  function gtag(){dataLayer.push(arguments);}",
+    "  gtag('js', new Date());",
+    "  gtag('config', 'G-2K8JWH5ZKY');",
+    '</script>',
+    '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>',
+])
+
+ABBR_TO_NAME = {
+    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas",
+    "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware",
+    "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii",
+    "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
+    "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine",
+    "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+    "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska",
+    "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico",
+    "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio",
+    "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island",
+    "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas",
+    "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington",
+    "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming", "PR": "Puerto Rico",
+}
+
+
+def slugify(name):
+    name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
+    name = name.strip().lower()
+    name = re.sub(r"[^a-z0-9]+", "-", name)
+    return name.strip("-")
+
+
+def fmt_money(v):
+    return "$" + format(round(v), ",")
+
+
+def fmt_pct(v):
+    if v is None:
+        return "n/a"
+    sign = "+" if v > 0 else ""
+    return sign + str(v) + "%"
+
+
+def county_url(name, state):
+    return SITE_URL + "/counties/" + state.lower() + "-" + slugify(name) + ".html"
+
+
+def county_href_relative(name, state, from_states_dir=True):
+    prefix = "../counties/" if from_states_dir else "counties/"
+    return prefix + state.lower() + "-" + slugify(name) + ".html"
+
+
+ROW_TEMPLATE = (
+    '<div style="display:flex;justify-content:space-between;padding:8px 0;'
+    'border-bottom:1px solid var(--border);font-size:14px;">'
+    '<span>{rank}. <a href="{href}">{name}</a></span>'
+    '<b style="color:var(--accent-2);">{value}</b></div>'
+)
+
+STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+{ga}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content="{description}">
+<link rel="canonical" href="{canonical}">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {{"@type": "ListItem", "position": 1, "name": "Home", "item": "{site_url}/"}},
+    {{"@type": "ListItem", "position": 2, "name": "States", "item": "{site_url}/states.html"}},
+    {{"@type": "ListItem", "position": 3, "name": "{state_name}", "item": "{canonical}"}}
+  ]
+}}
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Home<span>Price</span>Map</div>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../counties.html">Counties</a>
+    <a href="../cities.html">Cities</a>
+    <a href="../states.html">States</a>
+  </nav>
+</header>
+
+<div class="hero" style="text-align:left;max-width:760px;">
+  <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; {state_name}</p>
+  <h1 style="font-size:30px;">Home Prices by County in {state_name}</h1>
+  <p>{intro}</p>
+</div>
+
+{lists_section}
+
+<div class="hero" style="text-align:left;max-width:760px;">
+  <p><a href="../counties.html">View all of {state_name} on the interactive county map &rarr;</a></p>
+</div>
+
+<footer class="site-footer">
+  Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
+  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  &middot; <a href="../privacy-policy.html">Privacy Policy</a>
+</footer>
+
+</body>
+</html>
+"""
+
+LIST_BLOCK = """<div class="content-section" style="padding-top:0;">
+  <h2>{heading}</h2>
+  {rows}
+</div>
+"""
+
+
+def build_state_list_block(heading, counties, state):
+    rows = "\n".join(
+        ROW_TEMPLATE.format(
+            rank=i + 1,
+            href=county_href_relative(c["name"], state),
+            name=c["name"],
+            value=fmt_money(c["value"]),
+        )
+        for i, c in enumerate(counties)
+    )
+    return LIST_BLOCK.format(heading=heading, rows=rows)
+
+
+def build_state_pages(county_data):
+    counties = county_data["counties"]
+    items = [
+        {"fips": fips, **rec}
+        for fips, rec in counties.items()
+        if rec.get("value") is not None and rec.get("name") and rec.get("state")
+    ]
+
+    all_values = [c["value"] for c in items]
+    national_median = statistics.median(all_values)
+
+    by_state = {}
+    for c in items:
+        by_state.setdefault(c["state"], []).append(c)
+
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    urls = []
+    hub_rows = []
+
+    for abbr in sorted(by_state.keys(), key=lambda a: ABBR_TO_NAME.get(a, a)):
+        group = by_state[abbr]
+        state_name = ABBR_TO_NAME.get(abbr, abbr)
+        ranked = sorted(group, key=lambda c: c["value"], reverse=True)
+        state_median = statistics.median(c["value"] for c in group)
+        n = len(ranked)
+
+        pct_vs_national = round((state_median / national_median - 1) * 100, 1)
+        if pct_vs_national > 0:
+            compare = fmt_pct(pct_vs_national) + " above"
+        elif pct_vs_national < 0:
+            compare = fmt_pct(pct_vs_national) + " below"
+        else:
+            compare = "in line with"
+
+        intro = (
+            "HomePriceMap tracks {n} {counties_word} in {state_name}. The typical (median) county "
+            "in the state has a home value of {state_median}, which is {compare} the U.S. national "
+            "county median of {national_median}. Below are the most expensive and most affordable "
+            "counties in {state_name} by current median home value."
+        ).format(
+            n=n,
+            counties_word="county" if n == 1 else "counties",
+            state_name=state_name,
+            state_median=fmt_money(state_median),
+            compare=compare,
+            national_median=fmt_money(national_median),
+        )
+
+        if n <= 12:
+            intro = (
+                "HomePriceMap tracks {n} {counties_word} in {state_name}. The typical (median) county "
+                "in the state has a home value of {state_median}, which is {compare} the U.S. national "
+                "county median of {national_median}. Below are all tracked counties in {state_name}, "
+                "ranked by current median home value."
+            ).format(
+                n=n,
+                counties_word="county" if n == 1 else "counties",
+                state_name=state_name,
+                state_median=fmt_money(state_median),
+                compare=compare,
+                national_median=fmt_money(national_median),
+            )
+            lists_section = build_state_list_block(
+                "All Counties in {} by Home Price".format(state_name), ranked, abbr
+            )
+        else:
+            top10 = ranked[:10]
+            bottom10 = list(reversed(ranked[-10:]))
+            lists_section = (
+                build_state_list_block(
+                    "Most Expensive Counties in {}".format(state_name), top10, abbr
+                )
+                + build_state_list_block(
+                    "Most Affordable Counties in {}".format(state_name), bottom10, abbr
+                )
+            )
+
+        slug = slugify(state_name)
+        filename = slug + ".html"
+        canonical = SITE_URL + "/states/" + filename
+
+        html = STATE_PAGE_TEMPLATE.format(
+            ga=GA_SNIPPET,
+            title="Most Expensive & Cheapest Counties in {} ({}) | Home Price Map".format(
+                state_name, group[0].get("as_of", "")[:4]
+            ),
+            description="Ranked list of the most expensive and most affordable counties in {} by median home price, updated daily from Zillow Research data.".format(
+                state_name
+            ),
+            canonical=canonical,
+            site_url=SITE_URL,
+            state_name=state_name,
+            intro=intro,
+            lists_section=lists_section,
+        )
+
+        (OUT_DIR / filename).write_text(html, encoding="utf-8")
+        urls.append(canonical)
+        hub_rows.append((state_name, "states/" + filename, n))
+
+    build_hub_page(hub_rows)
+    return urls
+
+
+HUB_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+{ga}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Prices by State | Home Price Map</title>
+<meta name="description" content="Browse the most expensive and most affordable counties in every U.S. state, ranked by median home price.">
+<link rel="canonical" href="{site_url}/states.html">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Home<span>Price</span>Map</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="counties.html">Counties</a>
+    <a href="cities.html">Cities</a>
+    <a href="states.html" class="active">States</a>
+  </nav>
+</header>
+
+<div class="hero" style="text-align:left;max-width:760px;">
+  <h1 style="font-size:30px;">Home Prices by State</h1>
+  <p>Pick a state to see its most expensive and most affordable counties, ranked by current median home value.</p>
+</div>
+
+<div class="content-section" style="padding-top:0;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">
+{links}
+  </div>
+</div>
+
+<footer class="site-footer">
+  Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
+  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  &middot; <a href="privacy-policy.html">Privacy Policy</a>
+</footer>
+
+</body>
+</html>
+"""
+
+
+def build_hub_page(hub_rows):
+    links = "\n".join(
+        '    <a class="choice-card" style="padding:12px 14px;" href="{href}">{name} <span style="color:var(--text-dim);font-size:12px;">({n})</span></a>'.format(
+            href=href, name=name, n=n
+        )
+        for name, href, n in hub_rows
+    )
+    html = HUB_TEMPLATE.format(ga=GA_SNIPPET, site_url=SITE_URL, links=links)
+    (ROOT / "states.html").write_text(html, encoding="utf-8")
+
+
+def build_sitemap(state_urls, county_data):
+    counties = county_data["counties"]
+    county_urls = [
+        county_url(rec["name"], rec["state"])
+        for rec in counties.values()
+        if rec.get("value") is not None and rec.get("name") and rec.get("state")
+    ]
+    static_urls = [
+        SITE_URL + "/",
+        SITE_URL + "/counties.html",
+        SITE_URL + "/cities.html",
+        SITE_URL + "/states.html",
+        SITE_URL + "/privacy-policy.html",
+    ]
+    all_urls = static_urls + county_urls + state_urls
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for u in all_urls:
+        lines.append("  <url><loc>" + u + "</loc></url>")
+    lines.append("</urlset>")
+    (ROOT / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main():
+    if not DATA_PATH.exists():
+        print("ERROR: " + str(DATA_PATH) + " not found. Run fetch_data.py first.")
+        return 1
+    county_data = json.loads(DATA_PATH.read_text())
+    counties = county_data["counties"]
+    if len(counties) < 500:
+        print(
+            "WARNING: county_prices.json has {} counties -- this looks like "
+            "placeholder/sample data, not a real fetch. Skipping state page "
+            "generation to avoid publishing garbage pages.".format(len(counties))
+        )
+        return 1
+
+    state_urls = build_state_pages(county_data)
+    build_sitemap(state_urls, county_data)
+    print("Generated {} state pages, states.html hub page, and rewrote sitemap.xml.".format(len(state_urls)))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -56,6 +56,23 @@ def fmt_pct(v):
     return sign + str(v) + "%"
 
 
+ABBR_TO_NAME = {
+    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas",
+    "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware",
+    "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii",
+    "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
+    "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine",
+    "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+    "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska",
+    "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico",
+    "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio",
+    "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island",
+    "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas",
+    "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington",
+    "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming", "PR": "Puerto Rico",
+}
+
+
 def ordinal(n):
     if 10 <= n % 100 <= 20:
         suffix = "th"
@@ -94,6 +111,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="../index.html">Home</a>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
+    <a href="../states.html">States</a>
   </nav>
 </header>
 
@@ -138,6 +156,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 NEARBY_TEMPLATE = """<div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Other Counties in {state}</h2>
   <p>{links}</p>
+  <p style="margin-top:10px;"><a href="../states/{state_slug}.html">See the full ranked list of {state_name} counties &rarr;</a></p>
 </div>
 """
 
@@ -217,6 +236,9 @@ def build_pages(county_data):
         else:
             state_compare_sentence = "in line with"
 
+        state_name = ABBR_TO_NAME.get(state, state)
+        state_slug = slugify(state_name)
+
         nearby = sorted(by_state[state], key=lambda c2: c2["value"], reverse=True)
         nearby = [c2 for c2 in nearby if c2["fips"] != fips][:8]
         if nearby:
@@ -224,9 +246,11 @@ def build_pages(county_data):
                 '<a href="{}.html">{}</a>'.format(slug_by_fips[c2["fips"]], c2["name"])
                 for c2 in nearby
             )
-            nearby_section = NEARBY_TEMPLATE.format(state=state, links=links)
         else:
-            nearby_section = ""
+            links = "This is the only tracked county in " + state_name + "."
+        nearby_section = NEARBY_TEMPLATE.format(
+            state=state, state_name=state_name, state_slug=state_slug, links=links
+        )
 
         html = PAGE_TEMPLATE.format(
             ga=GA_SNIPPET,
