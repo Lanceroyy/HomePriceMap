@@ -22,8 +22,7 @@ Promise.all([
     if (crimeData) crimeByCityKey = crimeData.cities;
 
     const cities = priceData.cities;
-    const values = cities.map(c => c.value);
-    const breaks = quantileBreaks(values, COLOR_RAMP.length);
+    const breaks = PRICE_BREAKS;
     renderLegend(legendEl, breaks);
 
     const cluster = L.layerGroup().addTo(map);

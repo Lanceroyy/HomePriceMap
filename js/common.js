@@ -1,6 +1,15 @@
 // Shared helpers for counties.js and cities.js
 
-const COLOR_RAMP = ["#1a3a5c", "#1e5f8a", "#2389b0", "#34b3a8", "#4fcf8b", "#a8e063", "#f4d35e", "#f4a259", "#ef6461", "#d63d5e"];
+// Fixed dollar-value breakpoints, NOT quantile/equal-count breaks. Home
+// prices are heavily right-skewed (a long tail of very expensive counties
+// and cities), so an equal-count scheme puts the entire top ~10% of the
+// country -- everywhere from ~$450K up to Nantucket's $3.09M -- into a
+// single color. Fixed breaks give the upper half of the market the same
+// number of color buckets as the lower half, so high-cost areas are
+// actually distinguishable from each other instead of all reading as
+// "the expensive color."
+const PRICE_BREAKS = [125000, 175000, 225000, 275000, 350000, 450000, 600000, 800000, 1100000, 1600000, 2500000];
+const COLOR_RAMP = ["#16324f", "#1a3a5c", "#1e5f8a", "#2389b0", "#2fa8a0", "#4fcf8b", "#a8e063", "#f4d35e", "#f4a259", "#ef6461", "#d63d5e", "#8b1e3f"];
 
 // --- Mortgage-rate affiliate CTA -----------------------------------------
 // Set AFFILIATE_URL once you're approved for an affiliate program (e.g.

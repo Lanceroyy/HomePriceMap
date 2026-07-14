@@ -23,8 +23,7 @@ Promise.all([
 ]).then(([priceData, topo, crimeData]) => {
   const counties = priceData.counties;
   if (crimeData) crimeByFips = crimeData.counties;
-  const values = Object.values(counties).map(c => c.value);
-  const breaks = quantileBreaks(values, COLOR_RAMP.length);
+  const breaks = PRICE_BREAKS;
   renderLegend(legendEl, breaks);
 
   const geojson = topojson.feature(topo, topo.objects.counties);
