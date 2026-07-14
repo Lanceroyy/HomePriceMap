@@ -29,6 +29,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "county_prices.json"
+CRIME_PATH = ROOT / "data" / "crime_data_county.json"
 OUT_DIR = ROOT / "states"
 SITE_URL = "https://homepricemap.us"
 
@@ -79,6 +80,12 @@ def fmt_pct(v):
     return sign + str(v) + "%"
 
 
+def fmt_rate(v):
+    if v is None:
+        return "n/a"
+    return format(round(v), ",")
+
+
 def county_url(name, state):
     return SITE_URL + "/counties/" + state.lower() + "-" + slugify(name) + ".html"
 
@@ -93,6 +100,13 @@ ROW_TEMPLATE = (
     'border-bottom:1px solid var(--border);font-size:14px;">'
     '<span>{rank}. <a href="{href}">{name}</a></span>'
     '<b style="color:var(--accent-2);">{value}</b></div>'
+)
+
+CRIME_ROW_TEMPLATE = (
+    '<div style="display:flex;justify-content:space-between;padding:8px 0;'
+    'border-bottom:1px solid var(--border);font-size:14px;">'
+    '<span>{rank}. <a href="{href}">{name}</a></span>'
+    '<b style="color:{color};">{value} /100k</b></div>'
 )
 
 STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -137,6 +151,8 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
 {lists_section}
 
+{crime_section}
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p><a href="../counties.html">View all of {state_name} on the interactive county map &rarr;</a></p>
 </div>
@@ -171,13 +187,78 @@ def build_state_list_block(heading, counties, state):
     return LIST_BLOCK.format(heading=heading, rows=rows)
 
 
-def build_state_pages(county_data):
+def build_crime_list_block(heading, counties, state, color):
+    rows = "\n".join(
+        CRIME_ROW_TEMPLATE.format(
+            rank=i + 1,
+            href=county_href_relative(c["name"], state),
+            name=c["name"],
+            value=fmt_rate(c["violent_crime_rate"]),
+            color=color,
+        )
+        for i, c in enumerate(counties)
+    )
+    return LIST_BLOCK.format(heading=heading, rows=rows)
+
+
+def build_crime_section(group, state_name, abbr, crime_by_fips, n_total):
+    crime_ranked = []
+    for c in group:
+        rec = crime_by_fips.get(c["fips"])
+        if not rec or rec.get("violent_crime_rate") is None:
+            continue
+        crime_ranked.append({**c, "violent_crime_rate": rec["violent_crime_rate"]})
+
+    if not crime_ranked:
+        return ""
+
+    crime_ranked.sort(key=lambda c: c["violent_crime_rate"])
+    n_crime = len(crime_ranked)
+
+    crime_intro = (
+        "Violent crime rates below are a population-weighted average of each county's reporting "
+        "cities from the FBI's Uniform Crime Reporting Program, covering {n_crime} of {n_total} "
+        "tracked counties in {state_name}. Counties with no FBI-reporting city aren't shown."
+    ).format(n_crime=n_crime, n_total=n_total, state_name=state_name)
+
+    intro_block = (
+        '<div class="content-section" style="padding-top:0;">'
+        "<h2>Crime Rates by County in {state_name}</h2>"
+        '<p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">{crime_intro}</p>'
+        "</div>"
+    ).format(state_name=state_name, crime_intro=crime_intro)
+
+    if n_crime <= 12:
+        crime_lists = build_crime_list_block(
+            "Counties in {} Ranked by Violent Crime Rate (Safest First)".format(state_name),
+            crime_ranked, abbr, "var(--accent-2)",
+        )
+    else:
+        safest = crime_ranked[:10]
+        most_dangerous = list(reversed(crime_ranked[-10:]))
+        crime_lists = (
+            build_crime_list_block(
+                "Safest Counties in {} (Lowest Violent Crime Rate)".format(state_name),
+                safest, abbr, "var(--accent-2)",
+            )
+            + build_crime_list_block(
+                "Most Dangerous Counties in {} (Highest Violent Crime Rate)".format(state_name),
+                most_dangerous, abbr, "var(--warn)",
+            )
+        )
+
+    return intro_block + crime_lists
+
+
+def build_state_pages(county_data, crime_data):
     counties = county_data["counties"]
     items = [
         {"fips": fips, **rec}
         for fips, rec in counties.items()
         if rec.get("value") is not None and rec.get("name") and rec.get("state")
     ]
+
+    crime_by_fips = crime_data["counties"] if crime_data else {}
 
     all_values = [c["value"] for c in items]
     national_median = statistics.median(all_values)
@@ -248,6 +329,8 @@ def build_state_pages(county_data):
                 )
             )
 
+        crime_section = build_crime_section(group, state_name, abbr, crime_by_fips, n)
+
         slug = slugify(state_name)
         filename = slug + ".html"
         canonical = SITE_URL + "/states/" + filename
@@ -265,6 +348,7 @@ def build_state_pages(county_data):
             state_name=state_name,
             intro=intro,
             lists_section=lists_section,
+            crime_section=crime_section,
         )
 
         (OUT_DIR / filename).write_text(html, encoding="utf-8")
@@ -367,7 +451,13 @@ def main():
         )
         return 1
 
-    state_urls = build_state_pages(county_data)
+    crime_data = None
+    if CRIME_PATH.exists():
+        crime_data = json.loads(CRIME_PATH.read_text())
+    else:
+        print("NOTE: {} not found -- state pages will skip crime rate lists.".format(CRIME_PATH))
+
+    state_urls = build_state_pages(county_data, crime_data)
     build_sitemap(state_urls, county_data)
     print("Generated {} state pages, states.html hub page, and rewrote sitemap.xml.".format(len(state_urls)))
     return 0
