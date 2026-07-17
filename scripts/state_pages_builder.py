@@ -118,6 +118,15 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <title>{title}</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="{canonical}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{canonical}">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{description}">
+<meta property="og:image" content="{site_url}/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="{site_url}/assets/og-image.jpg">
 <link rel="stylesheet" href="../css/style.css">
 <script type="application/ld+json">
 {{
@@ -368,6 +377,15 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 <title>Home Prices by State | Home Price Map</title>
 <meta name="description" content="Browse the most expensive and most affordable counties in every U.S. state, ranked by median home price.">
 <link rel="canonical" href="{site_url}/states.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{site_url}/states.html">
+<meta property="og:title" content="Home Prices by State | Home Price Map">
+<meta property="og:description" content="Browse the most expensive and most affordable counties in every U.S. state, ranked by median home price.">
+<meta property="og:image" content="{site_url}/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Home Prices by State | Home Price Map">
+<meta name="twitter:description" content="Browse the most expensive and most affordable counties in every U.S. state, ranked by median home price.">
+<meta name="twitter:image" content="{site_url}/assets/og-image.jpg">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
