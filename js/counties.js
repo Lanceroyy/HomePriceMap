@@ -119,6 +119,10 @@ Promise.all([
     const rec = counties[linkedFips];
     map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
     if (rec) selectCounty(linkedFips, lyr, rec);
+    // Strip the ?fips= param once it's been applied, so refreshing the page
+    // afterward lands on the normal map instead of re-locking to this same
+    // county forever.
+    window.history.replaceState(null, "", window.location.pathname);
   }
 }).catch(err => {
   console.error(err);
