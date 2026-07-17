@@ -15,12 +15,29 @@ const COLOR_RAMP = ["#16324f", "#1a3a5c", "#1e5f8a", "#2389b0", "#2fa8a0", "#4fc
 // Set AFFILIATE_URL once you're approved for an affiliate program (e.g.
 // LendingTree, Credible, Rocket Mortgage). Leave it null and the CTA simply
 // won't render anywhere -- no broken/placeholder links go live by accident.
+// Takes priority over the house-plans CTA below when active, since a
+// mortgage-rate check is relevant everywhere, not just affordable markets.
 const AFFILIATE_URL = null; // e.g. "https://www.lendingtree.com/your-affiliate-id"
 const AFFILIATE_LABEL = "Check today's mortgage rates";
 
-function affiliateCta(regionLabel) {
-  if (!AFFILIATE_URL) return "";
-  return `<a class="mortgage-cta" href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
+// --- House-plans affiliate CTA (Architectural Designs, via CJ) -----------
+// Only shown on affordable markets (median value at or below the
+// threshold) -- "browse house plans to build" is a coherent thought for
+// someone looking at a cheap county, but not for someone looking at
+// Nantucket. Threshold is roughly the point where a meaningful majority of
+// U.S. counties fall below it (national county median is ~$234K).
+const HOUSEPLANS_URL = "https://www.anrdoezrs.net/click-101818616-15735175";
+const HOUSEPLANS_LABEL = "Building instead? Browse house plans";
+const HOUSEPLANS_MAX_VALUE = 300000;
+
+function affiliateCta(regionLabel, value) {
+  if (AFFILIATE_URL) {
+    return `<a class="mortgage-cta" href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
+  }
+  if (HOUSEPLANS_URL && value != null && value <= HOUSEPLANS_MAX_VALUE) {
+    return `<a class="mortgage-cta" href="${HOUSEPLANS_URL}" target="_blank" rel="noopener sponsored">${HOUSEPLANS_LABEL} &rarr;</a>`;
+  }
+  return "";
 }
 
 // Mirrors normalize_place() in scripts/process_crime_data.py / fetch_data.py
@@ -100,6 +117,6 @@ function showInfo(el, { title, value, yoy, crime }) {
     <div class="region-value">${fmtMoney(value)}</div>
     <div class="region-yoy ${cls}">${fmtYoy(yoy)} year-over-year</div>
     ${crimeBlock(crime)}
-    ${affiliateCta(title)}
+    ${affiliateCta(title, value)}
   `;
 }
