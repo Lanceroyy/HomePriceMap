@@ -16,6 +16,14 @@ const layerByFips = {};
 
 let crimeByFips = {};
 
+// Clicking a county "locks" the info panel (so hovering other counties on
+// the way to the CTA button inside it doesn't wipe it out before you can
+// click it). Hovering only live-updates the panel while nothing is locked;
+// clicking the locked county again unlocks it and goes back to hover-preview.
+let selectedFips = null;
+let selectedLyr = null;
+const PLACEHOLDER_HTML = '<div class="placeholder">Hover or click a county to see its median home value.</div>';
+
 Promise.all([
   fetch("data/county_prices.json").then(r => r.json()),
   fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json").then(r => r.json()),
@@ -27,6 +35,24 @@ Promise.all([
   renderLegend(legendEl, breaks);
 
   const geojson = topojson.feature(topo, topo.objects.counties);
+
+  function selectCounty(fips, lyr, rec) {
+    if (selectedLyr) selectedLyr.setStyle({ weight: 0.5, color: "#0f1419" });
+
+    if (selectedFips === fips) {
+      // Clicking the already-locked county again unlocks it.
+      selectedFips = null;
+      selectedLyr = null;
+      infoBox.innerHTML = PLACEHOLDER_HTML;
+      return;
+    }
+
+    selectedFips = fips;
+    selectedLyr = lyr;
+    lyr.setStyle({ weight: 2, color: "#ffffff" });
+    const key = `${rec.name}, ${rec.state}`;
+    showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
+  }
 
   const layer = L.geoJSON(geojson, {
     style: feature => {
@@ -51,15 +77,17 @@ Promise.all([
       lyr.bindTooltip(`${rec.name}, ${rec.state}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
 
       lyr.on("mouseover", () => {
+        if (selectedFips) return; // a county is locked -- don't disturb the panel
         lyr.setStyle({ weight: 2, color: "#ffffff" });
         showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
       });
       lyr.on("mouseout", () => {
+        if (selectedFips === fips) return; // keep the locked county highlighted
         lyr.setStyle({ weight: 0.5, color: "#0f1419" });
       });
       lyr.on("click", () => {
         map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
+        selectCounty(fips, lyr, rec);
       });
     },
   }).addTo(map);
@@ -74,7 +102,11 @@ Promise.all([
       map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
       const fips = Object.keys(counties).find(f => `${counties[f].name}, ${counties[f].state}` === searchBox.value);
       const rec = counties[fips];
-      if (rec) showInfo(infoBox, { title: searchBox.value, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
+      if (rec) {
+        selectedFips = null; // force a fresh lock even if it's the same county as before
+        selectedLyr = null;
+        selectCounty(fips, lyr, rec);
+      }
     }
   });
 
@@ -86,8 +118,7 @@ Promise.all([
     const lyr = layerByFips[linkedFips];
     const rec = counties[linkedFips];
     map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
-    lyr.setStyle({ weight: 3, color: "#ffffff" });
-    if (rec) showInfo(infoBox, { title: `${rec.name}, ${rec.state}`, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[linkedFips] });
+    if (rec) selectCounty(linkedFips, lyr, rec);
   }
 }).catch(err => {
   console.error(err);
