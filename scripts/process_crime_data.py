@@ -53,6 +53,16 @@ CITY_PRICES_PATH = DATA_DIR / "city_prices.json"
 COUNTY_PRICES_PATH = DATA_DIR / "county_prices.json"
 CRIME_YEAR = 2024
 
+# A county's crime rate is only published if the reporting cities we matched
+# cover at least this many residents. Without a floor, a county like Ford
+# County, KS (~34k people, home to Dodge City) would show "0 violent crime"
+# purely because the only agencies reporting to the FBI there were two towns
+# totalling 1,483 people -- a rate computed off a handful of residents swings
+# wildly on a single incident and reads as "safe" when it actually means
+# "barely measured". 5,000 removes 99 of the 104 counties that were reporting
+# an implausible zero while retaining about three quarters of coverage.
+MIN_COVERED_POPULATION = 5000
+
 PLACE_SUFFIXES = re.compile(
     r"\s+(city|town|village|township|CDP|borough|municipality)\s*$", re.IGNORECASE
 )
@@ -230,7 +240,11 @@ def main():
         acc["cities_matched"] += 1
 
     county_out = {}
+    thin_coverage = 0
     for fips, acc in county_acc.items():
+        if acc["population"] < MIN_COVERED_POPULATION:
+            thin_coverage += 1
+            continue
         rec = county_prices[fips]
         county_out[fips] = {
             "name": rec["name"],
@@ -258,6 +272,10 @@ def main():
     )
 
     print(f"Wrote {len(city_out)} city crime records.")
+    print(
+        f"Suppressed {thin_coverage} counties whose matched cities covered fewer "
+        f"than {MIN_COVERED_POPULATION:,} residents (too thin to state a rate)."
+    )
     print(
         f"Matched {matched_cities}/{len(crime_rows)} crime rows to a known city "
         f"in city_prices.json, rolling up to {len(county_out)}/{len(county_prices)} "
