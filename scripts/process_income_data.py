@@ -42,8 +42,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 INCOME_DIR = DATA_DIR / "IncomeData"
-COUNTY_CSV = INCOME_DIR / "county.csv"
-PLACE_CSV = INCOME_DIR / "place.csv"
+
+# Census GEO_ID prefixes identify the geography level, which lets us just drop
+# the downloads in as-named rather than depending on someone renaming them
+# correctly a year from now.
+GEO_PREFIX_COUNTY = "0500000US"
+GEO_PREFIX_PLACE = "1600000US"
 CITY_PRICES_PATH = DATA_DIR / "city_prices.json"
 COUNTY_PRICES_PATH = DATA_DIR / "county_prices.json"
 
@@ -143,6 +147,49 @@ def read_acs_rows(path):
             yield geo_id, row[name_i].strip(), income, capped
 
 
+def classify_csv(path):
+    """Peek at the first data row's GEO_ID to work out which geography this
+    export covers. Returns 'county', 'place', or None for files that aren't
+    B19013 data exports (the folder also collects the little national-summary
+    CSV and the metadata files that come in the same download)."""
+    try:
+        with path.open(newline="", encoding="utf-8-sig") as f:
+            reader = csv.reader(f)
+            header = next(reader, None)
+            if not header:
+                return None
+            cleaned = [h.strip() for h in header]
+            if "GEO_ID" not in cleaned:
+                return None
+            gi = cleaned.index("GEO_ID")
+            for row in reader:
+                if len(row) <= gi:
+                    continue
+                geo = row[gi].strip()
+                if geo in ("", "Geography"):
+                    continue  # human-readable second header row
+                if geo.startswith(GEO_PREFIX_COUNTY):
+                    return "county"
+                if geo.startswith(GEO_PREFIX_PLACE):
+                    return "place"
+                return None
+    except (OSError, csv.Error):
+        return None
+    return None
+
+
+def discover_inputs():
+    """Maps geography level -> csv path for everything usable in IncomeData/."""
+    found = {}
+    if not INCOME_DIR.exists():
+        return found
+    for path in sorted(INCOME_DIR.glob("*.csv")):
+        kind = classify_csv(path)
+        if kind and kind not in found:
+            found[kind] = path
+    return found
+
+
 def split_place_name(full_name):
     """'Los Angeles city, California' -> ('Los Angeles city', 'CA')"""
     if "," not in full_name:
@@ -152,15 +199,26 @@ def split_place_name(full_name):
 
 
 def main():
-    missing = [p for p in (COUNTY_CSV, PLACE_CSV) if not p.exists()]
-    if missing:
+    inputs = discover_inputs()
+    if not inputs:
         sys.exit(
-            "ERROR: missing {}.\nDownload table B19013 from "
-            "https://data.census.gov (ACS 5-Year Estimates Detailed Tables) "
-            "for both County and Place geographies, then save the '*-Data.csv' "
-            "files as data/IncomeData/county.csv and data/IncomeData/place.csv."
-            .format(" and ".join(str(p) for p in missing))
+            "ERROR: no usable B19013 exports found in {}.\nDownload table "
+            "B19013 from https://data.census.gov (ACS 5-Year Estimates "
+            "Detailed Tables) for the County and/or Place geographies and drop "
+            "the '*-Data.csv' files in that folder -- filenames don't matter, "
+            "the geography is detected from the GEO_ID column."
+            .format(INCOME_DIR)
         )
+
+    county_csv = inputs.get("county")
+    place_csv = inputs.get("place")
+    for kind, path in sorted(inputs.items()):
+        print("Found {} data: {}".format(kind, path.name))
+    if not place_csv:
+        print("NOTE: no Place-level export found -- city income will be skipped. "
+              "The city map simply won't show income until one is added.")
+    if not county_csv:
+        print("NOTE: no County-level export found -- county income will be skipped.")
 
     county_prices = json.loads(COUNTY_PRICES_PATH.read_text())["counties"]
     city_prices = json.loads(CITY_PRICES_PATH.read_text())["cities"]
@@ -178,7 +236,8 @@ def main():
     county_out = {}
     county_rows = 0
     county_suppressed = 0
-    for geo_id, name, income, capped in read_acs_rows(COUNTY_CSV):
+    county_unmatched = []
+    for geo_id, name, income, capped in read_acs_rows(county_csv) if county_csv else []:
         county_rows += 1
         # County GEO_IDs look like '0500000US01001'; the trailing 5 digits are
         # the FIPS code, which is exactly how county_prices.json is keyed.
@@ -189,6 +248,7 @@ def main():
             county_suppressed += 1
             continue
         if fips not in county_prices:
+            county_unmatched.append(name)
             continue
         rec = county_prices[fips]
         county_out[fips] = {
@@ -207,7 +267,7 @@ def main():
     city_out = {}
     place_rows = 0
     place_suppressed = 0
-    for geo_id, full_name, income, capped in read_acs_rows(PLACE_CSV):
+    for geo_id, full_name, income, capped in read_acs_rows(place_csv) if place_csv else []:
         place_rows += 1
         place_name, state_abbr = split_place_name(full_name)
         if not place_name or not state_abbr:
@@ -228,17 +288,29 @@ def main():
             "source": "U.S. Census Bureau, ACS 5-Year Estimates, table B19013",
         }
 
-    (DATA_DIR / "income_data_county.json").write_text(
-        json.dumps({"count": len(county_out), "counties": county_out}, separators=(",", ":"))
-    )
-    (DATA_DIR / "income_data_city.json").write_text(
-        json.dumps({"count": len(city_out), "cities": city_out}, separators=(",", ":"))
-    )
+    # Only write a file if we actually had input for it -- otherwise a
+    # partial download would silently wipe out good data from a previous run.
+    if county_csv:
+        (DATA_DIR / "income_data_county.json").write_text(
+            json.dumps({"count": len(county_out), "counties": county_out}, separators=(",", ":"))
+        )
+    if place_csv:
+        (DATA_DIR / "income_data_city.json").write_text(
+            json.dumps({"count": len(city_out), "cities": city_out}, separators=(",", ":"))
+        )
 
-    print("Counties: parsed {} rows, {} suppressed/no estimate, matched {} of {} priced counties.".format(
-        county_rows, county_suppressed, len(county_out), len(county_prices)))
-    print("Cities:   parsed {} rows, {} suppressed/no estimate, matched {} of {} priced cities.".format(
-        place_rows, place_suppressed, len(city_out), len(city_prices)))
+    print()
+    if county_csv:
+        print("Counties: parsed {} rows, {} suppressed/no estimate, {} not in price data, matched {} of {} priced counties ({:.1f}%).".format(
+            county_rows, county_suppressed, len(county_unmatched),
+            len(county_out), len(county_prices),
+            100.0 * len(county_out) / max(1, len(county_prices))))
+        if county_unmatched:
+            print("          unmatched sample: {}".format(", ".join(county_unmatched[:5])))
+    if place_csv:
+        print("Cities:   parsed {} rows, {} suppressed/no estimate, matched {} of {} priced cities ({:.1f}%).".format(
+            place_rows, place_suppressed, len(city_out), len(city_prices),
+            100.0 * len(city_out) / max(1, len(city_prices))))
     return 0
 
 
