@@ -201,11 +201,16 @@ footer.site-footer {
 .income-row {
   display: flex;
   justify-content: space-between;
+  /* Guarantees a gap between the label and its value even when the label is
+     long (e.g. "Median household income") and nearly fills the panel width,
+     which otherwise butts the value right up against it with no space. */
+  gap: 12px;
   font-size: 13px;
   margin: 2px 0;
 }
+/* Keep the dollar/rate value on one line so the gap above is never collapsed. */
 .crime-row b,
-.income-row b { color: var(--text); font-weight: 600; }
+.income-row b { color: var(--text); font-weight: 600; white-space: nowrap; }
 /* Affordability signal on the price-to-income multiple. */
 .income-row b.ratio-high { color: var(--warn); }
 .income-row b.ratio-low { color: var(--accent-2); }
