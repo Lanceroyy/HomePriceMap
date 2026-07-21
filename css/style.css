@@ -182,12 +182,14 @@ footer.site-footer {
 .info-box .region-yoy.down { color: var(--warn); }
 .info-box .placeholder { color: var(--text-dim); }
 
-.crime-block {
+.crime-block,
+.income-block {
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--border);
 }
-.crime-title {
+.crime-title,
+.income-title {
   font-size: 10.5px;
   font-weight: 600;
   color: var(--text-dim);
@@ -195,13 +197,18 @@ footer.site-footer {
   letter-spacing: .04em;
   margin-bottom: 5px;
 }
-.crime-row {
+.crime-row,
+.income-row {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
   margin: 2px 0;
 }
-.crime-row b { color: var(--text); font-weight: 600; }
+.crime-row b,
+.income-row b { color: var(--text); font-weight: 600; }
+/* Affordability signal on the price-to-income multiple. */
+.income-row b.ratio-high { color: var(--warn); }
+.income-row b.ratio-low { color: var(--accent-2); }
 .crime-coverage {
   font-size: 10.5px;
   color: var(--text-dim);
@@ -236,6 +243,33 @@ footer.site-footer {
 }
 .legend .row { display: flex; align-items: center; gap: 8px; margin: 3px 0; }
 .legend .swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+/* Doubles as the legend's title on desktop and its tap target on mobile. */
+.legend-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 6px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.legend-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-dim);
+  display: none;
+  transition: transform .15s;
+}
+.legend.open .legend-caret { transform: rotate(180deg); }
 
 .leaflet-popup-content-wrapper {
   background: #161c24;
@@ -287,4 +321,64 @@ footer.site-footer {
 }
 .faq-item p {
   margin: 0;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 700px) {
+  /* Keep the top bar on a single line so the map height math below stays
+     honest -- if the nav wraps, the header grows and the map overflows. */
+  header.topbar { padding: 10px 12px; }
+  header.topbar .brand { font-size: 15px; }
+  header.topbar nav a { margin-left: 12px; font-size: 13px; }
+
+  /* dvh accounts for mobile browser chrome showing/hiding on scroll.
+     The plain vh line is the fallback for browsers without dvh support. */
+  .map-wrap {
+    height: calc(100vh - 42px);
+    height: calc(100dvh - 42px);
+  }
+
+  .panel {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    padding: 10px 12px;
+  }
+  .panel h3 { font-size: 12px; margin-bottom: 6px; }
+
+  /* Right gap clears the collapsed legend sitting in the bottom corner. */
+  .info-box {
+    left: 8px;
+    right: 136px;
+    bottom: 8px;
+    min-width: 0;
+    max-width: none;
+    padding: 12px 14px;
+  }
+  .info-box .region-name { font-size: 15px; }
+  .info-box .region-value { font-size: 20px; }
+
+  .legend {
+    right: 8px;
+    bottom: 8px;
+    padding: 8px 10px;
+    /* Above the info box, so an expanded legend overlays it cleanly
+       instead of the two colliding. */
+    z-index: 810;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .legend-body { display: none; }
+  .legend.open .legend-body { display: block; }
+  .legend-toggle { cursor: pointer; }
+  .legend-caret { display: inline-block; }
+  .legend .row { font-size: 11px; margin: 2px 0; }
+  .legend .swatch { width: 12px; height: 12px; }
+
+  .hero { padding: 40px 16px 24px; }
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 15px; }
+  .content-section { padding: 32px 16px 40px; }
+  .content-section h2 { font-size: 20px; }
 }

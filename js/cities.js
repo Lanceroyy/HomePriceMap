@@ -13,13 +13,16 @@ const cityListEl = document.getElementById("cityList");
 
 const markerByKey = {};
 let crimeByCityKey = {};
+let incomeByCityKey = {};
 
 Promise.all([
   fetch("data/city_prices.json").then(r => r.json()),
   fetch("data/crime_data_city.json").then(r => r.ok ? r.json() : null).catch(() => null),
+  fetch("data/income_data_city.json").then(r => r.ok ? r.json() : null).catch(() => null),
 ])
-  .then(([priceData, crimeData]) => {
+  .then(([priceData, crimeData, incomeData]) => {
     if (crimeData) crimeByCityKey = crimeData.cities;
+    if (incomeData) incomeByCityKey = incomeData.cities;
 
     const cities = priceData.cities;
     const breaks = PRICE_BREAKS;
@@ -42,7 +45,7 @@ Promise.all([
       marker.bindTooltip(`${key}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
       marker.on("click", () => {
         map.setView([rec.lat, rec.lon], Math.max(map.getZoom(), 9));
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByCityKey[crimeKey] });
+        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByCityKey[crimeKey], income: incomeByCityKey[crimeKey] });
       });
 
       marker.addTo(cluster);
@@ -56,7 +59,7 @@ Promise.all([
       const hit = markerByKey[searchBox.value];
       if (hit) {
         map.setView([hit.rec.lat, hit.rec.lon], 10);
-        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct, crime: crimeByCityKey[hit.crimeKey] });
+        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct, crime: crimeByCityKey[hit.crimeKey], income: incomeByCityKey[hit.crimeKey] });
         hit.marker.openTooltip();
       }
     });

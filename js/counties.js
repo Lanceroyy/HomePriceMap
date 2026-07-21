@@ -15,6 +15,7 @@ const layerByKey = {};
 const layerByFips = {};
 
 let crimeByFips = {};
+let incomeByFips = {};
 
 // Clicking a county "locks" the info panel (so hovering other counties on
 // the way to the CTA button inside it doesn't wipe it out before you can
@@ -28,9 +29,11 @@ Promise.all([
   fetch("data/county_prices.json").then(r => r.json()),
   fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json").then(r => r.json()),
   fetch("data/crime_data_county.json").then(r => r.ok ? r.json() : null).catch(() => null),
-]).then(([priceData, topo, crimeData]) => {
+  fetch("data/income_data_county.json").then(r => r.ok ? r.json() : null).catch(() => null),
+]).then(([priceData, topo, crimeData, incomeData]) => {
   const counties = priceData.counties;
   if (crimeData) crimeByFips = crimeData.counties;
+  if (incomeData) incomeByFips = incomeData.counties;
   const breaks = PRICE_BREAKS;
   renderLegend(legendEl, breaks);
 
@@ -51,7 +54,7 @@ Promise.all([
     selectedLyr = lyr;
     lyr.setStyle({ weight: 2, color: "#ffffff" });
     const key = `${rec.name}, ${rec.state}`;
-    showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
+    showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips], income: incomeByFips[fips] });
   }
 
   const layer = L.geoJSON(geojson, {
@@ -79,7 +82,7 @@ Promise.all([
       lyr.on("mouseover", () => {
         if (selectedFips) return; // a county is locked -- don't disturb the panel
         lyr.setStyle({ weight: 2, color: "#ffffff" });
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips] });
+        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips], income: incomeByFips[fips] });
       });
       lyr.on("mouseout", () => {
         if (selectedFips === fips) return; // keep the locked county highlighted

@@ -30,6 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "county_prices.json"
 CRIME_PATH = ROOT / "data" / "crime_data_county.json"
+INCOME_PATH = ROOT / "data" / "income_data_county.json"
 OUT_DIR = ROOT / "states"
 SITE_URL = "https://homepricemap.us"
 
@@ -118,6 +119,9 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <title>{title}</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="{canonical}">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{canonical}">
 <meta property="og:title" content="{title}">
@@ -160,7 +164,11 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
 {lists_section}
 
+{affordability_section}
+
 {crime_section}
+
+{faq_section}
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <p><a href="../counties.html">View all of {state_name} on the interactive county map &rarr;</a></p>
@@ -208,6 +216,164 @@ def build_crime_list_block(heading, counties, state, color):
         for i, c in enumerate(counties)
     )
     return LIST_BLOCK.format(heading=heading, rows=rows)
+
+
+RATIO_ROW_TEMPLATE = (
+    '<div style="display:flex;justify-content:space-between;padding:8px 0;'
+    'border-bottom:1px solid var(--border);font-size:14px;">'
+    '<span>{rank}. <a href="{href}">{name}</a></span>'
+    '<b style="color:{color};">{value}&times; income</b></div>'
+)
+
+
+def build_ratio_list_block(heading, counties, state, color):
+    rows = "\n".join(
+        RATIO_ROW_TEMPLATE.format(
+            rank=i + 1,
+            href=county_href_relative(c["name"], state),
+            name=c["name"],
+            # Top-coded income means the true ratio can only be lower than this.
+            value=("&le;" if c["top_coded"] else "") + "{:.1f}".format(c["ratio"]),
+            color=color,
+        )
+        for i, c in enumerate(counties)
+    )
+    return LIST_BLOCK.format(heading=heading, rows=rows)
+
+
+def build_affordability_section(group, state_name, abbr, income_by_fips, n_total):
+    """Ranks counties by home price divided by median household income -- a
+    standard housing affordability measure, and a more useful signal than
+    price alone (a cheap county where nobody earns much can be harder to buy
+    into than an expensive one with high wages)."""
+    rows = []
+    for c in group:
+        rec = income_by_fips.get(c["fips"])
+        if not rec:
+            continue
+        income = rec.get("median_household_income")
+        if not income:
+            continue
+        rows.append({
+            **c,
+            "income": income,
+            "top_coded": bool(rec.get("top_coded")),
+            "ratio": c["value"] / income,
+        })
+
+    if not rows:
+        return ""
+
+    rows.sort(key=lambda r: r["ratio"])
+    n_cov = len(rows)
+
+    intro = (
+        "This ranks each county by its median home value divided by its median household "
+        "income &mdash; how many years of a typical local income it would take to buy a "
+        "typical local home. Housing researchers generally treat about 3&times; income as "
+        "manageable and 5&times; or more as severely stretched. Coverage is {n_cov} of {n_total} "
+        "tracked {counties_word} in {state_name}; income figures come from the Census Bureau's "
+        "American Community Survey and home values from Zillow."
+    ).format(
+        n_cov=n_cov, n_total=n_total, state_name=state_name,
+        counties_word="county" if n_total == 1 else "counties",
+    )
+
+    intro_block = (
+        '<div class="content-section" style="padding-top:0;">'
+        "<h2>Housing Affordability by County in {state_name}</h2>"
+        '<p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">{intro}</p>'
+        "</div>"
+    ).format(state_name=state_name, intro=intro)
+
+    if n_cov <= 12:
+        lists = build_ratio_list_block(
+            "{} Counties Ranked by Housing Affordability".format(state_name),
+            rows, abbr, "var(--accent-2)",
+        )
+    else:
+        lists = (
+            build_ratio_list_block(
+                "Most Affordable Counties in {} Relative to Local Income".format(state_name),
+                rows[:10], abbr, "var(--accent-2)",
+            )
+            + build_ratio_list_block(
+                "Least Affordable Counties in {} Relative to Local Income".format(state_name),
+                list(reversed(rows[-10:])), abbr, "var(--warn)",
+            )
+        )
+
+    return intro_block + lists
+
+
+FAQ_BLOCK = """<div class="content-section" style="padding-top:0;">
+  <h2>Frequently asked questions about {state_name} home prices</h2>
+  <div class="faq-item">
+    <h4>Which county in {state_name} has the most expensive homes?</h4>
+    <p>{top_name} has the highest median home value in {state_name} at {top_value}. This is often searched as the "richest" or "wealthiest" county in {state_name} &mdash; though it's worth being precise about what's being measured here: median home value reflects property prices, not household income or net worth. The two usually correlate, but a county can have expensive homes without having the highest-earning residents, particularly in areas with a lot of vacation or second homes.</p>
+  </div>
+{income_faq}
+  <div class="faq-item">
+    <h4>What is the cheapest county in {state_name}?</h4>
+    <p>{bottom_name} has the lowest median home value of the {n} {state_name} {counties_word} tracked here, at {bottom_value}. Keep in mind that low home prices often reflect limited local job markets, distance from major metro areas, or shrinking population &mdash; affordability alone doesn't tell you whether somewhere is a good fit.</p>
+  </div>
+  <div class="faq-item">
+    <h4>How do {state_name} home prices compare to the rest of the country?</h4>
+    <p>The typical (median) county in {state_name} has a home value of {state_median}, against {national_median} for the median U.S. county &mdash; {compare_phrase}. Figures come from Zillow's Home Value Index and are refreshed daily on this site.</p>
+  </div>
+</div>
+"""
+
+
+INCOME_FAQ_ITEM = """  <div class="faq-item">
+    <h4>Which county in {state_name} has the highest household income?</h4>
+    <p>{name} has the highest median household income in {state_name} at {income}{plus}. If what you're really after is the "richest" or "wealthiest" county in {state_name}, this is the closer answer &mdash; income measures what households actually earn each year, while home values measure what property costs. Neither is quite the same as wealth, which would also account for savings, investments and property people already own outright.</p>
+  </div>
+"""
+
+
+def build_faq_section(ranked, state_name, n, state_median, national_median, income_by_fips=None):
+    top = ranked[0]
+    bottom = ranked[-1]
+
+    income_faq = ""
+    if income_by_fips:
+        with_income = [
+            (income_by_fips[c["fips"]], c)
+            for c in ranked
+            if c["fips"] in income_by_fips
+            and income_by_fips[c["fips"]].get("median_household_income")
+        ]
+        if with_income:
+            rec, _ = max(with_income, key=lambda p: p[0]["median_household_income"])
+            income_faq = INCOME_FAQ_ITEM.format(
+                state_name=state_name,
+                name=rec["name"],
+                income=fmt_money(rec["median_household_income"]),
+                plus="+" if rec.get("top_coded") else "",
+            )
+
+    pct = round((state_median / national_median - 1) * 100, 1)
+    if pct > 0:
+        compare_phrase = "roughly {}% higher".format(abs(pct))
+    elif pct < 0:
+        compare_phrase = "roughly {}% lower".format(abs(pct))
+    else:
+        compare_phrase = "almost exactly in line with the national figure"
+
+    return FAQ_BLOCK.format(
+        state_name=state_name,
+        income_faq=income_faq,
+        top_name=top["name"],
+        top_value=fmt_money(top["value"]),
+        bottom_name=bottom["name"],
+        bottom_value=fmt_money(bottom["value"]),
+        n=n,
+        counties_word="county" if n == 1 else "counties",
+        state_median=fmt_money(state_median),
+        national_median=fmt_money(national_median),
+        compare_phrase=compare_phrase,
+    )
 
 
 def build_crime_section(group, state_name, abbr, crime_by_fips, n_total):
@@ -259,7 +425,7 @@ def build_crime_section(group, state_name, abbr, crime_by_fips, n_total):
     return intro_block + crime_lists
 
 
-def build_state_pages(county_data, crime_data):
+def build_state_pages(county_data, crime_data, income_data=None):
     counties = county_data["counties"]
     items = [
         {"fips": fips, **rec}
@@ -268,6 +434,7 @@ def build_state_pages(county_data, crime_data):
     ]
 
     crime_by_fips = crime_data["counties"] if crime_data else {}
+    income_by_fips = income_data["counties"] if income_data else {}
 
     all_values = [c["value"] for c in items]
     national_median = statistics.median(all_values)
@@ -334,11 +501,15 @@ def build_state_pages(county_data, crime_data):
                     "Most Expensive Counties in {}".format(state_name), top10, abbr
                 )
                 + build_state_list_block(
-                    "Most Affordable Counties in {}".format(state_name), bottom10, abbr
+                    "Cheapest & Most Affordable Counties in {}".format(state_name), bottom10, abbr
                 )
             )
 
+        affordability_section = build_affordability_section(group, state_name, abbr, income_by_fips, n)
         crime_section = build_crime_section(group, state_name, abbr, crime_by_fips, n)
+        faq_section = build_faq_section(
+            ranked, state_name, n, state_median, national_median, income_by_fips
+        )
 
         slug = slugify(state_name)
         filename = slug + ".html"
@@ -357,7 +528,9 @@ def build_state_pages(county_data, crime_data):
             state_name=state_name,
             intro=intro,
             lists_section=lists_section,
+            affordability_section=affordability_section,
             crime_section=crime_section,
+            faq_section=faq_section,
         )
 
         (OUT_DIR / filename).write_text(html, encoding="utf-8")
@@ -377,6 +550,9 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 <title>Home Prices by State | Home Price Map</title>
 <meta name="description" content="Browse the most expensive and most affordable counties in every U.S. state, ranked by median home price.">
 <link rel="canonical" href="{site_url}/states.html">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{site_url}/states.html">
 <meta property="og:title" content="Home Prices by State | Home Price Map">
@@ -475,7 +651,13 @@ def main():
     else:
         print("NOTE: {} not found -- state pages will skip crime rate lists.".format(CRIME_PATH))
 
-    state_urls = build_state_pages(county_data, crime_data)
+    income_data = None
+    if INCOME_PATH.exists():
+        income_data = json.loads(INCOME_PATH.read_text())
+    else:
+        print("NOTE: {} not found -- state pages will skip affordability lists.".format(INCOME_PATH))
+
+    state_urls = build_state_pages(county_data, crime_data, income_data)
     build_sitemap(state_urls, county_data)
     print("Generated {} state pages, states.html hub page, and rewrote sitemap.xml.".format(len(state_urls)))
     return 0

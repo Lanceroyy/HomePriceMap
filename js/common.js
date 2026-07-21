@@ -74,6 +74,36 @@ function fmtMoney(v) {
   return "$" + Math.round(v).toLocaleString();
 }
 
+// Price-to-income is computed here at render time rather than stored in
+// income_data_*.json, because home prices refresh daily while the Census
+// income figures refresh once a year -- a stored ratio would drift out of
+// date the moment Zillow publishes new numbers.
+function incomeBlock(income, value) {
+  if (!income || !income.median_household_income) return "";
+  const inc = income.median_household_income;
+  const incLabel = income.top_coded ? fmtMoney(inc) + "+" : fmtMoney(inc);
+
+  let ratioRow = "";
+  if (value != null) {
+    const ratio = value / inc;
+    // Rough rule of thumb in housing research: around 3x income or below is
+    // considered manageable, 5x and up is severely stretched.
+    const cls = ratio >= 5 ? "ratio-high" : ratio <= 3 ? "ratio-low" : "";
+    // When income is top-coded the true figure is at least that much, so the
+    // real ratio can only be lower than what we can compute -- hence "≤".
+    const prefix = income.top_coded ? "≤&nbsp;" : "";
+    ratioRow = `<div class="income-row"><span>Price to income</span><b class="${cls}">${prefix}${ratio.toFixed(1)}&times;</b></div>`;
+  }
+
+  return `
+    <div class="income-block">
+      <div class="income-title">Income &amp; affordability</div>
+      <div class="income-row"><span>Median household income</span><b>${incLabel}</b></div>
+      ${ratioRow}
+    </div>
+  `;
+}
+
 function fmtYoy(v) {
   if (v == null) return "n/a";
   const sign = v > 0 ? "+" : "";
@@ -99,23 +129,36 @@ function colorForValue(value, breaks) {
   return COLOR_RAMP[COLOR_RAMP.length - 1];
 }
 
+// The legend is always expanded on desktop. On mobile (see the max-width:700px
+// block in style.css) the rows collapse behind the title, which doubles as a
+// tap target -- 12 price bands is a lot of screen to give up permanently on a
+// phone, and the info box already reports exact values for whatever you tap.
 function renderLegend(el, breaks) {
   const edges = [0, ...breaks, Infinity];
-  let html = "<div style='font-weight:600;margin-bottom:6px;color:var(--text-dim);text-transform:uppercase;font-size:11px;letter-spacing:.04em;'>Median price</div>";
+  let rows = "";
   for (let i = 0; i < edges.length - 1; i++) {
     const lo = edges[i] === 0 ? "$0" : fmtMoney(edges[i]);
     const hi = edges[i + 1] === Infinity ? "+" : fmtMoney(edges[i + 1]);
-    html += `<div class="row"><span class="swatch" style="background:${COLOR_RAMP[i]}"></span>${lo} – ${hi}</div>`;
+    rows += `<div class="row"><span class="swatch" style="background:${COLOR_RAMP[i]}"></span>${lo} – ${hi}</div>`;
   }
-  el.innerHTML = html;
+  el.innerHTML = `
+    <button type="button" class="legend-toggle" aria-expanded="false">Median price<span class="legend-caret"></span></button>
+    <div class="legend-body">${rows}</div>
+  `;
+  const btn = el.querySelector(".legend-toggle");
+  btn.addEventListener("click", () => {
+    const isOpen = el.classList.toggle("open");
+    btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
 }
 
-function showInfo(el, { title, value, yoy, crime }) {
+function showInfo(el, { title, value, yoy, crime, income }) {
   const cls = yoy > 0 ? "up" : yoy < 0 ? "down" : "";
   el.innerHTML = `
     <div class="region-name">${title}</div>
     <div class="region-value">${fmtMoney(value)}</div>
     <div class="region-yoy ${cls}">${fmtYoy(yoy)} year-over-year</div>
+    ${incomeBlock(income, value)}
     ${crimeBlock(crime)}
     ${affiliateCta(title, value)}
   `;
