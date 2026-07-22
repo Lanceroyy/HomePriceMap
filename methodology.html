@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2K8JWH5ZKY');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data &amp; Methodology | Home Price Map</title>
+<meta name="description" content="Where Home Price Map's data comes from and how it's processed: Zillow ZHVI home values, FBI crime rates, and Census income figures, with each source's limitations explained.">
+<link rel="canonical" href="https://homepricemap.us/methodology.html">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://homepricemap.us/methodology.html">
+<meta property="og:title" content="Data &amp; Methodology | Home Price Map">
+<meta property="og:description" content="Where Home Price Map's data comes from and how it's processed, with each source's limitations explained honestly.">
+<meta property="og:image" content="https://homepricemap.us/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Data &amp; Methodology | Home Price Map">
+<meta name="twitter:description" content="Where Home Price Map's data comes from and how it's processed, with each source's limitations explained honestly.">
+<meta name="twitter:image" content="https://homepricemap.us/assets/og-image.jpg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Home<span>Price</span>Map</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="counties.html">Counties</a>
+    <a href="cities.html">Cities</a>
+    <a href="states.html">States</a>
+  </nav>
+</header>
+
+<div class="content-section">
+  <h1 style="font-size:30px;margin-bottom:16px;">Data &amp; Methodology</h1>
+
+  <p>Every number on this site comes from a public data source, and every source has strengths and limits worth understanding. This page explains exactly where each figure comes from, how it's processed, and what it can and can't tell you. If a number ever looks surprising, the explanation is almost always here.</p>
+
+  <h2>Home values</h2>
+  <p>Home prices come from the <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Home Value Index (ZHVI)</a>, a widely used measure published by Zillow Research. ZHVI is not an average of recent sale prices; it's a smoothed, seasonally adjusted estimate of the typical value of homes in the 35th-to-65th percentile range for an area &mdash; in plain terms, the broad middle of the market, excluding both the cheapest distressed properties and the most expensive luxury outliers. Because it's smoothed, it moves more steadily month to month than raw sales data, which makes it well suited to comparing places and tracking trends but not to pricing any single specific home. An automated job on this site checks Zillow's public data daily; Zillow itself typically republishes ZHVI once a month, usually around the 16th.</p>
+
+  <h2>Crime rates</h2>
+  <p>Crime figures come from the FBI's Uniform Crime Reporting (UCR) Program, specifically the "Offenses Known to Law Enforcement by City" table from the most recent annual Crime in the United States release. City-level rates are calculated directly as offenses per 100,000 residents.</p>
+  <p>County-level crime is handled more carefully. The FBI does publish a county table, but it counts only crimes reported by sheriff's offices and county departments &mdash; it excludes any incorporated city that runs its own police department. Using it directly would dramatically understate crime in any county containing a real city. Instead, this site builds each county's rate as a population-weighted average of the crime rates of that county's own reporting cities. To avoid publishing a misleading number, a county's crime figure is only shown when the reporting cities cover at least 5,000 residents; below that threshold, a single incident swings the rate so wildly that the figure says more about reporting gaps than about actual safety. As a result, crime data is available for many but not all counties, and rural areas &mdash; where fewer agencies report to the FBI &mdash; are the most likely to be missing it. That is a limitation of the underlying federal data, not an error on this site.</p>
+
+  <h2>Household income and affordability</h2>
+  <p>Median household income comes from the U.S. Census Bureau's American Community Survey (ACS) 5-Year Estimates, table B19013. The 5-year estimates are used because they cover far more small counties reliably than the 1-year release does. From income and home value together, the site computes a price-to-income ratio &mdash; roughly how many years of a typical local household income it would take to buy a typical local home. Housing researchers generally treat about 3&times; income as manageable and 5&times; or more as severely stretched. Because home values update daily but income updates only once a year, this ratio is always calculated fresh at the moment you view it rather than stored, so the two figures never drift out of sync. Two caveats: ACS estimates carry margins of error that widen for small areas, and household income is not the same as wealth, which would also include savings, investments, and property already owned outright. One geography is missing entirely &mdash; Connecticut, which replaced its counties with planning regions for Census purposes in 2022, so its ACS geographies no longer line up with the county boundaries used elsewhere on the site.</p>
+
+  <h2>Geography and boundaries</h2>
+  <p>County shapes are drawn from the U.S. Census Bureau's TIGER/Line data via the open-source us-atlas project. City coordinates are matched against the Census Bureau's Gazetteer place files. Counties shown in gray, with no color fill, simply don't have a published ZHVI value &mdash; typically very rural counties with too few recorded sales for a statistically reliable estimate.</p>
+
+  <h2>How it all stays current</h2>
+  <p>The home price data and the thousands of individual location pages are regenerated automatically every day, so they always reflect the latest published figures with no manual step. The crime and income datasets update on the annual cycle their sources follow and are refreshed by hand when each new release comes out.</p>
+
+  <h2>What this data is not</h2>
+  <p>These figures are estimates drawn from public datasets, intended for comparison and general research. They are not appraisals, not investment advice, and not a substitute for professional guidance when you're actually buying, selling, or relocating. This site is independent and is not affiliated with or endorsed by Zillow, the FBI, or the U.S. Census Bureau.</p>
+
+  <p style="margin-top:24px;">Spotted something that looks wrong, or want to know more about how a specific number was calculated? Reach out through the <a href="contact.html">Contact</a> page.</p>
+</div>
+
+<footer class="site-footer">
+  Data sources: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>, FBI UCR, U.S. Census Bureau.
+  Not affiliated with or endorsed by any of them.
+  &middot; <a href="about.html">About</a>
+  &middot; <a href="methodology.html">Data &amp; Methodology</a>
+  &middot; <a href="contact.html">Contact</a>
+  &middot; <a href="privacy-policy.html">Privacy Policy</a>
+</footer>
+
+</body>
+</html>

@@ -177,6 +177,9 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
   refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  &middot; <a href="../about.html">About</a>
+  &middot; <a href="../methodology.html">Data &amp; Methodology</a>
+  &middot; <a href="../contact.html">Contact</a>
   &middot; <a href="../privacy-policy.html">Privacy Policy</a>
 </footer>
 
@@ -590,6 +593,9 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
   refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  &middot; <a href="about.html">About</a>
+  &middot; <a href="methodology.html">Data &amp; Methodology</a>
+  &middot; <a href="contact.html">Contact</a>
   &middot; <a href="privacy-policy.html">Privacy Policy</a>
 </footer>
 
@@ -621,6 +627,9 @@ def build_sitemap(state_urls, county_data):
         SITE_URL + "/counties.html",
         SITE_URL + "/cities.html",
         SITE_URL + "/states.html",
+        SITE_URL + "/about.html",
+        SITE_URL + "/methodology.html",
+        SITE_URL + "/contact.html",
         SITE_URL + "/privacy-policy.html",
     ]
     all_urls = static_urls + county_urls + state_urls
