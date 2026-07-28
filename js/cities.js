@@ -45,7 +45,7 @@ Promise.all([
       marker.bindTooltip(`${key}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
       marker.on("click", () => {
         map.setView([rec.lat, rec.lon], Math.max(map.getZoom(), 9));
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByCityKey[crimeKey], income: incomeByCityKey[crimeKey] });
+        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByCityKey[crimeKey], income: incomeByCityKey[crimeKey], track: "map_click" });
       });
 
       marker.addTo(cluster);
@@ -59,7 +59,7 @@ Promise.all([
       const hit = markerByKey[searchBox.value];
       if (hit) {
         map.setView([hit.rec.lat, hit.rec.lon], 10);
-        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct, crime: crimeByCityKey[hit.crimeKey], income: incomeByCityKey[hit.crimeKey] });
+        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct, crime: crimeByCityKey[hit.crimeKey], income: incomeByCityKey[hit.crimeKey], track: "search" });
         hit.marker.openTooltip();
       }
     });

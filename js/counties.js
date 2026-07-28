@@ -39,7 +39,7 @@ Promise.all([
 
   const geojson = topojson.feature(topo, topo.objects.counties);
 
-  function selectCounty(fips, lyr, rec) {
+  function selectCounty(fips, lyr, rec, method) {
     if (selectedLyr) selectedLyr.setStyle({ weight: 0.5, color: "#0f1419" });
 
     if (selectedFips === fips) {
@@ -54,7 +54,11 @@ Promise.all([
     selectedLyr = lyr;
     lyr.setStyle({ weight: 2, color: "#ffffff" });
     const key = `${rec.name}, ${rec.state}`;
-    showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips], income: incomeByFips[fips] });
+    showInfo(infoBox, {
+      title: key, value: rec.value, yoy: rec.yoy_pct,
+      crime: crimeByFips[fips], income: incomeByFips[fips],
+      track: method || "map_click",
+    });
   }
 
   const layer = L.geoJSON(geojson, {
@@ -108,7 +112,7 @@ Promise.all([
       if (rec) {
         selectedFips = null; // force a fresh lock even if it's the same county as before
         selectedLyr = null;
-        selectCounty(fips, lyr, rec);
+        selectCounty(fips, lyr, rec, "search");
       }
     }
   });
@@ -121,7 +125,7 @@ Promise.all([
     const lyr = layerByFips[linkedFips];
     const rec = counties[linkedFips];
     map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
-    if (rec) selectCounty(linkedFips, lyr, rec);
+    if (rec) selectCounty(linkedFips, lyr, rec, "deep_link");
     // Strip the ?fips= param once it's been applied, so refreshing the page
     // afterward lands on the normal map instead of re-locking to this same
     // county forever.

@@ -81,7 +81,10 @@ header.topbar nav a.active { color: var(--text); }
 
 .choice-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* auto-fit rather than a fixed column count so the homepage's three cards
+     sit evenly across on desktop and reflow to two (then one) as the
+     viewport narrows, instead of stranding the last card at half width. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   max-width: 920px;
   margin: 0 auto;

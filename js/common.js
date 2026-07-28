@@ -1,5 +1,31 @@
 // Shared helpers for counties.js and cities.js
 
+// --- Analytics ------------------------------------------------------------
+// Thin wrapper so nothing here depends on gtag actually being present. Ad
+// blockers stop the GA script from loading for a meaningful share of
+// visitors, and an uncaught ReferenceError in a click handler would break
+// the affiliate link itself -- losing real revenue to collect a stat.
+function trackEvent(name, params) {
+  try {
+    if (typeof gtag === "function") gtag("event", name, params || {});
+  } catch (e) {
+    /* analytics must never break the page */
+  }
+}
+
+// Delegated listener: the info panel is re-rendered via innerHTML on every
+// hover/click, so per-element listeners would be discarded constantly. One
+// document-level listener survives all of it.
+document.addEventListener("click", function (e) {
+  const cta = e.target.closest && e.target.closest(".mortgage-cta");
+  if (!cta) return;
+  trackEvent("affiliate_click", {
+    affiliate: cta.dataset.affiliate || "unknown",
+    region: cta.dataset.region || "",
+    region_value: Number(cta.dataset.value) || 0,
+  });
+});
+
 // Fixed dollar-value breakpoints, NOT quantile/equal-count breaks. Home
 // prices are heavily right-skewed (a long tail of very expensive counties
 // and cities), so an equal-count scheme puts the entire top ~10% of the
@@ -30,14 +56,28 @@ const HOUSEPLANS_URL = "https://www.anrdoezrs.net/click-101818616-15735175";
 const HOUSEPLANS_LABEL = "Building instead? Browse house plans";
 const HOUSEPLANS_MAX_VALUE = 300000;
 
+// data-* attributes feed the delegated click handler above, so each affiliate
+// click is attributed to the specific region and price that produced it.
 function affiliateCta(regionLabel, value) {
+  const attrs = `data-region="${escapeAttr(regionLabel)}" data-value="${value == null ? "" : Math.round(value)}"`;
   if (AFFILIATE_URL) {
-    return `<a class="mortgage-cta" href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
+    return `<a class="mortgage-cta" data-affiliate="mortgage" ${attrs} href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
   }
   if (HOUSEPLANS_URL && value != null && value <= HOUSEPLANS_MAX_VALUE) {
-    return `<a class="mortgage-cta" href="${HOUSEPLANS_URL}" target="_blank" rel="noopener sponsored">${HOUSEPLANS_LABEL} &rarr;</a>`;
+    return `<a class="mortgage-cta" data-affiliate="house-plans" ${attrs} href="${HOUSEPLANS_URL}" target="_blank" rel="noopener sponsored">${HOUSEPLANS_LABEL} &rarr;</a>`;
   }
   return "";
+}
+
+// Region names come from JSON data, not user input, but they do contain
+// quotes and ampersands in places -- escape before interpolating into an
+// attribute so the markup can't be broken by a stray character.
+function escapeAttr(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 // Mirrors normalize_place() in scripts/process_crime_data.py / fetch_data.py
@@ -152,7 +192,11 @@ function renderLegend(el, breaks) {
   });
 }
 
-function showInfo(el, { title, value, yoy, crime, income }) {
+// `track` is the interaction that produced this panel ("map_click",
+// "search", "deep_link"). Left undefined for hover previews on purpose --
+// hovering across a choropleth fires constantly and would bury the
+// deliberate selections in noise (and blow through GA's event quota).
+function showInfo(el, { title, value, yoy, crime, income, track }) {
   const cls = yoy > 0 ? "up" : yoy < 0 ? "down" : "";
   el.innerHTML = `
     <div class="region-name">${title}</div>
@@ -162,4 +206,14 @@ function showInfo(el, { title, value, yoy, crime, income }) {
     ${crimeBlock(crime)}
     ${affiliateCta(title, value)}
   `;
+
+  if (track) {
+    trackEvent("region_select", {
+      region: title,
+      region_value: value == null ? 0 : Math.round(value),
+      method: track,
+      has_crime_data: !!crime,
+      has_income_data: !!income,
+    });
+  }
 }
