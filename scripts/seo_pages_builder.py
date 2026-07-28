@@ -23,6 +23,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "county_prices.json"
+CRIME_PATH = ROOT / "data" / "crime_data_county.json"
+INCOME_PATH = ROOT / "data" / "income_data_county.json"
 OUT_DIR = ROOT / "counties"
 SITE_URL = "https://homepricemap.us"
 
@@ -153,6 +155,12 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p><a href="../counties.html?fips={fips}">View {county_name} on the interactive county map &rarr;</a></p>
 </div>
 
+{affordability_section}
+
+{crime_section}
+
+{faq_section}
+
 {nearby_section}
 
 <footer class="site-footer">
@@ -168,21 +176,223 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
+STAT_CARD = (
+    '<div class="choice-card" style="text-align:center;">'
+    '<p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">{label}</p>'
+    '<p style="font-size:22px;font-weight:700;color:{color};margin:0;">{value}</p>'
+    "</div>"
+)
+
+
+def fmt_rate(v):
+    if v is None:
+        return "n/a"
+    return format(int(round(v)), ",")
+
+
+def affordability_section(name, state, value, income_rec, national_ratios):
+    """Per-county affordability write-up. The numbers here (income, ratio,
+    national percentile) differ for every county, which is the point --
+    these pages were being rejected by Google as near-duplicates, so the
+    added content has to be genuinely specific rather than more boilerplate."""
+    if not income_rec or not income_rec.get("median_household_income"):
+        return ""
+
+    income = income_rec["median_household_income"]
+    top_coded = bool(income_rec.get("top_coded"))
+    ratio = value / income
+
+    # Where this county sits nationally on affordability.
+    below = sum(1 for r in national_ratios if r < ratio)
+    pct = round(100.0 * below / len(national_ratios)) if national_ratios else 0
+
+    # Deliberately terse. An earlier draft explained the 3x/5x affordability
+    # convention in full on every page, which made same-state pages ~85%
+    # textually identical -- the exact duplication problem these pages were
+    # already being penalised for. The explanation lives on /methodology.html
+    # now; each page carries only its own figures.
+    if ratio <= 3:
+        verdict = "comfortably below the 3&times; income level generally considered manageable"
+    elif ratio < 5:
+        verdict = "above the 3&times; level usually considered comfortable, but below 5&times;"
+    else:
+        verdict = "past the 5&times; level generally described as severely unaffordable"
+
+    prefix = "at least " if top_coded else ""
+    approx = "&le;" if top_coded else ""
+
+    return """
+<div class="hero" style="text-align:left;max-width:760px;">
+  <h2 style="font-size:20px;">Can you afford a home in {name}?</h2>
+  <p>Households here earn a median of <b>{prefix}{income}</b> a year against a typical home value of <b>{value}</b> &mdash; a price-to-income ratio of <b>{approx}{ratio}&times;</b>, {verdict}. That is higher than roughly {pct}% of U.S. counties. (<a href="../methodology.html">How this is calculated</a>.)</p>
+</div>
+""".format(
+        name=name,
+        prefix=prefix,
+        income=fmt_money(income) + ("+" if top_coded else ""),
+        value=fmt_money(value),
+        approx=approx,
+        ratio="{:.1f}".format(ratio),
+        pct=pct,
+        verdict=verdict,
+    )
+
+
+def crime_section(name, crime_rec, national_violent):
+    """Per-county crime write-up, including how it compares nationally and an
+    explicit note about how much of the county the figure actually covers."""
+    if not crime_rec or crime_rec.get("violent_crime_rate") is None:
+        return ""
+
+    violent = crime_rec["violent_crime_rate"]
+    prop = crime_rec.get("property_crime_rate")
+    matched = crime_rec.get("cities_matched") or 0
+    covered = crime_rec.get("population_covered") or 0
+    year = crime_rec.get("year", "")
+
+    below = sum(1 for r in national_violent if r < violent)
+    pct = round(100.0 * below / len(national_violent)) if national_violent else 0
+
+    if pct <= 25:
+        compare = "lower than most counties nationally"
+    elif pct <= 75:
+        compare = "around the middle of the national range"
+    else:
+        compare = "higher than most counties nationally"
+
+    prop_sentence = (
+        " Property crime runs at <b>{}</b> per 100,000.".format(fmt_rate(prop))
+        if prop is not None else ""
+    )
+
+    return """
+<div class="hero" style="text-align:left;max-width:760px;">
+  <h2 style="font-size:20px;">Crime in {name}</h2>
+  <p>Reporting agencies in {name} recorded a violent crime rate of <b>{violent}</b> per 100,000 residents in {year} &mdash; {compare}.{prop_sentence}</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on {matched} reporting {city_word} covering {covered} residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+</div>
+""".format(
+        name=name,
+        violent=fmt_rate(violent),
+        year=year,
+        compare=compare,
+        prop_sentence=prop_sentence,
+        matched=matched,
+        city_word="city" if matched == 1 else "cities",
+        covered=format(int(covered), ","),
+    )
+
+
+def faq_section(name, state, state_name, value, yoy, income_rec, crime_rec,
+                state_rank_ord, state_total, national_median):
+    """Three questions people actually search, answered with this county's own
+    figures. Every number below varies per county."""
+    items = []
+
+    # Q1: the headline price question, phrased the way people search it.
+    if yoy is None:
+        trend = "Year-over-year change isn't currently available for this county."
+    elif yoy > 0:
+        trend = "That's up {} from a year earlier.".format(fmt_pct(yoy))
+    elif yoy < 0:
+        trend = "That's down {} from a year earlier.".format(fmt_pct(abs(yoy)))
+    else:
+        trend = "That's essentially unchanged from a year earlier."
+
+    vs_nat = round((value / national_median - 1) * 100, 1)
+    nat_phrase = (
+        "about {}% above".format(abs(vs_nat)) if vs_nat > 0
+        else "about {}% below".format(abs(vs_nat)) if vs_nat < 0
+        else "in line with"
+    )
+    items.append((
+        "How much does a house cost in {}, {}?".format(name, state),
+        "The median home value in {name} is <b>{value}</b>. {trend} That is {nat_phrase} "
+        "the U.S. national county median of {natmed}, and makes {name} the "
+        "{rank} most expensive of {total} counties in {state_name}.".format(
+            name=name, value=fmt_money(value), trend=trend, nat_phrase=nat_phrase,
+            natmed=fmt_money(national_median), rank=state_rank_ord, total=state_total,
+            state_name=state_name,
+        ),
+    ))
+
+    # Q2: affordability relative to local wages.
+    if income_rec and income_rec.get("median_household_income"):
+        inc = income_rec["median_household_income"]
+        ratio = value / inc
+        items.append((
+            "Is {} affordable?".format(name),
+            "Median household income here is <b>{inc}</b>, so a typical home costs about "
+            "<b>{ratio}&times;</b> annual household earnings &mdash; {verdict} compared with "
+            "other U.S. counties.".format(
+                inc=fmt_money(inc) + ("+" if income_rec.get("top_coded") else ""),
+                ratio="{:.1f}".format(ratio),
+                verdict=("relatively affordable" if ratio <= 3
+                         else "moderately expensive" if ratio < 5
+                         else "expensive"),
+            ),
+        ))
+
+    # Q3: safety, only where the FBI data actually supports an answer.
+    if crime_rec and crime_rec.get("violent_crime_rate") is not None:
+        items.append((
+            "Is {} a safe place to live?".format(name),
+            "Reporting police departments in {name} recorded <b>{v}</b> violent crimes per "
+            "100,000 residents. That figure covers {cov} residents across {m} reporting "
+            "{cw}, so it reflects the county's incorporated areas rather than every "
+            "community within its borders.".format(
+                name=name, v=fmt_rate(crime_rec["violent_crime_rate"]),
+                cov=format(int(crime_rec.get("population_covered") or 0), ","),
+                m=crime_rec.get("cities_matched") or 0,
+                cw="city" if (crime_rec.get("cities_matched") or 0) == 1 else "cities",
+            ),
+        ))
+
+    if not items:
+        return ""
+
+    blocks = "\n".join(
+        '  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">{q}</h3><p>{a}</p></div>'.format(q=q, a=a)
+        for q, a in items
+    )
+    return (
+        '<div class="content-section" style="padding-top:0;max-width:760px;margin:0 auto;">\n'
+        '  <h2 style="font-size:20px;">Common questions about {name}</h2>\n'
+        "{blocks}\n</div>\n"
+    ).format(name=name, blocks=blocks)
+
+
 NEARBY_TEMPLATE = """<div class="hero" style="text-align:left;max-width:760px;">
-  <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Other Counties in {state}</h2>
+  <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Counties with similar home prices in {state}</h2>
   <p>{links}</p>
   <p style="margin-top:10px;"><a href="../states/{state_slug}.html">See the full ranked list of {state_name} counties &rarr;</a></p>
 </div>
 """
 
 
-def build_pages(county_data):
+def build_pages(county_data, crime_data=None, income_data=None):
     counties = county_data["counties"]
     items = [
         {"fips": fips, **rec}
         for fips, rec in counties.items()
         if rec.get("value") is not None and rec.get("name") and rec.get("state")
     ]
+
+    crime_by_fips = crime_data["counties"] if crime_data else {}
+    income_by_fips = income_data["counties"] if income_data else {}
+
+    # National distributions, computed once, so each page can say where its
+    # county actually sits rather than just quoting a bare number.
+    national_ratios = sorted(
+        c["value"] / income_by_fips[c["fips"]]["median_household_income"]
+        for c in items
+        if c["fips"] in income_by_fips
+        and income_by_fips[c["fips"]].get("median_household_income")
+    )
+    national_violent = sorted(
+        r["violent_crime_rate"] for r in crime_by_fips.values()
+        if r.get("violent_crime_rate") is not None
+    )
 
     all_values = [c["value"] for c in items]
     national_median = statistics.median(all_values)
@@ -254,8 +464,18 @@ def build_pages(county_data):
         state_name = ABBR_TO_NAME.get(state, state)
         state_slug = slugify(state_name)
 
-        nearby = sorted(by_state[state], key=lambda c2: c2["value"], reverse=True)
-        nearby = [c2 for c2 in nearby if c2["fips"] != fips][:8]
+        # Link to the counties nearest this one in price rather than the
+        # state's eight most expensive. Two reasons: those top-eight links
+        # were identical on every page in the state (making same-state pages
+        # ~85% textually similar), and they funnelled every internal link to
+        # the same handful of counties, leaving the cheapest ones with almost
+        # no inbound links for crawlers to follow. Neighbours-by-price forms
+        # a chain across the whole state instead, and is a more useful
+        # comparison for a reader anyway.
+        ranked_state = sorted(by_state[state], key=lambda c2: c2["value"], reverse=True)
+        pos = next(i for i, c2 in enumerate(ranked_state) if c2["fips"] == fips)
+        window = ranked_state[max(0, pos - 4): pos + 5]
+        nearby = [c2 for c2 in window if c2["fips"] != fips]
         if nearby:
             links = " &middot; ".join(
                 '<a href="{}.html">{}</a>'.format(slug_by_fips[c2["fips"]], c2["name"])
@@ -265,6 +485,15 @@ def build_pages(county_data):
             links = "This is the only tracked county in " + state_name + "."
         nearby_section = NEARBY_TEMPLATE.format(
             state=state, state_name=state_name, state_slug=state_slug, links=links
+        )
+
+        income_rec = income_by_fips.get(fips)
+        crime_rec = crime_by_fips.get(fips)
+        aff_html = affordability_section(name, state, value, income_rec, national_ratios)
+        crime_html = crime_section(name, crime_rec, national_violent)
+        faq_html = faq_section(
+            name, state, state_name, value, yoy, income_rec, crime_rec,
+            ordinal(s_rank), s_total, national_median,
         )
 
         html = PAGE_TEMPLATE.format(
@@ -289,6 +518,9 @@ def build_pages(county_data):
             state_median_fmt=fmt_money(s_med),
             state_compare_sentence=state_compare_sentence,
             fips=fips,
+            affordability_section=aff_html,
+            crime_section=crime_html,
+            faq_section=faq_html,
             nearby_section=nearby_section,
         )
 
@@ -323,7 +555,17 @@ def main():
         print("ERROR: " + str(DATA_PATH) + " not found. Run fetch_data.py first.")
         return 1
     county_data = json.loads(DATA_PATH.read_text())
-    urls = build_pages(county_data)
+
+    # Both are optional -- pages still build without them, they just omit the
+    # corresponding sections rather than failing the whole daily run.
+    crime_data = json.loads(CRIME_PATH.read_text()) if CRIME_PATH.exists() else None
+    income_data = json.loads(INCOME_PATH.read_text()) if INCOME_PATH.exists() else None
+    if not crime_data:
+        print("NOTE: no crime data found -- county pages will omit crime sections.")
+    if not income_data:
+        print("NOTE: no income data found -- county pages will omit affordability sections.")
+
+    urls = build_pages(county_data, crime_data, income_data)
     build_sitemap(urls)
     build_robots()
     print("Generated " + str(len(urls)) + " county pages, sitemap.xml, robots.txt.")
