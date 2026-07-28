@@ -58,6 +58,14 @@ def fmt_pct(v):
     return sign + str(v) + "%"
 
 
+def fmt_pct_bare(v):
+    """Magnitude only, no sign. For sentences that already carry the
+    direction in words -- "down +4.92%" reads as a contradiction."""
+    if v is None:
+        return "n/a"
+    return str(abs(v)) + "%"
+
+
 ABBR_TO_NAME = {
     "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas",
     "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware",
@@ -218,13 +226,22 @@ def affordability_section(name, state, value, income_rec, national_ratios):
     else:
         verdict = "past the 5&times; level generally described as severely unaffordable"
 
+    # At the extremes "higher than roughly 0% of U.S. counties" is technically
+    # true but reads like broken output, so the tails get plain English.
+    if pct <= 2:
+        rank_sentence = "That makes it one of the most affordable counties in the country relative to local wages."
+    elif pct >= 98:
+        rank_sentence = "That makes it one of the least affordable counties in the country relative to local wages."
+    else:
+        rank_sentence = "That is less affordable than roughly {}% of U.S. counties.".format(pct)
+
     prefix = "at least " if top_coded else ""
     approx = "&le;" if top_coded else ""
 
     return """
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Can you afford a home in {name}?</h2>
-  <p>Households here earn a median of <b>{prefix}{income}</b> a year against a typical home value of <b>{value}</b> &mdash; a price-to-income ratio of <b>{approx}{ratio}&times;</b>, {verdict}. That is higher than roughly {pct}% of U.S. counties. (<a href="../methodology.html">How this is calculated</a>.)</p>
+  <p>Households here earn a median of <b>{prefix}{income}</b> a year against a typical home value of <b>{value}</b> &mdash; a price-to-income ratio of <b>{approx}{ratio}&times;</b>, {verdict}. {rank_sentence} (<a href="../methodology.html">How this is calculated</a>.)</p>
 </div>
 """.format(
         name=name,
@@ -233,7 +250,7 @@ def affordability_section(name, state, value, income_rec, national_ratios):
         value=fmt_money(value),
         approx=approx,
         ratio="{:.1f}".format(ratio),
-        pct=pct,
+        rank_sentence=rank_sentence,
         verdict=verdict,
     )
 
@@ -293,9 +310,9 @@ def faq_section(name, state, state_name, value, yoy, income_rec, crime_rec,
     if yoy is None:
         trend = "Year-over-year change isn't currently available for this county."
     elif yoy > 0:
-        trend = "That's up {} from a year earlier.".format(fmt_pct(yoy))
+        trend = "That's up {} from a year earlier.".format(fmt_pct_bare(yoy))
     elif yoy < 0:
-        trend = "That's down {} from a year earlier.".format(fmt_pct(abs(yoy)))
+        trend = "That's down {} from a year earlier.".format(fmt_pct_bare(yoy))
     else:
         trend = "That's essentially unchanged from a year earlier."
 
@@ -434,9 +451,9 @@ def build_pages(county_data, crime_data=None, income_data=None):
         if yoy is None:
             yoy_sentence = "with no year-over-year comparison currently available."
         elif yoy > 0:
-            yoy_sentence = "up " + fmt_pct(yoy) + " from a year earlier."
+            yoy_sentence = "up " + fmt_pct_bare(yoy) + " from a year earlier."
         elif yoy < 0:
-            yoy_sentence = "down " + fmt_pct(abs(yoy)) + " from a year earlier."
+            yoy_sentence = "down " + fmt_pct_bare(yoy) + " from a year earlier."
         else:
             yoy_sentence = "unchanged from a year earlier."
 
