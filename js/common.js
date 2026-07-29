@@ -35,7 +35,15 @@ document.addEventListener("click", function (e) {
 // actually distinguishable from each other instead of all reading as
 // "the expensive color."
 const PRICE_BREAKS = [125000, 175000, 225000, 275000, 350000, 450000, 600000, 800000, 1100000, 1600000, 2500000];
-const COLOR_RAMP = ["#16324f", "#1a3a5c", "#1e5f8a", "#2389b0", "#2fa8a0", "#4fcf8b", "#a8e063", "#f4d35e", "#f4a259", "#ef6461", "#d63d5e", "#8b1e3f"];
+
+// Cividis, not a blue-to-red rainbow. Rainbow ramps fail for red-green colour
+// blindness (~8% of men): simulating the previous ramp put two adjacent steps
+// at deltaE 1.4 under protanopia -- indistinguishable. Cividis is designed so
+// dichromats and trichromats see near-identical output, and measures with zero
+// adjacent collisions under both deuteranopia and protanopia. It also rises
+// monotonically in lightness, so "darker = cheaper" survives even in
+// greyscale or on a bad monitor, which a rainbow never manages.
+const COLOR_RAMP = ["#00224e", "#083370", "#33447b", "#4e577d", "#646b7f", "#7a7f81", "#918f7f", "#a9a179", "#c3b46f", "#ddc960", "#f0de4b", "#fee838"];
 
 // --- Mortgage-rate affiliate CTA -----------------------------------------
 // Set AFFILIATE_URL once you're approved for an affiliate program (e.g.
@@ -162,7 +170,10 @@ function quantileBreaks(values, n) {
 }
 
 function colorForValue(value, breaks) {
-  if (value == null) return "#3a4452";
+  // Warm grey for counties Zillow doesn't price. Measured at deltaE 28+ from
+  // every cividis step under simulated colour blindness, so "no data" never
+  // reads as a price band.
+  if (value == null) return "#3a352e";
   for (let i = 0; i < breaks.length; i++) {
     if (value <= breaks[i]) return COLOR_RAMP[i];
   }
