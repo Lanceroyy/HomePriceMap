@@ -523,8 +523,25 @@ def build_state_pages(county_data, crime_data, income_data=None):
             title="Most Expensive & Cheapest Counties in {} ({}) | Home Price Map".format(
                 state_name, group[0].get("as_of", "")[:4]
             ),
-            description="Ranked list of the most expensive and most affordable counties in {} by median home price, updated daily from Zillow Research data.".format(
-                state_name
+            # Lead with the state's actual extremes rather than a generic
+            # summary. These pages hold positions 6-12 in search but get very
+            # few clicks; a snippet containing real names and dollar figures
+            # gives someone scanning results a reason to pick this one.
+            # Kept under ~155 characters so Google doesn't truncate it.
+            description=(
+                # DC has a single tracked "county", so the most/least framing
+                # would name the same place twice.
+                "The median home value in {state_name} is {topv}. See home prices, "
+                "affordability and crime data.".format(
+                    state_name=state_name, topv=fmt_money(ranked[0]["value"])
+                )
+                if n == 1 else
+                "{top} is the most expensive county in {state_name} at {topv}; "
+                "{bottom} the cheapest at {botv}. Compare all {n} counties.".format(
+                    top=ranked[0]["name"], topv=fmt_money(ranked[0]["value"]),
+                    bottom=ranked[-1]["name"], botv=fmt_money(ranked[-1]["value"]),
+                    state_name=state_name, n=n,
+                )
             ),
             canonical=canonical,
             site_url=SITE_URL,
