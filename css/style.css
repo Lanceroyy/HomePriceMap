@@ -21,7 +21,7 @@
      avoid when the two are meant to mean opposite things. */
   --accent: #d08a3c;
   --accent-hover: #e5a25b;
-  --accent-2: #3f9e9a;
+  --accent-2: #35d0c8;
   --warn: #c4604f;
   --radius: 10px;
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
@@ -220,11 +220,15 @@ footer.site-footer {
 /* Tabular figures on every number in the panel: hovering across the map
    swaps these constantly, and proportional digits make the whole box jump
    as the value changes width. */
+/* The headline figure is the reason anyone clicked, so it gets the most
+   visual weight in the panel: larger, tighter, and the brightest colour
+   on the page. */
 .info-box .region-value {
-  font-size: 22px;
+  font-size: 27px;
   font-weight: 600;
   color: var(--accent-2);
-  margin: 6px 0 2px;
+  margin: 4px 0 2px;
+  letter-spacing: -0.02em;
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }

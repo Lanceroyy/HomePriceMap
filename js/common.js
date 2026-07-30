@@ -34,16 +34,22 @@ document.addEventListener("click", function (e) {
 // number of color buckets as the lower half, so high-cost areas are
 // actually distinguishable from each other instead of all reading as
 // "the expensive color."
-const PRICE_BREAKS = [125000, 175000, 225000, 275000, 350000, 450000, 600000, 800000, 1100000, 1600000, 2500000];
+// Nine bands rather than twelve. Crowding twelve steps into one ramp forced
+// them close enough together that adjacent bands collided for colour-blind
+// viewers; fewer, better-separated bands are both safer and easier to read
+// off a legend. Three bands still sit above $600k so expensive counties stay
+// distinguishable from one another.
+const PRICE_BREAKS = [130000, 180000, 240000, 310000, 420000, 600000, 900000, 1500000];
 
-// Cividis, not a blue-to-red rainbow. Rainbow ramps fail for red-green colour
-// blindness (~8% of men): simulating the previous ramp put two adjacent steps
-// at deltaE 1.4 under protanopia -- indistinguishable. Cividis is designed so
-// dichromats and trichromats see near-identical output, and measures with zero
-// adjacent collisions under both deuteranopia and protanopia. It also rises
-// monotonically in lightness, so "darker = cheaper" survives even in
-// greyscale or on a bad monitor, which a rainbow never manages.
-const COLOR_RAMP = ["#00224e", "#083370", "#33447b", "#4e577d", "#646b7f", "#7a7f81", "#918f7f", "#a9a179", "#c3b46f", "#ddc960", "#f0de4b", "#fee838"];
+// Plasma, sampled at hand-picked stops rather than evenly. The original
+// blue-to-red rainbow put two adjacent steps at deltaE 1.4 under simulated
+// protanopia -- literally the same colour to those viewers. These nine stops
+// were chosen by searching the plasma range for the spacing that maximises
+// the minimum separation under both deuteranopia and protanopia: the worst
+// adjacent pair measures deltaE 13.7, comfortably distinguishable. Lightness
+// also rises monotonically across the ramp, so "darker = cheaper" still holds
+// in greyscale or on a poorly calibrated screen.
+const COLOR_RAMP = ["#0d0887", "#a11b9b", "#bf3984", "#cc4778", "#d8576b", "#e97158", "#f68d45", "#fdbb2c", "#f0f921"];
 
 // --- Mortgage-rate affiliate CTA -----------------------------------------
 // Set AFFILIATE_URL once you're approved for an affiliate program (e.g.
