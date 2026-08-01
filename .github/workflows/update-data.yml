@@ -28,7 +28,12 @@ jobs:
       - name: Generate SEO county pages, sitemap, robots.txt
         run: python scripts/seo_pages_builder.py
 
-      - name: Generate state listicle pages
+      - name: Generate city pages
+        run: python scripts/city_pages_builder.py
+
+      # Runs last of the page builders because it also writes sitemap.xml,
+      # which globs the cities/ directory produced by the step above.
+      - name: Generate state listicle pages and sitemap
         run: python scripts/state_pages_builder.py
 
       - name: Commit updated data and pages if changed
@@ -41,7 +46,7 @@ jobs:
           # temporarily shelves the just-generated data files so the pull
           # can apply cleanly, then restores them.
           git pull --rebase --autostash origin main
-          git add data/county_prices.json data/city_prices.json data/history/ counties/ states/ states.html sitemap.xml robots.txt
+          git add data/county_prices.json data/city_prices.json data/history/ counties/ cities/ states/ states.html sitemap.xml robots.txt
           if ! git diff --cached --quiet; then
             git commit -m "chore: daily home price data + SEO page refresh"
             git push

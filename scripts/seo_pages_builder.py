@@ -25,6 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "county_prices.json"
 CRIME_PATH = ROOT / "data" / "crime_data_county.json"
 INCOME_PATH = ROOT / "data" / "income_data_county.json"
+CITY_PATH = ROOT / "data" / "city_prices.json"
+CITY_DIR = ROOT / "cities"
 OUT_DIR = ROOT / "counties"
 SITE_URL = "https://homepricemap.us"
 
@@ -146,15 +148,15 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <div class="choice-grid" style="grid-template-columns:repeat(3,1fr);max-width:760px;">
   <div class="choice-card" style="text-align:center;">
     <p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">Median Home Value</p>
-    <p style="font-size:22px;font-weight:700;color:var(--accent-2);margin:0;">{value_fmt}</p>
+    <p class="figure" style="font-size:22px;font-weight:700;color:var(--accent-2);margin:0;">{value_fmt}</p>
   </div>
   <div class="choice-card" style="text-align:center;">
     <p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">Year-over-Year</p>
-    <p style="font-size:22px;font-weight:700;margin:0;">{yoy_fmt}</p>
+    <p class="figure" style="font-size:22px;font-weight:700;margin:0;">{yoy_fmt}</p>
   </div>
   <div class="choice-card" style="text-align:center;">
     <p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">National Rank</p>
-    <p style="font-size:22px;font-weight:700;margin:0;">#{national_rank} of {national_total}</p>
+    <p class="figure" style="font-size:22px;font-weight:700;margin:0;">#{national_rank} of {national_total}</p>
   </div>
 </div>
 
@@ -168,6 +170,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 {crime_section}
 
 {faq_section}
+
+{city_section}
 
 {nearby_section}
 
@@ -187,7 +191,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 STAT_CARD = (
     '<div class="choice-card" style="text-align:center;">'
     '<p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">{label}</p>'
-    '<p style="font-size:22px;font-weight:700;color:{color};margin:0;">{value}</p>'
+    '<p class="figure" style="font-size:22px;font-weight:700;color:{color};margin:0;">{value}</p>'
     "</div>"
 )
 
@@ -387,6 +391,35 @@ NEARBY_TEMPLATE = """<div class="hero" style="text-align:left;max-width:760px;">
 """
 
 
+def load_city_links():
+    """Maps a county (state, normalised name) to the city pages inside it that
+    actually exist on disk. Only pages city_pages_builder chose to generate are
+    linked, so a county page never points at a 404 -- and the new city pages
+    get a real internal path for crawlers to follow, rather than sitting
+    orphaned in the sitemap."""
+    if not CITY_PATH.exists() or not CITY_DIR.is_dir():
+        return {}
+    existing = {p.stem for p in CITY_DIR.glob("*.html")}
+    out = {}
+    for c in json.loads(CITY_PATH.read_text())["cities"]:
+        if not c.get("county") or c.get("value") is None:
+            continue
+        stem = "{}-{}".format(c["state"].lower(), slugify(c["name"]))
+        if stem not in existing:
+            continue
+        key = "{}|{}".format(c["state"], re.sub(r"[^a-z0-9]+", "", COUNTY_SUFFIXES.sub("", c["county"]).strip().lower()))
+        out.setdefault(key, []).append((c["value"], c["name"], stem))
+    for k in out:
+        out[k].sort(reverse=True)          # biggest-value cities first
+    return out
+
+
+COUNTY_SUFFIXES = re.compile(
+    r"\s+(county|parish|borough|census area|municipality|municipio|city and borough)\s*$",
+    re.IGNORECASE,
+)
+
+
 def build_pages(county_data, crime_data=None, income_data=None):
     counties = county_data["counties"]
     items = [
@@ -397,6 +430,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
 
     crime_by_fips = crime_data["counties"] if crime_data else {}
     income_by_fips = income_data["counties"] if income_data else {}
+    city_links = load_city_links()
 
     # National distributions, computed once, so each page can say where its
     # county actually sits rather than just quoting a bare number.
@@ -504,6 +538,18 @@ def build_pages(county_data, crime_data=None, income_data=None):
             state=state, state_name=state_name, state_slug=state_slug, links=links
         )
 
+        ckey = "{}|{}".format(state, re.sub(r"[^a-z0-9]+", "", COUNTY_SUFFIXES.sub("", name).strip().lower()))
+        cities_here = city_links.get(ckey, [])[:12]
+        if cities_here:
+            city_html = (
+                '<div class="hero" style="text-align:left;max-width:760px;">\n'
+                '  <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities in {n}</h2>\n'
+                "  <p>{links}</p>\n</div>\n"
+            ).format(n=name, links=" &middot; ".join(
+                '<a href="../cities/{}.html">{}</a>'.format(stem, cname) for _, cname, stem in cities_here))
+        else:
+            city_html = ""
+
         income_rec = income_by_fips.get(fips)
         crime_rec = crime_by_fips.get(fips)
         aff_html = affordability_section(name, state, value, income_rec, national_ratios)
@@ -538,6 +584,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
             affordability_section=aff_html,
             crime_section=crime_html,
             faq_section=faq_html,
+            city_section=city_html,
             nearby_section=nearby_section,
         )
 

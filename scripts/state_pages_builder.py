@@ -100,14 +100,14 @@ ROW_TEMPLATE = (
     '<div style="display:flex;justify-content:space-between;padding:8px 0;'
     'border-bottom:1px solid var(--border);font-size:14px;">'
     '<span>{rank}. <a href="{href}">{name}</a></span>'
-    '<b style="color:var(--accent-2);">{value}</b></div>'
+    '<b class="figure" style="color:var(--accent-2);">{value}</b></div>'
 )
 
 CRIME_ROW_TEMPLATE = (
     '<div style="display:flex;justify-content:space-between;padding:8px 0;'
     'border-bottom:1px solid var(--border);font-size:14px;">'
     '<span>{rank}. <a href="{href}">{name}</a></span>'
-    '<b style="color:{color};">{value} /100k</b></div>'
+    '<b class="figure" style="color:{color};">{value} /100k</b></div>'
 )
 
 STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
@@ -225,7 +225,7 @@ RATIO_ROW_TEMPLATE = (
     '<div style="display:flex;justify-content:space-between;padding:8px 0;'
     'border-bottom:1px solid var(--border);font-size:14px;">'
     '<span>{rank}. <a href="{href}">{name}</a></span>'
-    '<b style="color:{color};">{value}&times; income</b></div>'
+    '<b class="figure" style="color:{color};">{value}&times; income</b></div>'
 )
 
 
@@ -639,6 +639,14 @@ def build_sitemap(state_urls, county_data):
         for rec in counties.values()
         if rec.get("value") is not None and rec.get("name") and rec.get("state")
     ]
+    # City pages are globbed off disk rather than recomputed, so the
+    # eligibility threshold lives in exactly one place (city_pages_builder.py)
+    # and this stays correct if that threshold ever changes.
+    city_dir = ROOT / "cities"
+    city_urls = sorted(
+        SITE_URL + "/cities/" + p.name
+        for p in city_dir.glob("*.html")
+    ) if city_dir.is_dir() else []
     static_urls = [
         SITE_URL + "/",
         SITE_URL + "/counties.html",
@@ -649,7 +657,7 @@ def build_sitemap(state_urls, county_data):
         SITE_URL + "/contact.html",
         SITE_URL + "/privacy-policy.html",
     ]
-    all_urls = static_urls + county_urls + state_urls
+    all_urls = static_urls + county_urls + city_urls + state_urls
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in all_urls:
         lines.append("  <url><loc>" + u + "</loc></url>")
@@ -685,7 +693,9 @@ def main():
 
     state_urls = build_state_pages(county_data, crime_data, income_data)
     build_sitemap(state_urls, county_data)
-    print("Generated {} state pages, states.html hub page, and rewrote sitemap.xml.".format(len(state_urls)))
+    n_city = len(list((ROOT / "cities").glob("*.html"))) if (ROOT / "cities").is_dir() else 0
+    print("Generated {} state pages, states.html hub page, and rewrote sitemap.xml "
+          "({} city pages included).".format(len(state_urls), n_city))
     return 0
 
 
