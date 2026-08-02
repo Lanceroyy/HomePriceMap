@@ -114,6 +114,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
 <meta name="twitter:image" content="{site_url}/assets/og-image.jpg">
+<script>(function(){{var d=document.documentElement;try{{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}}catch(e){{}}function cur(){{return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}}function label(){{var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}}window.toggleTheme=function(){{var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{{localStorage.setItem("theme",n);}}catch(e){{}}label();}};document.addEventListener("DOMContentLoaded",label);}})();</script>
 <link rel="stylesheet" href="../css/style.css">
 <script type="application/ld+json">
 {{
@@ -136,6 +137,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
 
@@ -391,6 +393,26 @@ NEARBY_TEMPLATE = """<div class="hero" style="text-align:left;max-width:760px;">
 """
 
 
+def meta_description(name, state, value, yoy_sentence, income_rec, crime_rec):
+    """Search snippet, kept under ~158 chars so Google doesn't truncate it.
+    Leads with the affordability ratio where we have income data, since that
+    is both unique to the county and the thing this site shows that a plain
+    price listing doesn't. Falls back to crime, then to a bare price line."""
+    base = "The median home value in {}, {} is {}, {}".format(
+        name, state, fmt_money(value), yoy_sentence)
+
+    if income_rec and income_rec.get("median_household_income"):
+        ratio = value / income_rec["median_household_income"]
+        tail = " That's about {:.1f}x local household income.".format(ratio)
+    elif crime_rec and crime_rec.get("violent_crime_rate") is not None:
+        tail = " See local crime rates and how it compares statewide."
+    else:
+        tail = " Compare to state and national median home prices."
+
+    out = base + tail
+    return out if len(out) <= 158 else base
+
+
 def load_city_links():
     """Maps a county (state, normalised name) to the city pages inside it that
     actually exist on disk. Only pages city_pages_builder chose to generate are
@@ -562,8 +584,12 @@ def build_pages(county_data, crime_data=None, income_data=None):
         html = PAGE_TEMPLATE.format(
             ga=GA_SNIPPET,
             title="Median Home Price in " + name + ", " + state + " (" + as_of[:4] + ") | Home Price Map",
-            description="The median home value in " + name + ", " + state + " is " + fmt_money(value) +
-                         ", " + yoy_sentence + " Compare to state and national median home prices.",
+            # Every county page used to end with the same "Compare to state and
+            # national median home prices" -- ~48 characters of Google snippet
+            # spent saying nothing that distinguishes one county from another.
+            # The price-to-income ratio is specific to this county and is the
+            # figure the site has that competitors don't surface.
+            description=meta_description(name, state, value, yoy_sentence, income_rec, crime_rec),
             canonical=canonical,
             site_url=SITE_URL,
             county_name=name,

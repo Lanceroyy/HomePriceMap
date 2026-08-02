@@ -27,6 +27,7 @@
 <meta name="twitter:title" content="Contact | Home Price Map">
 <meta name="twitter:description" content="Get in touch to report a data issue, suggest a feature, or ask a question about how the numbers are calculated.">
 <meta name="twitter:image" content="https://homepricemap.us/assets/og-image.jpg">
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -38,6 +39,7 @@
     <a href="counties.html">Counties</a>
     <a href="cities.html">Cities</a>
     <a href="states.html">States</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
 

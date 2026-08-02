@@ -31,10 +31,16 @@
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
-/* Applied to <html> on counties.html and cities.html only. Scoping to the
-   root element (rather than body) means the dark background also covers any
-   overscroll area, which a body-level override would leave light. */
-html.map-page {
+/* Dark values live in two blocks because CSS can't alias a group of custom
+   properties. Keep them in sync.
+   1. html.map-page  -- the two interactive map pages, always dark: the CARTO
+      basemap tiles are dark regardless of our CSS, so light chrome around
+      them would look broken.
+   2. html[data-theme="dark"] -- an explicit user choice via the nav toggle.
+   The @media block further down covers "system is dark and the user hasn't
+   explicitly asked for light". */
+html.map-page,
+html[data-theme="dark"] {
   --bg: #14120f;
   --bg-card: #1d1a16;
   --border: #342f28;
@@ -48,6 +54,40 @@ html.map-page {
      against a dark panel. */
   --warn: #e58471;
 }
+
+/* Follow the operating system when the visitor hasn't overridden it. The
+   :not() is what makes an explicit "light" choice stick on a dark-mode
+   machine. */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --bg: #14120f;
+    --bg-card: #1d1a16;
+    --border: #342f28;
+    --text: #f1ece4;
+    --text-dim: #a69c8d;
+    --panel: rgba(29, 26, 22, 0.94);
+    --accent: #d9963f;
+    --accent-hover: #e8ab5c;
+    --accent-2: #35d0c8;
+    --warn: #e58471;
+  }
+}
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  margin-left: 18px;
+  padding: 3px 10px;
+  vertical-align: middle;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--text-dim); }
+/* Map pages are locked dark, so a toggle there would look broken. */
+html.map-page .theme-toggle { display: none; }
 
 * { box-sizing: border-box; }
 

@@ -15,6 +15,7 @@
 <title>Privacy Policy | Home Price Map</title>
 <meta name="description" content="Privacy policy for Home Price Map, covering analytics, advertising, and cookie usage.">
 <link rel="canonical" href="https://homepricemap.us/privacy-policy.html">
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -26,6 +27,7 @@
     <a href="counties.html">Counties</a>
     <a href="cities.html">Cities</a>
     <a href="states.html">States</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
 

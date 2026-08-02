@@ -131,6 +131,7 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
 <meta name="twitter:image" content="{site_url}/assets/og-image.jpg">
+<script>(function(){{var d=document.documentElement;try{{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}}catch(e){{}}function cur(){{return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}}function label(){{var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}}window.toggleTheme=function(){{var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{{localStorage.setItem("theme",n);}}catch(e){{}}label();}};document.addEventListener("DOMContentLoaded",label);}})();</script>
 <link rel="stylesheet" href="../css/style.css">
 <script type="application/ld+json">
 {{
@@ -153,6 +154,7 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
 
@@ -582,6 +584,7 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 <meta name="twitter:title" content="Home Prices by State | Home Price Map">
 <meta name="twitter:description" content="Browse the most expensive and most affordable counties in every U.S. state, ranked by median home price.">
 <meta name="twitter:image" content="{site_url}/assets/og-image.jpg">
+<script>(function(){{var d=document.documentElement;try{{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}}catch(e){{}}function cur(){{return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}}function label(){{var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}}window.toggleTheme=function(){{var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{{localStorage.setItem("theme",n);}}catch(e){{}}label();}};document.addEventListener("DOMContentLoaded",label);}})();</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -593,6 +596,7 @@ HUB_TEMPLATE = """<!DOCTYPE html>
     <a href="counties.html">Counties</a>
     <a href="cities.html">Cities</a>
     <a href="states.html" class="active">States</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
 
