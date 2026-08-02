@@ -218,6 +218,46 @@ header.topbar nav a.active { color: var(--text); }
   font-variant-numeric: tabular-nums;
 }
 
+/* Featured analysis callout on the homepage. Deliberately styled apart from
+   .choice-card -- those three are map entry points and this is reading
+   material, so it shouldn't read as a fourth map. */
+.article-feature {
+  display: block;
+  max-width: 920px;
+  margin: 32px auto 0;
+  padding: 22px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.article-feature:hover { border-left-color: var(--accent-hover); transform: translateY(-1px); }
+.article-feature .kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.article-feature b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.article-feature span:last-child {
+  display: block;
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
 footer.site-footer {
   text-align: center;
   color: var(--text-dim);
@@ -449,6 +489,17 @@ footer.site-footer {
   line-height: 1.7;
   margin: 0 0 12px;
 }
+.content-section ul {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0 0 16px;
+  padding-left: 22px;
+}
+.content-section li { margin-bottom: 4px; }
+.content-section li b { color: var(--text); font-weight: 600; }
+.content-section a { color: var(--accent); }
+
 .faq-item {
   margin-bottom: 16px;
 }

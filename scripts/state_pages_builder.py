@@ -660,6 +660,7 @@ def build_sitemap(state_urls, county_data):
         SITE_URL + "/methodology.html",
         SITE_URL + "/contact.html",
         SITE_URL + "/privacy-policy.html",
+        SITE_URL + "/cheapest-counties-arent-the-most-affordable.html",
     ]
     all_urls = static_urls + county_urls + city_urls + state_urls
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
