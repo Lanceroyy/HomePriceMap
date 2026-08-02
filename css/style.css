@@ -5,28 +5,48 @@
    extra round trip, saves the risk of the templates drifting apart. */
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
+/* Light by default. The site is mostly prose now -- thousands of county and
+   city pages -- and light type on paper is what reading surfaces use. The
+   two interactive map pages opt back into dark further down, because a
+   choropleth genuinely reads better against a dark ground. */
 :root {
-  /* Warm, low-chroma darks rather than the blue-grey slate that every UI
-     framework ships as its default -- closer to printed atlas stock. */
+  --bg: #faf9f7;
+  --bg-card: #ffffff;
+  --border: #e3e0da;
+  --text: #1a1917;
+  --text-dim: #6b6862;
+  --panel: rgba(255, 255, 255, 0.96);
+  /* Deep ochre for links, teal and terracotta for the good/bad signal.
+     Teal rather than green on purpose: green-vs-terracotta measures deltaE 10
+     under simulated deuteranopia (effectively identical), teal-vs-terracotta
+     measures 41. Green/red is the pairing to avoid when the two are meant to
+     mean opposite things. All four clear 4.5:1 against their backgrounds. */
+  --accent: #8a5a2b;
+  --accent-hover: #6d4622;
+  --accent-2: #1d6b63;
+  --warn: #a8402f;
+  --radius: 10px;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* Applied to <html> on counties.html and cities.html only. Scoping to the
+   root element (rather than body) means the dark background also covers any
+   overscroll area, which a body-level override would leave light. */
+html.map-page {
   --bg: #14120f;
   --bg-card: #1d1a16;
   --border: #342f28;
   --text: #f1ece4;
   --text-dim: #a69c8d;
   --panel: rgba(29, 26, 22, 0.94);
-  /* Ochre for interface accents; teal and terracotta carry the good/bad
-     signal. Teal rather than a green on purpose: green-vs-terracotta measured
-     at deltaE 10 under simulated deuteranopia (effectively the same colour),
-     while teal-vs-terracotta measures 41. Green/red is the one pairing to
-     avoid when the two are meant to mean opposite things. */
-  --accent: #d08a3c;
-  --accent-hover: #e5a25b;
+  --accent: #d9963f;
+  --accent-hover: #e8ab5c;
   --accent-2: #35d0c8;
-  --warn: #c4604f;
-  --radius: 10px;
-  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
-  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* Lifted from the light theme's terracotta, which only reached 4.24:1
+     against a dark panel. */
+  --warn: #e58471;
 }
 
 * { box-sizing: border-box; }
@@ -79,7 +99,7 @@ header.topbar nav a.active { color: var(--text); }
 .updated-pill {
   font-size: 12px;
   color: var(--text-dim);
-  background: #262019;
+  background: var(--bg-card);
   border: 1px solid var(--border);
   padding: 4px 10px;
   border-radius: 999px;
