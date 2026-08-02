@@ -234,15 +234,18 @@ def faq_section(name, state, value, yoy, crime, county_name, county_value, state
     else:
         trend = "That's essentially unchanged from a year earlier."
 
+    # state_median here is the median across TRACKED CITIES in the state, not
+    # across its counties -- the wording has to match or the page contradicts
+    # the comparison line above it.
     vs_state = round((value / state_median - 1) * 100, 1)
     phrase = ("about {}% above".format(abs(vs_state)) if vs_state > 0
               else "about {}% below".format(abs(vs_state)) if vs_state < 0
               else "in line with")
     items.append((
         "How much does a house cost in {}, {}?".format(name, state),
-        "The median home value in {n} is <b>{v}</b>. {t} That is {p} the typical county "
-        "in {sn}.".format(n=name, v=fmt_money(value), t=trend, p=phrase,
-                          sn=ABBR_TO_NAME.get(state, state)),
+        "The median home value in {n} is <b>{v}</b>. {t} That is {p} the typical {sn} "
+        "city tracked here.".format(n=name, v=fmt_money(value), t=trend, p=phrase,
+                                    sn=ABBR_TO_NAME.get(state, state)),
     ))
 
     if county_name and county_value:
