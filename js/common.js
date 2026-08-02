@@ -27,13 +27,11 @@ document.addEventListener("click", function (e) {
 });
 
 // Fixed dollar-value breakpoints, NOT quantile/equal-count breaks. Home
-// prices are heavily right-skewed (a long tail of very expensive counties
-// and cities), so an equal-count scheme puts the entire top ~10% of the
-// country -- everywhere from ~$450K up to Nantucket's $3.09M -- into a
-// single color. Fixed breaks give the upper half of the market the same
-// number of color buckets as the lower half, so high-cost areas are
-// actually distinguishable from each other instead of all reading as
-// "the expensive color."
+// prices are heavily right-skewed, so an equal-count scheme would drop the
+// entire top ~10% of the country -- everywhere from ~$450K to Nantucket's
+// $3M+ -- into one bucket, which is exactly the flattening this is meant to
+// avoid.
+//
 // Eight bands. Fewer bands means more colour separation between them, which
 // matters because neighbouring counties usually sit one band apart -- if
 // adjacent bands look alike, the whole map reads as one flat colour. Breaks
@@ -182,8 +180,8 @@ function quantileBreaks(values, n) {
 }
 
 function colorForValue(value, breaks) {
-  // Desaturated slate for counties Zillow doesn't price -- deliberately off
-  // the warm ramp's hue entirely, so "no data" can't read as a price band.
+  // Desaturated slate for counties Zillow doesn't price. Measured at deltaE
+  // 29 from the nearest ramp step, so "no data" can't read as a price band.
   if (value == null) return "#3d3f42";
   for (let i = 0; i < breaks.length; i++) {
     if (value <= breaks[i]) return COLOR_RAMP[i];
@@ -193,8 +191,9 @@ function colorForValue(value, breaks) {
 
 // The legend is always expanded on desktop. On mobile (see the max-width:700px
 // block in style.css) the rows collapse behind the title, which doubles as a
-// tap target -- 12 price bands is a lot of screen to give up permanently on a
-// phone, and the info box already reports exact values for whatever you tap.
+// tap target -- eight price bands is still a lot of screen to give up
+// permanently on a phone, and the info box already reports exact values for
+// whatever you tap.
 function renderLegend(el, breaks) {
   const edges = [0, ...breaks, Infinity];
   let rows = "";
