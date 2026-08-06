@@ -37,6 +37,7 @@ DATA_DIR = ROOT / "data"
 CITY_PATH = DATA_DIR / "city_prices.json"
 COUNTY_PATH = DATA_DIR / "county_prices.json"
 CITY_CRIME_PATH = DATA_DIR / "crime_data_city.json"
+CITY_INCOME_PATH = DATA_DIR / "income_data_city.json"
 OUT_DIR = ROOT / "cities"
 SITE_URL = "https://homepricemap.us"
 
@@ -131,8 +132,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   "@type": "BreadcrumbList",
   "itemListElement": [
     {{"@type": "ListItem", "position": 1, "name": "Home", "item": "{site_url}/"}},
-    {{"@type": "ListItem", "position": 2, "name": "Cities", "item": "{site_url}/cities.html"}},
-    {{"@type": "ListItem", "position": 3, "name": "{city_name}, {state}", "item": "{canonical}"}}
+    {{"@type": "ListItem", "position": 2, "name": "States", "item": "{site_url}/states.html"}},
+    {{"@type": "ListItem", "position": 3, "name": "{state_name}", "item": "{site_url}/states/{state_slug}.html"}},
+    {{"@type": "ListItem", "position": 4, "name": "{city_name}, {state}", "item": "{canonical}"}}
   ]
 }}
 </script>
@@ -151,7 +153,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </header>
 
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../cities.html">Cities</a> &rsaquo; {city_name}, {state}</p>
+  <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; <a href="../states/{state_slug}.html">{state_name}</a> &rsaquo; {city_name}</p>
   <h1 style="font-size:30px;">Median Home Price in {city_name}, {state}</h1>
   <p>The median home value in <b>{city_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
 </div>
@@ -174,6 +176,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>{comparison}</p>
 </div>
+
+{income_section}
 
 {crime_section}
 
@@ -224,7 +228,28 @@ def crime_section(name, crime, national_violent):
            compare=compare, prop_sentence=prop_sentence)
 
 
-def faq_section(name, state, value, yoy, crime, county_name, county_value, state_median):
+def income_section(name, value, income):
+    if not income or not income.get("median_household_income"):
+        return ""
+
+    annual_income = income["median_household_income"]
+    ratio = value / annual_income
+    capped = bool(income.get("top_coded"))
+    ratio_phrase = (
+        "no more than <b>{:.1f}&times;</b>" if capped else "about <b>{:.1f}&times;</b>"
+    ).format(ratio)
+    income_fmt = fmt_money(annual_income) + ("+" if capped else "")
+
+    return """
+<div class="hero" style="text-align:left;max-width:760px;">
+  <h2 style="font-size:20px;">Housing affordability in {name}</h2>
+  <p>Median household income in {name} is <b>{income}</b>, so the typical home value is {ratio_phrase} annual household income. This is a simple price-to-income benchmark rather than a monthly payment estimate; it does not account for mortgage rates, down payments, taxes or insurance.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Household income comes from the U.S. Census Bureau's ACS 5-Year Estimates, table B19013 (<a href="../methodology.html">how the affordability measure works</a>).</p>
+</div>
+""".format(name=name, income=income_fmt, ratio_phrase=ratio_phrase)
+
+
+def faq_section(name, state, value, yoy, income, crime, county_name, county_value, state_median):
     items = []
 
     if yoy is None:
@@ -260,6 +285,21 @@ def faq_section(name, state, value, yoy, crime, county_name, county_value, state
                                 pctpart="" if diff == 0 else " &mdash; a difference of about {}%".format(abs(diff))),
         ))
 
+    if income and income.get("median_household_income"):
+        annual_income = income["median_household_income"]
+        ratio = value / annual_income
+        capped = bool(income.get("top_coded"))
+        items.append((
+            "Is {} affordable?".format(name),
+            "Median household income here is <b>{income}</b>, so the typical home value is "
+            "{bound}<b>{ratio:.1f}&times;</b> annual household income. This ratio is a broad "
+            "comparison measure, not a mortgage-payment estimate.".format(
+                income=fmt_money(annual_income) + ("+" if capped else ""),
+                bound="no more than " if capped else "about ",
+                ratio=ratio,
+            ),
+        ))
+
     if crime and crime.get("violent_crime_rate") is not None:
         items.append((
             "Is {} a safe place to live?".format(name),
@@ -281,6 +321,23 @@ def faq_section(name, state, value, yoy, crime, county_name, county_value, state
             ).format(name=name, b=blocks)
 
 
+def meta_description(name, state, value, yoy_sentence, income, comparison_name):
+    """Uses city income when available because it is more distinctive than a
+    bare price result. Falls back to the existing crime/comparison promise."""
+    base = "The median home value in {}, {} is {}, {}".format(
+        name, state, fmt_money(value), yoy_sentence
+    )
+    if income and income.get("median_household_income"):
+        ratio = value / income["median_household_income"]
+        qualifier = "no more than" if income.get("top_coded") else "about"
+        tail = " That's {} {:.1f}x local household income.".format(qualifier, ratio)
+    else:
+        tail = " See local crime rates and how it compares to {}.".format(comparison_name)
+
+    description = base + tail
+    return description if len(description) <= 158 else base
+
+
 def build():
     for p in (CITY_PATH, COUNTY_PATH, CITY_CRIME_PATH):
         if not p.exists():
@@ -289,6 +346,10 @@ def build():
     cities = json.loads(CITY_PATH.read_text())["cities"]
     counties = json.loads(COUNTY_PATH.read_text())["counties"]
     crime = json.loads(CITY_CRIME_PATH.read_text())["cities"]
+    income = (
+        json.loads(CITY_INCOME_PATH.read_text()).get("cities", {})
+        if CITY_INCOME_PATH.exists() else {}
+    )
 
     # county lookup by (state, normalized county name) so each city can be
     # compared against, and linked to, its own county page
@@ -326,6 +387,8 @@ def build():
         ranked = sorted(grp, key=lambda x: x[0]["value"], reverse=True)
         for pos, (c, cr) in enumerate(ranked):
             name, state, value = c["name"], c["state"], c["value"]
+            state_name = ABBR_TO_NAME.get(state, state)
+            state_slug = slugify(state_name)
             slug = "{}-{}".format(state.lower(), slugify(name))
             if slug in seen:      # two same-named places in one state
                 continue
@@ -333,6 +396,7 @@ def build():
 
             filename = slug + ".html"
             canonical = "{}/cities/{}".format(SITE_URL, filename)
+            income_rec = income.get("{}|{}".format(state, normalize_place(name)))
             yoy = c.get("yoy_pct")
             as_of = c.get("as_of", "")
 
@@ -357,10 +421,10 @@ def build():
             vs_phrase = ("{}% above".format(abs(vs)) if vs > 0
                          else "{}% below".format(abs(vs)) if vs < 0 else "in line with")
             comparison = (
-                "{n} ranks {r} of {t} {sn} cities tracked here by median home value, and sits "
+                "{n} ranks {r} of {t} <a href=\"../states/{ss}.html\">{sn}</a> cities tracked here by median home value, and sits "
                 "{vs} the state's city median of {sm}.".format(
                     n=name, r="#" + str(pos + 1), t=len(ranked),
-                    sn=ABBR_TO_NAME.get(state, state), vs=vs_phrase, sm=fmt_money(smed))
+                    ss=state_slug, sn=state_name, vs=vs_phrase, sm=fmt_money(smed))
             )
             if county_rec:
                 comparison += ' It sits in <a href="../counties/{cs}-{cslug}.html">{cn}</a>, where the county-wide median is {cv}.'.format(
@@ -387,21 +451,26 @@ def build():
             html = PAGE_TEMPLATE.format(
                 ga=GA_SNIPPET,
                 title="Median Home Price in {}, {} ({}) | Home Price Map".format(name, state, as_of[:4]),
-                description="The median home value in {}, {} is {}, {} See local crime rates and how it compares to {}.".format(
-                    name, state, fmt_money(value), yoy_sentence,
-                    county_rec["name"] if county_rec else ABBR_TO_NAME.get(state, state)),
+                description=meta_description(
+                    name, state, value, yoy_sentence, income_rec,
+                    county_rec["name"] if county_rec else state_name,
+                ),
                 canonical=canonical,
                 site_url=SITE_URL,
                 city_name=name,
                 state=state,
+                state_name=state_name,
+                state_slug=state_slug,
                 value_fmt=fmt_money(value),
                 yoy_fmt=("n/a" if yoy is None else ("+" if yoy > 0 else "") + str(yoy) + "%"),
                 population_fmt=format(int(cr.get("population") or 0), ","),
                 as_of=as_of,
                 yoy_sentence=yoy_sentence,
                 comparison=comparison,
+                income_section=income_section(name, value, income_rec),
                 crime_section=crime_section(name, cr, national_violent),
-                faq_section=faq_section(name, state, value, yoy, cr,
+                faq_section=faq_section(
+                                        name, state, value, yoy, income_rec, cr,
                                         county_rec["name"] if county_rec else None,
                                         county_rec["value"] if county_rec else None,
                                         smed),

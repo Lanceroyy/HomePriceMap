@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Generates one static SEO listicle page per state from data/county_prices.json
-("most expensive / most affordable counties in <State>"), plus a states.html
-hub page linking to all of them, and rewrites sitemap.xml to include every
-county page (recomputed the same way seo_pages_builder.py builds them) plus
-every state page and static page.
+Generates one static SEO listicle page per state from county and city price
+data ("most expensive / most affordable counties in <State>" plus links to
+representative city pages), a states.html hub page linking to all of them, and
+rewrites sitemap.xml to include every published county, city, state and static
+page.
 
 Runs as part of the daily GitHub Actions workflow, right after
 seo_pages_builder.py, so it always reflects the latest committed data with
@@ -29,6 +29,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "county_prices.json"
+CITY_PATH = ROOT / "data" / "city_prices.json"
 CRIME_PATH = ROOT / "data" / "crime_data_county.json"
 INCOME_PATH = ROOT / "data" / "income_data_county.json"
 OUT_DIR = ROOT / "states"
@@ -94,6 +95,10 @@ def county_url(name, state):
 def county_href_relative(name, state, from_states_dir=True):
     prefix = "../counties/" if from_states_dir else "counties/"
     return prefix + state.lower() + "-" + slugify(name) + ".html"
+
+
+def city_href_relative(name, state):
+    return "../cities/" + state.lower() + "-" + slugify(name) + ".html"
 
 
 ROW_TEMPLATE = (
@@ -170,6 +175,8 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
 {crime_section}
 
+{cities_section}
+
 {faq_section}
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -207,6 +214,84 @@ def build_state_list_block(heading, counties, state):
         for i, c in enumerate(counties)
     )
     return LIST_BLOCK.format(heading=heading, rows=rows)
+
+
+def build_city_list_block(heading, cities, state):
+    rows = "\n".join(
+        ROW_TEMPLATE.format(
+            rank=i + 1,
+            href=city_href_relative(c["name"], state),
+            name=c["name"],
+            value=fmt_money(c["value"]),
+        )
+        for i, c in enumerate(cities)
+    )
+    return LIST_BLOCK.format(heading=heading, rows=rows)
+
+
+def group_published_cities(city_data):
+    """Groups priced cities that have a generated page on disk.
+
+    The city builder owns the crime/population eligibility rule. Looking at
+    its output here avoids duplicating that threshold and guarantees every
+    state-page city link resolves to a page that was actually published.
+    """
+    city_dir = ROOT / "cities"
+    published = {p.stem for p in city_dir.glob("*.html")} if city_dir.is_dir() else set()
+    by_state = {}
+    seen = set()
+
+    for city in (city_data or {}).get("cities", []):
+        name, state, value = city.get("name"), city.get("state"), city.get("value")
+        if not name or not state or value is None:
+            continue
+        page_slug = state.lower() + "-" + slugify(name)
+        if page_slug not in published or page_slug in seen:
+            continue
+        seen.add(page_slug)
+        by_state.setdefault(state, []).append(city)
+
+    return by_state
+
+
+def build_state_city_section(cities, state_name, state):
+    if not cities:
+        return ""
+
+    ranked = sorted(cities, key=lambda c: c["value"], reverse=True)
+    median_value = statistics.median(c["value"] for c in ranked)
+    intro = (
+        "HomePriceMap has standalone pages for {n} {state_name} {city_word} with both a "
+        "current Zillow home value and enough FBI reporting coverage for a meaningful "
+        "local profile. Among those tracked cities, the median home value is {median}."
+    ).format(
+        n=len(ranked), state_name=state_name,
+        city_word="city" if len(ranked) == 1 else "cities",
+        median=fmt_money(median_value),
+    )
+    intro_block = (
+        '<div class="content-section" style="padding-top:0;">'
+        '<h2>Home Prices in {state_name} Cities</h2>'
+        '<p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">{intro}</p>'
+        '</div>'
+    ).format(state_name=state_name, intro=intro)
+
+    if len(ranked) <= 10:
+        lists = build_city_list_block(
+            "Tracked Cities in {} by Home Price".format(state_name), ranked, state
+        )
+    else:
+        lists = (
+            build_city_list_block(
+                "Highest-Priced Tracked Cities in {}".format(state_name), ranked[:5], state
+            )
+            + build_city_list_block(
+                "Lowest-Priced Tracked Cities in {}".format(state_name),
+                list(reversed(ranked[-5:])), state,
+            )
+        )
+
+    return intro_block + lists
 
 
 def build_crime_list_block(heading, counties, state, color):
@@ -430,7 +515,7 @@ def build_crime_section(group, state_name, abbr, crime_by_fips, n_total):
     return intro_block + crime_lists
 
 
-def build_state_pages(county_data, crime_data, income_data=None):
+def build_state_pages(county_data, crime_data, income_data=None, city_data=None):
     counties = county_data["counties"]
     items = [
         {"fips": fips, **rec}
@@ -447,6 +532,7 @@ def build_state_pages(county_data, crime_data, income_data=None):
     by_state = {}
     for c in items:
         by_state.setdefault(c["state"], []).append(c)
+    cities_by_state = group_published_cities(city_data)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     urls = []
@@ -512,6 +598,9 @@ def build_state_pages(county_data, crime_data, income_data=None):
 
         affordability_section = build_affordability_section(group, state_name, abbr, income_by_fips, n)
         crime_section = build_crime_section(group, state_name, abbr, crime_by_fips, n)
+        cities_section = build_state_city_section(
+            cities_by_state.get(abbr, []), state_name, abbr
+        )
         faq_section = build_faq_section(
             ranked, state_name, n, state_median, national_median, income_by_fips
         )
@@ -552,6 +641,7 @@ def build_state_pages(county_data, crime_data, income_data=None):
             lists_section=lists_section,
             affordability_section=affordability_section,
             crime_section=crime_section,
+            cities_section=cities_section,
             faq_section=faq_section,
         )
 
@@ -696,7 +786,13 @@ def main():
     else:
         print("NOTE: {} not found -- state pages will skip affordability lists.".format(INCOME_PATH))
 
-    state_urls = build_state_pages(county_data, crime_data, income_data)
+    city_data = None
+    if CITY_PATH.exists():
+        city_data = json.loads(CITY_PATH.read_text())
+    else:
+        print("NOTE: {} not found -- state pages will skip city links.".format(CITY_PATH))
+
+    state_urls = build_state_pages(county_data, crime_data, income_data, city_data)
     build_sitemap(state_urls, county_data)
     n_city = len(list((ROOT / "cities").glob("*.html"))) if (ROOT / "cities").is_dir() else 0
     print("Generated {} state pages, states.html hub page, and rewrote sitemap.xml "
