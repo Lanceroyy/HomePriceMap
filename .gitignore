@@ -25,3 +25,9 @@ Desktop.ini
 
 # Private planning notes - not for the public repo
 MONETIZATION.md
+
+# AI agent handoff instructions - local only, never published.
+# Contains revenue, affiliate, and account details.
+AGENTS.md
+CLAUDE.md
+.codex/

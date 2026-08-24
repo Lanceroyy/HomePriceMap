@@ -31,6 +31,7 @@ import statistics
 import sys
 import unicodedata
 from pathlib import Path
+from urllib.parse import quote_plus
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -156,6 +157,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; <a href="../states/{state_slug}.html">{state_name}</a> &rsaquo; {city_name}</p>
   <h1 style="font-size:30px;">Median Home Price in {city_name}, {state}</h1>
   <p>The median home value in <b>{city_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
+  <p><a href="../cities.html?city={map_city}">View {city_name} on the interactive city map &rarr;</a></p>
 </div>
 
 <div class="choice-grid" style="grid-template-columns:repeat(3,1fr);max-width:760px;">
@@ -458,6 +460,7 @@ def build():
                 canonical=canonical,
                 site_url=SITE_URL,
                 city_name=name,
+                map_city=quote_plus("{}, {}".format(name, state)),
                 state=state,
                 state_name=state_name,
                 state_slug=state_slug,

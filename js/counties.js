@@ -25,6 +25,24 @@ let selectedFips = null;
 let selectedLyr = null;
 const PLACEHOLDER_HTML = '<div class="placeholder">Hover or click a county to see its median home value.</div>';
 
+function countyProfileUrl(rec) {
+  return `counties/${rec.state.toLowerCase()}-${slugifyRegion(rec.name)}.html`;
+}
+
+function countyShareUrl(fips) {
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.searchParams.set("fips", fips);
+  return url.href;
+}
+
+function setCountyUrl(fips) {
+  const url = new URL(window.location.href);
+  url.search = "";
+  if (fips) url.searchParams.set("fips", fips);
+  window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+}
+
 Promise.all([
   fetch("data/county_prices.json").then(r => r.json()),
   fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json").then(r => r.json()),
@@ -47,17 +65,22 @@ Promise.all([
       selectedFips = null;
       selectedLyr = null;
       infoBox.innerHTML = PLACEHOLDER_HTML;
+      setCountyUrl(null);
       return;
     }
 
     selectedFips = fips;
     selectedLyr = lyr;
+    setCountyUrl(fips);
     lyr.setStyle({ weight: 2, color: "#ffffff" });
     const key = `${rec.name}, ${rec.state}`;
     showInfo(infoBox, {
       title: key, value: rec.value, yoy: rec.yoy_pct,
       crime: crimeByFips[fips], income: incomeByFips[fips],
       track: method || "map_click",
+      regionType: "county",
+      profileUrl: countyProfileUrl(rec),
+      shareUrl: countyShareUrl(fips),
     });
   }
 
@@ -86,7 +109,12 @@ Promise.all([
       lyr.on("mouseover", () => {
         if (selectedFips) return; // a county is locked -- don't disturb the panel
         lyr.setStyle({ weight: 2, color: "#ffffff" });
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByFips[fips], income: incomeByFips[fips] });
+        showInfo(infoBox, {
+          title: key, value: rec.value, yoy: rec.yoy_pct,
+          crime: crimeByFips[fips], income: incomeByFips[fips],
+          regionType: "county", profileUrl: countyProfileUrl(rec),
+          shareUrl: countyShareUrl(fips),
+        });
       });
       lyr.on("mouseout", () => {
         if (selectedFips === fips) return; // keep the locked county highlighted
@@ -126,10 +154,6 @@ Promise.all([
     const rec = counties[linkedFips];
     map.fitBounds(lyr.getBounds(), { maxZoom: 8 });
     if (rec) selectCounty(linkedFips, lyr, rec, "deep_link");
-    // Strip the ?fips= param once it's been applied, so refreshing the page
-    // afterward lands on the normal map instead of re-locking to this same
-    // county forever.
-    window.history.replaceState(null, "", window.location.pathname);
   }
 }).catch(err => {
   console.error(err);

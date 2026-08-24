@@ -18,13 +18,76 @@ function trackEvent(name, params) {
 // document-level listener survives all of it.
 document.addEventListener("click", function (e) {
   const cta = e.target.closest && e.target.closest(".mortgage-cta");
-  if (!cta) return;
-  trackEvent("affiliate_click", {
-    affiliate: cta.dataset.affiliate || "unknown",
-    region: cta.dataset.region || "",
-    region_value: Number(cta.dataset.value) || 0,
-  });
+  if (cta) {
+    trackEvent("affiliate_click", {
+      affiliate: cta.dataset.affiliate || "unknown",
+      region: cta.dataset.region || "",
+      region_type: cta.dataset.regionType || "",
+      region_value: Number(cta.dataset.value) || 0,
+      selection_method: cta.dataset.selectionMethod || "preview",
+    });
+    return;
+  }
+
+  const profileLink = e.target.closest && e.target.closest(".profile-link");
+  if (profileLink) {
+    trackEvent("profile_click", {
+      region: profileLink.dataset.region || "",
+      region_type: profileLink.dataset.regionType || "",
+      selection_method: profileLink.dataset.selectionMethod || "preview",
+    });
+    return;
+  }
+
+  const shareButton = e.target.closest && e.target.closest(".share-region");
+  if (!shareButton) return;
+  shareRegion(shareButton);
 });
+
+async function shareRegion(button) {
+  const url = button.dataset.shareUrl;
+  const title = button.dataset.region || "Home Price Map";
+  if (!url) return;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text: `Home price data for ${title}`, url });
+      trackEvent("share", {
+        method: "native",
+        content_type: button.dataset.regionType || "region",
+        item_id: title,
+        selection_method: button.dataset.selectionMethod || "preview",
+      });
+      return;
+    } catch (e) {
+      // Closing the native share sheet is an intentional cancellation. Other
+      // failures can still recover by copying the URL below.
+      if (e && e.name === "AbortError") return;
+    }
+  }
+
+  try {
+    if (!navigator.clipboard || !window.isSecureContext) {
+      throw new Error("Clipboard unavailable");
+    }
+    await navigator.clipboard.writeText(url);
+    showShareStatus(button, "Copied!");
+    trackEvent("share", {
+      method: "clipboard",
+      content_type: button.dataset.regionType || "region",
+      item_id: title,
+      selection_method: button.dataset.selectionMethod || "preview",
+    });
+  } catch (e) {
+    showShareStatus(button, "Copy failed");
+  }
+}
+
+function showShareStatus(button, text) {
+  const original = button.textContent;
+  button.textContent = text;
+  window.setTimeout(() => { button.textContent = original; }, 1600);
+}
 
 // Fixed dollar-value breakpoints, NOT quantile/equal-count breaks. Home
 // prices are heavily right-skewed, so an equal-count scheme would drop the
@@ -76,8 +139,8 @@ const HOUSEPLANS_MAX_VALUE = 300000;
 
 // data-* attributes feed the delegated click handler above, so each affiliate
 // click is attributed to the specific region and price that produced it.
-function affiliateCta(regionLabel, value) {
-  const attrs = `data-region="${escapeAttr(regionLabel)}" data-value="${value == null ? "" : Math.round(value)}"`;
+function affiliateCta(regionLabel, value, regionType, selectionMethod) {
+  const attrs = `data-region="${escapeAttr(regionLabel)}" data-region-type="${escapeAttr(regionType)}" data-selection-method="${escapeAttr(selectionMethod || "preview")}" data-value="${value == null ? "" : Math.round(value)}"`;
   if (AFFILIATE_URL) {
     return `<a class="mortgage-cta" data-affiliate="mortgage" ${attrs} href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
   }
@@ -85,6 +148,18 @@ function affiliateCta(regionLabel, value) {
     return `<a class="mortgage-cta" data-affiliate="house-plans" ${attrs} href="${HOUSEPLANS_URL}" target="_blank" rel="noopener sponsored">${HOUSEPLANS_LABEL} &rarr;</a>`;
   }
   return "";
+}
+
+function regionActions(regionLabel, regionType, profileUrl, shareUrl, selectionMethod) {
+  if (!profileUrl && !shareUrl) return "";
+  const attrs = `data-region="${escapeAttr(regionLabel)}" data-region-type="${escapeAttr(regionType)}" data-selection-method="${escapeAttr(selectionMethod || "preview")}"`;
+  const profile = profileUrl
+    ? `<a class="profile-link" ${attrs} href="${escapeAttr(profileUrl)}">View full profile &rarr;</a>`
+    : "";
+  const share = shareUrl
+    ? `<button class="share-region" type="button" ${attrs} data-share-url="${escapeAttr(shareUrl)}" aria-label="Share ${escapeAttr(regionLabel)}" aria-live="polite">Share</button>`
+    : "";
+  return `<div class="region-actions">${profile}${share}</div>`;
 }
 
 // Region names come from JSON data, not user input, but they do contain
@@ -105,6 +180,18 @@ const PLACE_SUFFIX_RE = /\s+(city|town|village|township|CDP|borough|municipality
 function normalizePlace(name) {
   if (!name) return "";
   return name.replace(PLACE_SUFFIX_RE, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+// Matches the Python builders' slugify() closely enough that an interactive
+// map can link to the generated profile without shipping a second lookup file.
+function slugifyRegion(name) {
+  return String(name || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function fmtRate(v) {
@@ -217,24 +304,37 @@ function renderLegend(el, breaks) {
 // "search", "deep_link"). Left undefined for hover previews on purpose --
 // hovering across a choropleth fires constantly and would bury the
 // deliberate selections in noise (and blow through GA's event quota).
-function showInfo(el, { title, value, yoy, crime, income, track }) {
+function showInfo(el, { title, value, yoy, crime, income, track, regionType, profileUrl, shareUrl }) {
   const cls = yoy > 0 ? "up" : yoy < 0 ? "down" : "";
+  const type = regionType || "region";
+  const ctaHtml = affiliateCta(title, value, type, track);
   el.innerHTML = `
     <div class="region-name">${title}</div>
     <div class="region-value">${fmtMoney(value)}</div>
     <div class="region-yoy ${cls}">${fmtYoy(yoy)} year-over-year</div>
     ${incomeBlock(income, value)}
     ${crimeBlock(crime)}
-    ${affiliateCta(title, value)}
+    ${regionActions(title, type, profileUrl, shareUrl, track)}
+    ${ctaHtml}
   `;
 
   if (track) {
     trackEvent("region_select", {
       region: title,
+      region_type: type,
       region_value: value == null ? 0 : Math.round(value),
-      method: track,
+      selection_method: track,
       has_crime_data: !!crime,
       has_income_data: !!income,
     });
+    if (ctaHtml) {
+      trackEvent("affiliate_cta_view", {
+        affiliate: AFFILIATE_URL ? "mortgage" : "house-plans",
+        region: title,
+        region_type: type,
+        region_value: value == null ? 0 : Math.round(value),
+        selection_method: track,
+      });
+    }
   }
 }

@@ -11,9 +11,32 @@ const legendEl = document.getElementById("legend");
 const searchBox = document.getElementById("searchBox");
 const cityListEl = document.getElementById("cityList");
 
-const markerByKey = {};
+const markerBySearchLabel = {};
+const markerByCityCounty = {};
+const canonicalMarkerByKey = {};
 let crimeByCityKey = {};
 let incomeByCityKey = {};
+
+function cityProfileUrl(rec, crime, isCanonicalRecord) {
+  if (!isCanonicalRecord || !crime || (crime.population || 0) < 5000) return null;
+  return `cities/${rec.state.toLowerCase()}-${slugifyRegion(rec.name)}.html`;
+}
+
+function cityShareUrl(key, county) {
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.searchParams.set("city", key);
+  if (county) url.searchParams.set("county", county);
+  return url.href;
+}
+
+function setCityUrl(key, county) {
+  const url = new URL(window.location.href);
+  url.search = "";
+  if (key) url.searchParams.set("city", key);
+  if (county) url.searchParams.set("county", county);
+  window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+}
 
 Promise.all([
   fetch("data/city_prices.json").then(r => r.json()),
@@ -30,8 +53,38 @@ Promise.all([
 
     const cluster = L.layerGroup().addTo(map);
 
+    // Zillow occasionally has two same-named places in one state. Standalone
+    // pages intentionally keep only the highest-priced record for each slug,
+    // so make that same record the canonical target for legacy ?city= links.
+    // County-qualified links preserve access to every individual map marker.
+    const cityCountByKey = {};
+    const canonicalRecordByKey = {};
     cities.forEach(rec => {
       const key = `${rec.name}, ${rec.state}`;
+      cityCountByKey[key] = (cityCountByKey[key] || 0) + 1;
+      const current = canonicalRecordByKey[key];
+      if (!current || (rec.value ?? -Infinity) > (current.value ?? -Infinity)) {
+        canonicalRecordByKey[key] = rec;
+      }
+    });
+
+    function selectCity(hit, method) {
+      const crime = crimeByCityKey[hit.crimeKey];
+      const countyParam = hit.isDuplicate ? hit.rec.county : null;
+      setCityUrl(hit.key, countyParam);
+      showInfo(infoBox, {
+        title: hit.label, value: hit.rec.value, yoy: hit.rec.yoy_pct,
+        crime, income: incomeByCityKey[hit.crimeKey], track: method,
+        regionType: "city",
+        profileUrl: cityProfileUrl(hit.rec, crime, canonicalRecordByKey[hit.key] === hit.rec),
+        shareUrl: cityShareUrl(hit.key, countyParam),
+      });
+    }
+
+    cities.forEach(rec => {
+      const key = `${rec.name}, ${rec.state}`;
+      const isDuplicate = cityCountByKey[key] > 1;
+      const label = isDuplicate ? `${key} (${rec.county})` : key;
       const crimeKey = `${rec.state}|${normalizePlace(rec.name)}`;
       const radius = 4 + Math.min(10, Math.sqrt(rec.value) / 120);
       const marker = L.circleMarker([rec.lat, rec.lon], {
@@ -42,27 +95,43 @@ Promise.all([
         weight: 1,
       });
 
-      marker.bindTooltip(`${key}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
+      marker.bindTooltip(`${label}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
       marker.on("click", () => {
         map.setView([rec.lat, rec.lon], Math.max(map.getZoom(), 9));
-        showInfo(infoBox, { title: key, value: rec.value, yoy: rec.yoy_pct, crime: crimeByCityKey[crimeKey], income: incomeByCityKey[crimeKey], track: "map_click" });
+        selectCity({ marker, rec, crimeKey, key, label, isDuplicate }, "map_click");
       });
 
       marker.addTo(cluster);
-      markerByKey[key] = { marker, rec, crimeKey };
+      const hit = { marker, rec, crimeKey, key, label, isDuplicate };
+      markerBySearchLabel[label] = hit;
+      markerByCityCounty[`${key}|${rec.county}`] = hit;
+      if (canonicalRecordByKey[key] === rec) canonicalMarkerByKey[key] = hit;
     });
 
-    const names = Object.keys(markerByKey).sort();
-    cityListEl.innerHTML = names.map(n => `<option value="${n}"></option>`).join("");
+    const names = Object.keys(markerBySearchLabel).sort();
+    cityListEl.innerHTML = names.map(n => `<option value="${escapeAttr(n)}"></option>`).join("");
 
     searchBox.addEventListener("change", () => {
-      const hit = markerByKey[searchBox.value];
+      const hit = markerBySearchLabel[searchBox.value];
       if (hit) {
         map.setView([hit.rec.lat, hit.rec.lon], 10);
-        showInfo(infoBox, { title: searchBox.value, value: hit.rec.value, yoy: hit.rec.yoy_pct, crime: crimeByCityKey[hit.crimeKey], income: incomeByCityKey[hit.crimeKey], track: "search" });
+        selectCity(hit, "search");
         hit.marker.openTooltip();
       }
     });
+
+    // Shareable city links mirror the county map's ?fips= deep links.
+    const params = new URLSearchParams(window.location.search);
+    const linkedCity = params.get("city");
+    const linkedCounty = params.get("county");
+    const linkedHit = linkedCity && (linkedCounty
+      ? markerByCityCounty[`${linkedCity}|${linkedCounty}`]
+      : canonicalMarkerByKey[linkedCity]);
+    if (linkedHit) {
+      map.setView([linkedHit.rec.lat, linkedHit.rec.lon], 10);
+      selectCity(linkedHit, "deep_link");
+      linkedHit.marker.openTooltip();
+    }
   })
   .catch(err => {
     console.error(err);

@@ -386,6 +386,40 @@ footer.site-footer {
   margin-top: 4px;
 }
 
+.region-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+  margin-top: 12px;
+}
+.profile-link,
+.share-region {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 8px 10px;
+}
+.profile-link {
+  flex: 1 1 auto;
+  text-align: center;
+  text-decoration: none;
+}
+.share-region {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+.profile-link:hover,
+.share-region:hover {
+  border-color: var(--accent);
+  color: var(--accent-2);
+  text-decoration: none;
+}
+
 .mortgage-cta {
   display: block;
   margin-top: 12px;
@@ -547,6 +581,8 @@ footer.site-footer {
   }
   .info-box .region-name { font-size: 15px; }
   .info-box .region-value { font-size: 20px; }
+  .region-actions { flex-wrap: wrap; }
+  .profile-link { min-width: 130px; }
 
   .legend {
     right: 8px;
@@ -570,4 +606,24 @@ footer.site-footer {
   .hero p { font-size: 15px; }
   .content-section { padding: 32px 16px 40px; }
   .content-section h2 { font-size: 20px; }
+}
+
+@media (max-width: 380px) {
+  /* At 320px the full brand plus four nav links otherwise wraps to a second
+     line, invalidating the map-height calculation and crowding both panels. */
+  header.topbar .brand { font-size: 14px; }
+  header.topbar nav a { margin-left: 7px; font-size: 11.5px; }
+
+  /* Use the width recovered from the relocated legend. The max-height only
+     matters on unusually short phones; the panel then scrolls internally. */
+  .info-box {
+    right: 8px;
+    max-height: calc(100vh - 270px);
+    max-height: calc(100dvh - 270px);
+    overflow-y: auto;
+  }
+  .legend {
+    top: 174px;
+    bottom: auto;
+  }
 }
