@@ -258,6 +258,60 @@ header.topbar nav a.active { color: var(--text); }
   line-height: 1.55;
 }
 
+.analysis-chart {
+  margin: 26px 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-card);
+}
+.analysis-chart figcaption {
+  margin-bottom: 15px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+.analysis-chart-row {
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr) 52px;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+.analysis-chart-track {
+  position: relative;
+  height: 12px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.analysis-chart-track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--text-dim);
+  opacity: .65;
+}
+.analysis-chart-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 2px;
+}
+.analysis-chart-bar.positive { left: 50%; background: var(--accent); }
+.analysis-chart-bar.negative { right: 50%; background: var(--accent-2); }
+.analysis-chart-value {
+  text-align: right;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
 footer.site-footer {
   text-align: center;
   color: var(--text-dim);
@@ -507,10 +561,19 @@ footer.site-footer {
   margin: 0 auto;
   padding: 48px 20px 60px;
 }
+.content-section h1 {
+  font-size: 24px;
+  color: var(--text);
+  margin: 0 0 14px;
+}
 .content-section h2 {
   font-size: 24px;
   color: var(--text);
   margin: 0 0 14px;
+}
+.content-section h2.subheading {
+  font-size: 16px;
+  margin: 28px 0 8px;
 }
 .content-section h3 {
   font-size: 16px;
@@ -533,6 +596,30 @@ footer.site-footer {
 .content-section li { margin-bottom: 4px; }
 .content-section li b { color: var(--text); font-weight: 600; }
 .content-section a { color: var(--accent); }
+
+.region-directory {
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-card);
+}
+.region-directory summary {
+  padding: 13px 15px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.region-directory-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 8px 18px;
+  padding: 0 15px 15px;
+}
+.region-directory-links a {
+  font-size: 13px;
+  line-height: 1.35;
+}
 
 .faq-item {
   margin-bottom: 16px;
@@ -605,7 +692,12 @@ footer.site-footer {
   .hero h1 { font-size: 28px; }
   .hero p { font-size: 15px; }
   .content-section { padding: 32px 16px 40px; }
+  .content-section h1 { font-size: 20px; }
   .content-section h2 { font-size: 20px; }
+  .content-section h2.subheading { font-size: 16px; }
+  .region-directory-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .analysis-chart { padding: 14px 10px; }
+  .analysis-chart-row { grid-template-columns: 78px minmax(0, 1fr) 45px; gap: 7px; }
 }
 
 @media (max-width: 380px) {

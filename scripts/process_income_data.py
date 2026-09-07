@@ -15,8 +15,9 @@ To refresh (roughly once a year, when new ACS 5-year estimates drop):
   3. Download it twice, once per geography level:
        - Geography > County > All Counties within United States
        - Geography > Place  > All Places within United States
-  4. Unzip both and drop the "*-Data.csv" files into data/IncomeData/,
-     renamed to county.csv and place.csv
+  4. Unzip both and drop the "*-Data.csv" files into data/IncomeData/ under
+     distinct names such as B19013-County-Data.csv and B19013-Place-Data.csv.
+     Do not let the second download overwrite the first.
 
 Outputs:
     data/income_data_county.json   keyed by 5-digit county FIPS (same keys as
@@ -97,6 +98,14 @@ def parse_income(raw):
     try:
         v = float(s)
     except ValueError:
+        return None, False
+    # ACS summary files encode the open-ended median ranges numerically:
+    # 250001 means "$250,000 or more" and 2499 means "$2,500 or less."
+    # Preserve the useful upper bound, but omit the lower bound because the
+    # existing output model cannot express the inverse affordability bound.
+    if v == 250001:
+        return 250000, True
+    if v == 2499:
         return None, False
     if v <= 0:
         return None, False
@@ -264,7 +273,8 @@ def main():
     for c in city_prices:
         price_city_keys.add("{}|{}".format(c["state"], normalize_place(c["name"])))
 
-    city_out = {}
+    city_candidates = {}
+    city_source_names = {}
     place_rows = 0
     place_suppressed = 0
     for geo_id, full_name, income, capped in read_acs_rows(place_csv) if place_csv else []:
@@ -272,21 +282,35 @@ def main():
         place_name, state_abbr = split_place_name(full_name)
         if not place_name or not state_abbr:
             continue
+        key = "{}|{}".format(state_abbr, normalize_place(place_name))
+        if key in price_city_keys:
+            city_source_names.setdefault(key, []).append(place_name)
         if income is None:
             place_suppressed += 1
             continue
-        key = "{}|{}".format(state_abbr, normalize_place(place_name))
-        # Only keep places we actually plot, and don't let a later duplicate
-        # (e.g. a CDP sharing a city's name) clobber an earlier match.
-        if key not in price_city_keys or key in city_out:
+        # Only keep places we actually plot. A normalized name can refer to
+        # multiple Census geographies (for example, Mountain View city and
+        # Mountain View CDP). Without a richer geographic match, publishing
+        # either income would be guesswork, so omit every ambiguous key.
+        if key not in price_city_keys:
             continue
-        city_out[key] = {
+        candidate = {
             "name": place_name,
             "state": state_abbr,
             "median_household_income": income,
             "top_coded": capped,
             "source": "U.S. Census Bureau, ACS 5-Year Estimates, table B19013",
         }
+        city_candidates.setdefault(key, candidate)
+
+    ambiguous_city_keys = {
+        key: names for key, names in city_source_names.items() if len(names) > 1
+    }
+
+    city_out = {
+        key: record for key, record in city_candidates.items()
+        if key not in ambiguous_city_keys
+    }
 
     # Only write a file if we actually had input for it -- otherwise a
     # partial download would silently wipe out good data from a previous run.
@@ -311,6 +335,14 @@ def main():
         print("Cities:   parsed {} rows, {} suppressed/no estimate, matched {} of {} priced cities ({:.1f}%).".format(
             place_rows, place_suppressed, len(city_out), len(city_prices),
             100.0 * len(city_out) / max(1, len(city_prices))))
+        if ambiguous_city_keys:
+            sample = "; ".join(
+                "{} ({})".format(key, " / ".join(names))
+                for key, names in sorted(ambiguous_city_keys.items())[:5]
+            )
+            print("          omitted {} ambiguous normalized place keys; sample: {}".format(
+                len(ambiguous_city_keys), sample
+            ))
     return 0
 
 

@@ -164,7 +164,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>{county_name} ranks {state_rank_ord} out of {state_total} counties in {state} by median home price, and is {national_compare_sentence} the U.S. national median of {national_median_fmt}. Within {state}, the typical county has a median home value of {state_median_fmt}, making {county_name} {state_compare_sentence} the {state} state median.</p>
-  <p><a href="../counties.html?fips={fips}">View {county_name} on the interactive county map &rarr;</a></p>
+  <p><a href="../counties.html#fips={fips}">View {county_name} on the interactive county map &rarr;</a></p>
 </div>
 
 {affordability_section}

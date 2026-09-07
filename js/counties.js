@@ -32,15 +32,19 @@ function countyProfileUrl(rec) {
 function countyShareUrl(fips) {
   const url = new URL(window.location.href);
   url.search = "";
-  url.searchParams.set("fips", fips);
+  const params = new URLSearchParams();
+  params.set("fips", fips);
+  url.hash = params.toString();
   return url.href;
 }
 
 function setCountyUrl(fips) {
   const url = new URL(window.location.href);
   url.search = "";
-  if (fips) url.searchParams.set("fips", fips);
-  window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+  const params = new URLSearchParams();
+  if (fips) params.set("fips", fips);
+  url.hash = params.toString();
+  window.history.replaceState(null, "", url.pathname + url.hash);
 }
 
 Promise.all([
@@ -145,9 +149,12 @@ Promise.all([
     }
   });
 
-  // Deep link support: /counties.html?fips=06037 flies to and highlights that county.
-  // Used by the SEO county pages' "View on interactive map" links.
-  const params = new URLSearchParams(window.location.search);
+  // Selection state lives in the fragment so crawlers see one map URL rather
+  // than a separate page for every county. Keep reading the old query-string
+  // form so previously shared links still work; selectCounty() normalizes it.
+  const fragmentParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const legacyParams = new URLSearchParams(window.location.search);
+  const params = fragmentParams.has("fips") ? fragmentParams : legacyParams;
   const linkedFips = params.get("fips");
   if (linkedFips && layerByFips[linkedFips]) {
     const lyr = layerByFips[linkedFips];

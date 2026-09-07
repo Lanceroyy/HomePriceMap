@@ -157,7 +157,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; <a href="../states/{state_slug}.html">{state_name}</a> &rsaquo; {city_name}</p>
   <h1 style="font-size:30px;">Median Home Price in {city_name}, {state}</h1>
   <p>The median home value in <b>{city_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
-  <p><a href="../cities.html?city={map_city}">View {city_name} on the interactive city map &rarr;</a></p>
+  <p><a href="../cities.html#city={map_city}">View {city_name} on the interactive city map &rarr;</a></p>
 </div>
 
 <div class="choice-grid" style="grid-template-columns:repeat(3,1fr);max-width:760px;">
@@ -271,10 +271,12 @@ def faq_section(name, state, value, yoy, income, crime, county_name, county_valu
               else "about {}% below".format(abs(vs_state)) if vs_state < 0
               else "in line with")
     items.append((
-        "How much does a house cost in {}, {}?".format(name, state),
-        "The median home value in {n} is <b>{v}</b>. {t} That is {p} the typical {sn} "
-        "city tracked here.".format(n=name, v=fmt_money(value), t=trend, p=phrase,
-                                    sn=ABBR_TO_NAME.get(state, state)),
+        "What is the average home price in {}, {}?".format(name, state),
+        "People often call this an average home price, but the figure shown here is "
+        "Zillow's typical home value (ZHVI), not a simple arithmetic average. In {n}, "
+        "that value is <b>{v}</b>. {t} It is {p} the typical {sn} city tracked here."
+        .format(n=name, v=fmt_money(value), t=trend, p=phrase,
+                sn=ABBR_TO_NAME.get(state, state)),
     ))
 
     if county_name and county_value:

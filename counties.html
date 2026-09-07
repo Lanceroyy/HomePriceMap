@@ -12,7 +12,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>County Map — Home Price Map</title>
+<title>Median Home Price by County Map (2026) | HomePriceMap</title>
 <meta name="description" content="Interactive choropleth map of median home values across every U.S. county, with crime data and year-over-year price trends.">
 <link rel="canonical" href="https://homepricemap.us/counties.html">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -20,11 +20,11 @@
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homepricemap.us/counties.html">
-<meta property="og:title" content="County Map — Home Price Map">
+<meta property="og:title" content="Median Home Price by County Map (2026) | HomePriceMap">
 <meta property="og:description" content="Interactive choropleth map of median home values across every U.S. county, with crime data and year-over-year price trends.">
 <meta property="og:image" content="https://homepricemap.us/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="County Map — Home Price Map">
+<meta name="twitter:title" content="Median Home Price by County Map (2026) | HomePriceMap">
 <meta name="twitter:description" content="Interactive choropleth map of median home values across every U.S. county, with crime data and year-over-year price trends.">
 <meta name="twitter:image" content="https://homepricemap.us/assets/og-image.jpg">
 <script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
@@ -63,13 +63,13 @@
 </div>
 
 <section class="content-section">
-  <h2>About the county map</h2>
+  <h1>Median Home Price by County Map (2026)</h1>
   <p>This map colors every county in the United States by its current median home value, using Zillow Research's Home Value Index (ZHVI). Darker, cooler colors indicate lower-priced counties; brighter, warmer colors indicate higher-priced ones. Hover over any county for a quick preview, or click one to lock in its details — median value, year-over-year price change, and local crime statistics where available — in the panel at the bottom of the screen.</p>
 
-  <h3>Data source and methodology</h3>
+  <h2 class="subheading">Data source and methodology</h2>
   <p>Home price figures are pulled directly from Zillow Research's public ZHVI dataset via an automated job that runs daily, so the numbers here stay current with Zillow's own monthly releases. County boundaries are rendered from the U.S. Census Bureau's TIGER/Line geographic data via the open-source us-atlas project. Crime figures are sourced from the FBI's Uniform Crime Reporting Program and are shown as a population-weighted average of that county's reporting cities, since the FBI's own county-level table excludes crimes handled by any city police department within the county.</p>
 
-  <h3>Reading the map</h3>
+  <h2 class="subheading">Reading the map</h2>
   <p>A county with no visible color fill, or shown in the darkest gray tone, simply means Zillow doesn't publish ZHVI data for that county — typically very rural counties with too few home sales to produce a statistically reliable estimate. This is a limitation of the underlying data, not an error in the map itself.</p>
 </section>
 

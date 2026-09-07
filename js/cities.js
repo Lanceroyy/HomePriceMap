@@ -25,17 +25,21 @@ function cityProfileUrl(rec, crime, isCanonicalRecord) {
 function cityShareUrl(key, county) {
   const url = new URL(window.location.href);
   url.search = "";
-  url.searchParams.set("city", key);
-  if (county) url.searchParams.set("county", county);
+  const params = new URLSearchParams();
+  params.set("city", key);
+  if (county) params.set("county", county);
+  url.hash = params.toString();
   return url.href;
 }
 
 function setCityUrl(key, county) {
   const url = new URL(window.location.href);
   url.search = "";
-  if (key) url.searchParams.set("city", key);
-  if (county) url.searchParams.set("county", county);
-  window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+  const params = new URLSearchParams();
+  if (key) params.set("city", key);
+  if (county) params.set("county", county);
+  url.hash = params.toString();
+  window.history.replaceState(null, "", url.pathname + url.hash);
 }
 
 Promise.all([
@@ -55,7 +59,7 @@ Promise.all([
 
     // Zillow occasionally has two same-named places in one state. Standalone
     // pages intentionally keep only the highest-priced record for each slug,
-    // so make that same record the canonical target for legacy ?city= links.
+    // so make that same record the canonical target for unqualified city links.
     // County-qualified links preserve access to every individual map marker.
     const cityCountByKey = {};
     const canonicalRecordByKey = {};
@@ -120,8 +124,11 @@ Promise.all([
       }
     });
 
-    // Shareable city links mirror the county map's ?fips= deep links.
-    const params = new URLSearchParams(window.location.search);
+    // Store selection in the fragment so it does not create thousands of
+    // crawlable map URLs. Legacy query-string links remain backward compatible.
+    const fragmentParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const legacyParams = new URLSearchParams(window.location.search);
+    const params = fragmentParams.has("city") ? fragmentParams : legacyParams;
     const linkedCity = params.get("city");
     const linkedCounty = params.get("county");
     const linkedHit = linkedCity && (linkedCounty

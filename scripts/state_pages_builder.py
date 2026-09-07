@@ -177,6 +177,8 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
 {cities_section}
 
+{directory_section}
+
 {faq_section}
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -292,6 +294,56 @@ def build_state_city_section(cities, state_name, state):
         )
 
     return intro_block + lists
+
+
+def build_detail_directories(counties, cities, state_name, state):
+    """Link every eligible detail page without expanding the ranked lists.
+
+    Small states already show every link in their ranked sections, so a
+    directory is only needed where it adds pages that are otherwise omitted.
+    """
+    directories = []
+
+    if len(counties) > 12:
+        county_links = "\n".join(
+            '<a href="{href}">{name}</a>'.format(
+                href=county_href_relative(c["name"], state), name=c["name"]
+            )
+            for c in sorted(counties, key=lambda item: item["name"])
+        )
+        directories.append(
+            '<details class="region-directory">\n'
+            '  <summary>All tracked counties in {state_name} ({count})</summary>\n'
+            '  <div class="region-directory-links">\n{links}\n  </div>\n'
+            '</details>'.format(
+                state_name=state_name, count=len(counties), links=county_links
+            )
+        )
+
+    if len(cities) > 10:
+        city_links = "\n".join(
+            '<a href="{href}">{name}</a>'.format(
+                href=city_href_relative(c["name"], state), name=c["name"]
+            )
+            for c in sorted(cities, key=lambda item: item["name"])
+        )
+        directories.append(
+            '<details class="region-directory">\n'
+            '  <summary>All tracked cities in {state_name} ({count})</summary>\n'
+            '  <div class="region-directory-links">\n{links}\n  </div>\n'
+            '</details>'.format(
+                state_name=state_name, count=len(cities), links=city_links
+            )
+        )
+
+    if not directories:
+        return ""
+    return (
+        '<div class="content-section region-directories" style="padding-top:0;">\n'
+        '  <h2>Browse all tracked places in {state_name}</h2>\n'
+        '{directories}\n'
+        '</div>'
+    ).format(state_name=state_name, directories="\n".join(directories))
 
 
 def build_crime_list_block(heading, counties, state, color):
@@ -598,8 +650,10 @@ def build_state_pages(county_data, crime_data, income_data=None, city_data=None)
 
         affordability_section = build_affordability_section(group, state_name, abbr, income_by_fips, n)
         crime_section = build_crime_section(group, state_name, abbr, crime_by_fips, n)
-        cities_section = build_state_city_section(
-            cities_by_state.get(abbr, []), state_name, abbr
+        state_cities = cities_by_state.get(abbr, [])
+        cities_section = build_state_city_section(state_cities, state_name, abbr)
+        directory_section = build_detail_directories(
+            group, state_cities, state_name, abbr
         )
         faq_section = build_faq_section(
             ranked, state_name, n, state_median, national_median, income_by_fips
@@ -642,6 +696,7 @@ def build_state_pages(county_data, crime_data, income_data=None, city_data=None)
             affordability_section=affordability_section,
             crime_section=crime_section,
             cities_section=cities_section,
+            directory_section=directory_section,
             faq_section=faq_section,
         )
 
@@ -751,6 +806,7 @@ def build_sitemap(state_urls, county_data):
         SITE_URL + "/contact.html",
         SITE_URL + "/privacy-policy.html",
         SITE_URL + "/cheapest-counties-arent-the-most-affordable.html",
+        SITE_URL + "/home-price-trends-by-state-2026.html",
     ]
     all_urls = static_urls + county_urls + city_urls + state_urls
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
