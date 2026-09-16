@@ -133,7 +133,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <header class="topbar">
   <div class="brand">Home<span>Price</span>Map</div>
   <nav>
-    <a href="../index.html">Home</a>
+    <a href="/">Home</a>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
@@ -142,7 +142,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </header>
 
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../counties.html">Counties</a> &rsaquo; {county_name}, {state}</p>
+  <p style="font-size:13px;color:var(--text-dim);"><a href="/">Home</a> &rsaquo; <a href="../counties.html">Counties</a> &rsaquo; {county_name}, {state}</p>
   <h1 style="font-size:30px;">Median Home Price in {county_name}, {state}</h1>
   <p>The median home value in <b>{county_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
 </div>

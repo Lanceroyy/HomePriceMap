@@ -155,7 +155,7 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 <header class="topbar">
   <div class="brand">Home<span>Price</span>Map</div>
   <nav>
-    <a href="../index.html">Home</a>
+    <a href="/">Home</a>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
@@ -164,7 +164,7 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 </header>
 
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p style="font-size:13px;color:var(--text-dim);"><a href="../index.html">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; {state_name}</p>
+  <p style="font-size:13px;color:var(--text-dim);"><a href="/">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; {state_name}</p>
   <h1 style="font-size:30px;">Home Prices by County in {state_name}</h1>
   <p>{intro}</p>
 </div>
@@ -737,7 +737,7 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 <header class="topbar">
   <div class="brand">Home<span>Price</span>Map</div>
   <nav>
-    <a href="index.html">Home</a>
+    <a href="/">Home</a>
     <a href="counties.html">Counties</a>
     <a href="cities.html">Cities</a>
     <a href="states.html" class="active">States</a>
