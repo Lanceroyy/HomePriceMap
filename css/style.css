@@ -177,8 +177,13 @@ header.topbar nav a.active { color: var(--text); }
   margin: 0 auto;
   padding: 0 20px;
 }
+.profile-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 760px;
+}
 @media (max-width: 700px) {
   .choice-grid { grid-template-columns: 1fr; }
+  .choice-grid.profile-stats { grid-template-columns: 1fr; }
 }
 
 .choice-card {

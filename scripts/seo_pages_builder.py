@@ -147,7 +147,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p>The median home value in <b>{county_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
 </div>
 
-<div class="choice-grid" style="grid-template-columns:repeat(3,1fr);max-width:760px;">
+<div class="choice-grid profile-stats">
   <div class="choice-card" style="text-align:center;">
     <p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">Median Home Value</p>
     <p class="figure" style="font-size:22px;font-weight:700;color:var(--accent-2);margin:0;">{value_fmt}</p>

@@ -160,7 +160,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p><a href="../cities.html#city={map_city}">View {city_name} on the interactive city map &rarr;</a></p>
 </div>
 
-<div class="choice-grid" style="grid-template-columns:repeat(3,1fr);max-width:760px;">
+<div class="choice-grid profile-stats">
   <div class="choice-card" style="text-align:center;">
     <p style="color:var(--text-dim);font-size:13px;margin:0 0 6px;">Median Home Value</p>
     <p class="figure" style="font-size:22px;font-weight:700;color:var(--accent-2);margin:0;">{value_fmt}</p>
