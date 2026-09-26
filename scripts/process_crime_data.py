@@ -19,13 +19,14 @@ they exclude crimes handled by a city's own police department, which would
 badly understate crime in any county containing an incorporated city.
 
 Instead, county-level figures are rolled up as a population-weighted average
-of that county's own cities' crime rates (matched via data/city_prices.json,
-which already carries each city's parent county name from Zillow's data).
+of that county's own cities' crime rates (matched conservatively by full city
+name against data/city_prices.json, which carries each city's parent county).
 This reuses data we already have instead of needing a second crosswalk.
 
 Outputs:
-    data/crime_data_city.json    keyed by "STATE|normalizedcityname" (same
-                                  key shape as city_history.json)
+    data/crime_data_city.json    keyed by legacy "STATE|normalizedcityname";
+                                  collisions contain a list of distinct rows
+                                  and consumers verify the full source name
     data/crime_data_county.json  keyed by 5-digit county FIPS (same keys as
                                   county_prices.json)
 
@@ -44,6 +45,7 @@ import sys
 from pathlib import Path
 
 import openpyxl
+from city_identity import city_candidates_by_key, match_city_source
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -160,6 +162,15 @@ def rate_per_100k(count, population):
     return round((count / population) * 100000, 1)
 
 
+def matched_county_for_crime_row(row, city_candidates):
+    """Return a Zillow county only for an unambiguous full-name match."""
+    key = f"{row['state']}|{normalize_place(row['city'])}"
+    source = {key: {"name": row["city"], "state": row["state"]}}
+    matched = [city for city in city_candidates.get(key, [])
+               if city.get("county") and match_city_source(city, source, city_candidates)]
+    return matched[0]["county"] if len(matched) == 1 else None
+
+
 def main():
     if not CITY_XLSX.exists():
         sys.exit(
@@ -186,12 +197,10 @@ def main():
             "first, or re-run this script once real data is live."
         )
 
-    # city key (STATE|normalizedname) -> county name, for the rollup join
-    city_to_county = {}
-    for c in city_prices:
-        key = f"{c['state']}|{normalize_place(c['name'])}"
-        if c.get("county"):
-            city_to_county[key] = c["county"]
+    # The suffix-stripped key is a lookup bucket, not a city identity. Several
+    # states have a city and township (or two cities in different counties)
+    # with the same key. A last-record-wins dictionary misassigns county crime.
+    city_candidates = city_candidates_by_key(city_prices)
 
     # county key (STATE|normalizedcountyname) -> fips
     county_key_to_fips = {}
@@ -209,7 +218,7 @@ def main():
 
     for r in crime_rows:
         key = f"{r['state']}|{normalize_place(r['city'])}"
-        city_out[key] = {
+        crime_record = {
             "name": r["city"],
             "state": r["state"],
             "population": int(r["population"]),
@@ -219,8 +228,15 @@ def main():
             "murder_rate": rate_per_100k(r["murder"], r["population"]),
             "source": "FBI CIUS Table 8 (Offenses Known to Law Enforcement by City)",
         }
+        previous = city_out.get(key)
+        if previous is None:
+            city_out[key] = crime_record
+        elif isinstance(previous, list):
+            previous.append(crime_record)
+        else:
+            city_out[key] = [previous, crime_record]
 
-        county_name = city_to_county.get(key)
+        county_name = matched_county_for_crime_row(r, city_candidates)
         if not county_name:
             continue
         county_key = f"{r['state']}|{normalize_county(county_name)}"
@@ -271,7 +287,7 @@ def main():
         json.dumps({"year": CRIME_YEAR, "count": len(county_out), "counties": county_out}, separators=(",", ":"))
     )
 
-    print(f"Wrote {len(city_out)} city crime records.")
+    print(f"Wrote {len(crime_rows)} city crime records in {len(city_out)} key buckets.")
     print(
         f"Suppressed {thin_coverage} counties whose matched cities covered fewer "
         f"than {MIN_COVERED_POPULATION:,} residents (too thin to state a rate)."

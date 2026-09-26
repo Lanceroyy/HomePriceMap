@@ -36,14 +36,7 @@ OUT_DIR = ROOT / "states"
 SITE_URL = "https://homepricemap.us"
 
 GA_SNIPPET = "\n".join([
-    '<!-- Google tag (gtag.js) -->',
-    '<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>',
-    '<script>',
-    '  window.dataLayer = window.dataLayer || [];',
-    "  function gtag(){dataLayer.push(arguments);}",
-    "  gtag('js', new Date());",
-    "  gtag('config', 'G-2K8JWH5ZKY');",
-    '</script>',
+    '<script src="/js/analytics-loader.js"></script>',
     '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>',
 ])
 
@@ -159,6 +152,7 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -741,6 +735,7 @@ HUB_TEMPLATE = """<!DOCTYPE html>
     <a href="counties.html">Counties</a>
     <a href="cities.html">Cities</a>
     <a href="states.html" class="active">States</a>
+    <a href="compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -801,6 +796,7 @@ def build_sitemap(state_urls, county_data):
         SITE_URL + "/counties.html",
         SITE_URL + "/cities.html",
         SITE_URL + "/states.html",
+        SITE_URL + "/compare.html",
         SITE_URL + "/about.html",
         SITE_URL + "/methodology.html",
         SITE_URL + "/contact.html",

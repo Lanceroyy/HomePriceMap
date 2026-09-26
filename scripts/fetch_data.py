@@ -25,8 +25,11 @@ import json
 import re
 import sys
 import urllib.request
+from collections import Counter
 from datetime import datetime, date
 from pathlib import Path
+
+from city_identity import city_history_key, full_place_name
 
 COUNTY_CSV_URL = (
     "https://files.zillowstatic.com/research/public_csvs/zhvi/"
@@ -143,6 +146,14 @@ def build_county_data(rows: list[dict], cols: list[str]) -> dict:
 def build_city_data(rows: list[dict], cols: list[str], coords: dict) -> list:
     out = []
     matched, unmatched = 0, 0
+    # The Gazetteer file stores only one coordinate per suffix-stripped key.
+    # If Zillow has two places in that bucket, neither coordinate is safe to
+    # use for a map marker, but both price records remain useful for profiles.
+    key_counts = Counter(
+        f"{row.get('State') or row.get('StateName')}|{normalize(row.get('RegionName') or row.get('City'))}"
+        for row in rows
+        if (row.get("RegionName") or row.get("City")) and (row.get("State") or row.get("StateName"))
+    )
     for row in rows:
         name = row.get("RegionName") or row.get("City")
         state = row.get("State") or row.get("StateName")
@@ -159,12 +170,26 @@ def build_city_data(rows: list[dict], cols: list[str], coords: dict) -> list:
             continue
         yoy = yoy_value(row, cols, latest_col)
         yoy_pct = round((value / yoy - 1) * 100, 2) if yoy else None
+        # The Gazetteer lookup was historically last-wins on the shortened
+        # key too. Reject a coordinate whose stored place name is different
+        # (for example Ocean City, MD versus Ocean, MD), even if Zillow has
+        # only one place in that bucket. Ambiguous future Gazetteer keys are
+        # marked explicitly by build_city_coords.py.
+        coordinate_name_matches = (
+            full_place_name(loc.get("name")) == full_place_name(name)
+            or (loc.get("source_name") or "").strip() == name.strip()
+        )
+        coordinate_is_unique = (
+            key_counts[key] == 1
+            and not loc.get("ambiguous")
+            and coordinate_name_matches
+        )
         out.append({
             "name": name,
             "state": state,
             "county": row.get("CountyName"),
-            "lat": loc["lat"],
-            "lon": loc["lon"],
+            "lat": loc["lat"] if coordinate_is_unique else None,
+            "lon": loc["lon"] if coordinate_is_unique else None,
             "value": round(value),
             "yoy_pct": yoy_pct,
             "as_of": latest_col,
@@ -254,7 +279,18 @@ def main():
     # Archive a time-series point per region (skipped automatically if this
     # month's Zillow numbers haven't changed since the last recorded point).
     update_history(HISTORY_DIR / "county_history.json", county_data)
-    city_keyed = {f"{d['state']}|{normalize(d['name'])}": d for d in city_data}
+    city_keyed = {}
+    duplicate_identities = set()
+    for city in city_data:
+        key = city_history_key(city)
+        if key in city_keyed:
+            duplicate_identities.add(key)
+        else:
+            city_keyed[key] = city
+    for key in duplicate_identities:
+        city_keyed.pop(key, None)
+    if duplicate_identities:
+        print(f"  WARNING: omitted history for {len(duplicate_identities)} duplicate city identities")
     update_history(HISTORY_DIR / "city_history.json", city_keyed)
 
 

@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="map-page">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +33,7 @@
     <a href="counties.html">Counties</a>
     <a href="cities.html" class="active">Cities</a>
     <a href="states.html">States</a>
+    <a href="compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -65,6 +59,7 @@
 <section class="content-section">
   <h1>Median Home Price by City Map (2026)</h1>
   <p>Every marker on this map represents an individual city or town, colored by its current median home value from Zillow Research's Home Value Index (ZHVI). Use the search box to jump straight to a specific city, or click any marker to see its median value, year-over-year price change, and local crime statistics where the FBI has reporting data available for that city.</p>
+  <p>For a closer look at local affordability and neighboring cities, explore the <a href="cities/ca-los-angeles.html">Los Angeles, CA</a> or <a href="cities/ga-canton.html">Canton, GA</a> profiles.</p>
 
   <h2 class="subheading">Data source and methodology</h2>
   <p>Home price figures come from Zillow Research's public ZHVI dataset, refreshed automatically every day. City coordinates are matched against the U.S. Census Bureau's Gazetteer place files. Crime statistics are sourced directly from the FBI's Uniform Crime Reporting Program's "Offenses Known to Law Enforcement by City" table, reflecting crimes reported by that city's own police department.</p>
@@ -75,6 +70,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/common.js"></script>
+<script src="js/city-identity.js"></script>
 <script src="js/cities.js"></script>
 </body>
 </html>

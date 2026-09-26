@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,6 +32,7 @@
     <a href="counties.html">Counties</a>
     <a href="cities.html">Cities</a>
     <a href="states.html">States</a>
+    <a href="compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -47,6 +41,20 @@
   <h1>Median home prices, <span>mapped</span>.</h1>
   <p>Explore current median home values across every U.S. county and thousands of cities. Data refreshes automatically every day from Zillow's public research data.</p>
 </div>
+
+<section class="home-finder" aria-labelledby="homeFinderHeading">
+  <p class="eyebrow">Search published profiles</p>
+  <h2 id="homeFinderHeading">Find your city or county</h2>
+  <p>Go straight to current prices, affordability, crime context, and monthly history for a published location.</p>
+  <div class="place-search">
+    <label class="sr-only" for="homePlaceSearch">Search for a city or county</label>
+    <input id="homePlaceSearch" type="search" role="combobox" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="homePlaceSearchResults" aria-describedby="homePlaceSearchHelp" placeholder="Search a city or county">
+    <ul id="homePlaceSearchResults" class="place-search-results" role="listbox" hidden></ul>
+    <p id="homePlaceSearchHelp" class="field-help">Type at least two characters, then choose a published profile.</p>
+  </div>
+  <p class="field-help">Explore examples: <a href="cities/ca-los-angeles.html">Los Angeles, CA</a> &middot; <a href="cities/ga-canton.html">Canton, GA</a></p>
+  <p class="home-finder-compare"><a href="compare.html">Or compare two or three places side by side &rarr;</a></p>
+</section>
 
 <div class="choice-grid">
   <a class="choice-card" href="counties.html">
@@ -75,7 +83,7 @@
 <a class="article-feature" href="cheapest-counties-arent-the-most-affordable.html">
   <span class="kicker">Analysis</span>
   <b>The cheapest counties in America aren't the most affordable</b>
-  <span>Owsley County, Kentucky has $141,654 homes and is harder to buy into than Fairfax County, Virginia, where the typical home costs $779,439. What 3,062 counties look like measured against local income. &rarr;</span>
+  <span>In a June 2026 snapshot, Owsley County, Kentucky had $141,654 homes yet was harder to buy into than Fairfax County, Virginia. See what 3,062 counties look like against local income. &rarr;</span>
 </a>
 
 <a class="article-feature" href="home-price-trends-by-state-2026.html">
@@ -122,7 +130,14 @@
   &middot; <a href="privacy-policy.html">Privacy Policy</a>
 </footer>
 
+<script src="js/place-search.js"></script>
 <script>
+window.HomePriceSearch.attach(
+  document.getElementById('homePlaceSearch'),
+  document.getElementById('homePlaceSearchResults'),
+  { onSelect: place => { window.location.href = place.url; } }
+);
+
 async function loadStats() {
   try {
     const [c, ci] = await Promise.all([

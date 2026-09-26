@@ -52,6 +52,8 @@ Promise.all([
     if (incomeData) incomeByCityKey = incomeData.cities;
 
     const cities = priceData.cities;
+    const cityCandidates = window.CityIdentity.groups(cities);
+    const mappableCities = cities.filter(window.CityIdentity.hasCoordinates);
     const breaks = PRICE_BREAKS;
     renderLegend(legendEl, breaks);
 
@@ -63,7 +65,7 @@ Promise.all([
     // County-qualified links preserve access to every individual map marker.
     const cityCountByKey = {};
     const canonicalRecordByKey = {};
-    cities.forEach(rec => {
+    mappableCities.forEach(rec => {
       const key = `${rec.name}, ${rec.state}`;
       cityCountByKey[key] = (cityCountByKey[key] || 0) + 1;
       const current = canonicalRecordByKey[key];
@@ -73,23 +75,23 @@ Promise.all([
     });
 
     function selectCity(hit, method) {
-      const crime = crimeByCityKey[hit.crimeKey];
       const countyParam = hit.isDuplicate ? hit.rec.county : null;
       setCityUrl(hit.key, countyParam);
       showInfo(infoBox, {
         title: hit.label, value: hit.rec.value, yoy: hit.rec.yoy_pct,
-        crime, income: incomeByCityKey[hit.crimeKey], track: method,
+        crime: hit.crime, income: hit.income, track: method,
         regionType: "city",
-        profileUrl: cityProfileUrl(hit.rec, crime, canonicalRecordByKey[hit.key] === hit.rec),
+        profileUrl: cityProfileUrl(hit.rec, hit.crime, canonicalRecordByKey[hit.key] === hit.rec),
         shareUrl: cityShareUrl(hit.key, countyParam),
       });
     }
 
-    cities.forEach(rec => {
+    mappableCities.forEach(rec => {
       const key = `${rec.name}, ${rec.state}`;
       const isDuplicate = cityCountByKey[key] > 1;
       const label = isDuplicate ? `${key} (${rec.county})` : key;
-      const crimeKey = `${rec.state}|${normalizePlace(rec.name)}`;
+      const crime = window.CityIdentity.matchedSource(rec, crimeByCityKey, cityCandidates);
+      const income = window.CityIdentity.matchedSource(rec, incomeByCityKey, cityCandidates, true);
       const radius = 4 + Math.min(10, Math.sqrt(rec.value) / 120);
       const marker = L.circleMarker([rec.lat, rec.lon], {
         radius,
@@ -102,11 +104,11 @@ Promise.all([
       marker.bindTooltip(`${label}<br><b>${fmtMoney(rec.value)}</b>`, { sticky: true });
       marker.on("click", () => {
         map.setView([rec.lat, rec.lon], Math.max(map.getZoom(), 9));
-        selectCity({ marker, rec, crimeKey, key, label, isDuplicate }, "map_click");
+        selectCity({ marker, rec, crime, income, key, label, isDuplicate }, "map_click");
       });
 
       marker.addTo(cluster);
-      const hit = { marker, rec, crimeKey, key, label, isDuplicate };
+      const hit = { marker, rec, crime, income, key, label, isDuplicate };
       markerBySearchLabel[label] = hit;
       markerByCityCounty[`${key}|${rec.county}`] = hit;
       if (canonicalRecordByKey[key] === rec) canonicalMarkerByKey[key] = hit;

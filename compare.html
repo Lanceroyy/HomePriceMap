@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="/js/analytics-loader.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare City and County Home Prices | HomePriceMap</title>
+<meta name="description" content="Compare typical home values, year-over-year change, affordability, and reported crime rates for up to three U.S. cities or counties.">
+<link rel="canonical" href="https://homepricemap.us/compare.html">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://homepricemap.us/compare.html">
+<meta property="og:title" content="Compare City and County Home Prices | HomePriceMap">
+<meta property="og:description" content="Compare home values, affordability, and local context for up to three U.S. cities or counties.">
+<meta property="og:image" content="https://homepricemap.us/assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Home<span>Price</span>Map</div>
+  <nav aria-label="Main navigation">
+    <a href="/">Home</a>
+    <a href="counties.html">Counties</a>
+    <a href="cities.html">Cities</a>
+    <a href="states.html">States</a>
+    <a href="compare.html" class="active">Compare</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
+  </nav>
+</header>
+
+<main class="compare-main">
+  <section class="compare-intro">
+    <p class="eyebrow">City and county comparison</p>
+    <h1>Compare places side by side</h1>
+    <p>Add two or three published profiles to compare typical home value, recent direction, affordability, and available FBI crime context. Missing data is shown honestly rather than estimated.</p>
+
+    <div class="place-search compare-search">
+      <label for="compareSearch">Add a city or county</label>
+      <input id="compareSearch" type="search" role="combobox" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="compareSearchResults" aria-describedby="compareSearchHelp" placeholder="Try Austin, TX or Clark County, AR">
+      <ul id="compareSearchResults" class="place-search-results" role="listbox" hidden></ul>
+      <p id="compareSearchHelp" class="field-help">Type at least two characters. You can compare up to three places.</p>
+    </div>
+
+    <div class="comparison-toolbar">
+      <button id="copyComparison" class="button-link" type="button" disabled>Copy comparison link</button>
+      <span id="copyStatus" class="comparison-status" aria-live="polite"></span>
+    </div>
+    <p id="comparisonLimit" class="comparison-notice" role="status" hidden>Three places is the maximum. Remove one before adding another.</p>
+  </section>
+
+  <section aria-live="polite" aria-label="Selected place comparison">
+    <div id="comparisonEmpty" class="comparison-empty">
+      <h2>Choose your first place</h2>
+      <p>Search above to begin. Add a second place to make the differences easier to see.</p>
+    </div>
+    <div id="comparisonError" class="comparison-error" role="alert" hidden>
+      The comparison data could not be loaded. Refresh the page or try again after the next data update.
+    </div>
+    <div id="comparisonGrid" class="comparison-grid" hidden></div>
+  </section>
+
+  <section class="content-section comparison-method" aria-labelledby="comparisonMethodHeading">
+    <h2 id="comparisonMethodHeading">What these figures mean</h2>
+    <p>Home value is Zillow's Home Value Index for the broad middle of the local housing market, not a simple average sale price. Price to income divides that value by Census median household income. FBI city crime figures are police-department reports; county figures combine the reporting cities that could be matched inside that county and may not cover every resident.</p>
+    <p><a href="methodology.html">Read the full data methodology &rarr;</a></p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
+  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  &middot; <a href="about.html">About</a>
+  &middot; <a href="methodology.html">Data &amp; Methodology</a>
+  &middot; <a href="contact.html">Contact</a>
+  &middot; <a href="privacy-policy.html">Privacy Policy</a>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/place-search.js"></script>
+<script src="js/compare.js"></script>
+</body>
+</html>

@@ -20,25 +20,23 @@ import statistics
 import sys
 import unicodedata
 from pathlib import Path
+from urllib.parse import quote_plus
+
+from profile_components import load_history_series, prune_stale_html, render_history_section
 
 ROOT = Path(__file__).resolve().parent.parent
+MIN_EXPECTED_PROFILES = 2500
 DATA_PATH = ROOT / "data" / "county_prices.json"
 CRIME_PATH = ROOT / "data" / "crime_data_county.json"
 INCOME_PATH = ROOT / "data" / "income_data_county.json"
 CITY_PATH = ROOT / "data" / "city_prices.json"
 CITY_DIR = ROOT / "cities"
 OUT_DIR = ROOT / "counties"
+HISTORY_PATH = ROOT / "data" / "history" / "county_history.json"
 SITE_URL = "https://homepricemap.us"
 
 GA_SNIPPET = "\n".join([
-    '<!-- Google tag (gtag.js) -->',
-    '<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>',
-    '<script>',
-    '  window.dataLayer = window.dataLayer || [];',
-    "  function gtag(){dataLayer.push(arguments);}",
-    "  gtag('js', new Date());",
-    "  gtag('config', 'G-2K8JWH5ZKY');",
-    '</script>',
+    '<script src="/js/analytics-loader.js"></script>',
 ])
 
 
@@ -137,6 +135,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -165,7 +164,10 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>{county_name} ranks {state_rank_ord} out of {state_total} counties in {state} by median home price, and is {national_compare_sentence} the U.S. national median of {national_median_fmt}. Within {state}, the typical county has a median home value of {state_median_fmt}, making {county_name} {state_compare_sentence} the {state} state median.</p>
   <p><a href="../counties.html#fips={fips}">View {county_name} on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places={compare_id}">Compare {county_name} with another place</a></p>
 </div>
+
+{history_section}
 
 {affordability_section}
 
@@ -453,6 +455,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
     crime_by_fips = crime_data["counties"] if crime_data else {}
     income_by_fips = income_data["counties"] if income_data else {}
     city_links = load_city_links()
+    history = load_history_series(HISTORY_PATH)
 
     # National distributions, computed once, so each page can say where its
     # county actually sits rather than just quoting a bare number.
@@ -492,6 +495,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     urls = []
+    expected_filenames = set()
 
     for c in items:
         fips = c["fips"]
@@ -502,6 +506,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
         as_of = c.get("as_of", "")
         slug = slug_by_fips[fips]
         filename = slug + ".html"
+        expected_filenames.add(filename)
         canonical = SITE_URL + "/counties/" + filename
 
         if yoy is None:
@@ -607,6 +612,10 @@ def build_pages(county_data, crime_data=None, income_data=None):
             state_median_fmt=fmt_money(s_med),
             state_compare_sentence=state_compare_sentence,
             fips=fips,
+            compare_id=quote_plus("county:{}".format(fips)),
+            history_section=render_history_section(
+                history.get(fips, []), "{}, {}".format(name, state)
+            ),
             affordability_section=aff_html,
             crime_section=crime_html,
             faq_section=faq_html,
@@ -617,6 +626,11 @@ def build_pages(county_data, crime_data=None, income_data=None):
         (OUT_DIR / filename).write_text(html, encoding="utf-8")
         urls.append(canonical)
 
+    prune_stale_html(
+        OUT_DIR,
+        expected_filenames,
+        minimum_expected=MIN_EXPECTED_PROFILES,
+    )
     return urls
 
 

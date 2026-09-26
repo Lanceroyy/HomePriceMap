@@ -52,6 +52,26 @@ def clean_key(k: str) -> str:
     return k.strip().lstrip(BOM)
 
 
+def add_coordinate(lookup: dict, state: str, name: str, lat: float, lon: float) -> bool:
+    """Keep only one coordinate per shortened key; report a new collision."""
+    key = state + "|" + normalize(name)
+    previous = lookup.get(key)
+    if previous is not None:
+        lookup[key] = {"ambiguous": True}
+        return not previous.get("ambiguous")
+    lookup[key] = {
+        "name": PLACE_SUFFIXES.sub("", name).strip(),
+        # Retain the original Census label too. Its capitalization separates
+        # a literal name like "Carson City" from a legal suffix like
+        # "Ocean city", which the old lookup discarded.
+        "source_name": name,
+        "state": state,
+        "lat": lat,
+        "lon": lon,
+    }
+    return False
+
+
 def main():
     print("Downloading " + GAZETTEER_URL + " ...")
     req = urllib.request.Request(GAZETTEER_URL, headers={"User-Agent": "Mozilla/5.0"})
@@ -77,6 +97,7 @@ def main():
     lookup = {}
     count = 0
     skipped = 0
+    ambiguous = 0
     for row in reader:
         row = {clean_key(k): (v.strip() if v else v) for k, v in row.items() if k}
         state = row.get("USPS")
@@ -86,20 +107,14 @@ def main():
         if not (state and name and lat and lon):
             skipped += 1
             continue
-        key = state + "|" + normalize(name)
-        lookup[key] = {
-            "name": PLACE_SUFFIXES.sub("", name).strip(),
-            "state": state,
-            "lat": float(lat),
-            "lon": float(lon),
-        }
+        ambiguous += add_coordinate(lookup, state, name, float(lat), float(lon))
         count += 1
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_PATH, "w") as f:
         json.dump(lookup, f, separators=(",", ":"))
 
-    print("Wrote " + str(count) + " places to " + str(OUT_PATH) + " (" + str(skipped) + " rows skipped as incomplete)")
+    print("Wrote " + str(count) + " places to " + str(OUT_PATH) + " (" + str(skipped) + " rows skipped as incomplete; " + str(ambiguous) + " ambiguous coordinate keys suppressed)")
     if count == 0:
         print("ERROR: 0 places written - check the Detected columns line above against USPS/NAME/INTPTLAT/INTPTLONG.")
 

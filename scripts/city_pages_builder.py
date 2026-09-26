@@ -30,8 +30,12 @@ import re
 import statistics
 import sys
 import unicodedata
+from html import escape
 from pathlib import Path
 from urllib.parse import quote_plus
+
+from city_identity import city_candidates_by_key, match_city_source, safe_city_history
+from profile_components import load_history_series, prune_stale_html, render_history_section
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -39,6 +43,7 @@ CITY_PATH = DATA_DIR / "city_prices.json"
 COUNTY_PATH = DATA_DIR / "county_prices.json"
 CITY_CRIME_PATH = DATA_DIR / "crime_data_city.json"
 CITY_INCOME_PATH = DATA_DIR / "income_data_city.json"
+CITY_HISTORY_PATH = DATA_DIR / "history" / "city_history.json"
 OUT_DIR = ROOT / "cities"
 SITE_URL = "https://homepricemap.us"
 
@@ -46,16 +51,17 @@ SITE_URL = "https://homepricemap.us"
 # incident. 5,000 is the same floor used for county rollups in
 # process_crime_data.py, kept consistent so the two never disagree.
 MIN_POPULATION = 5000
+MIN_EXPECTED_PROFILES = 3000
+
+# These two profiles already have measurable search interest. The named peers
+# are a deliberately small local-context pilot, not a template for every city.
+PILOT_PEERS = {
+    ("CA", "Los Angeles"): ("Long Beach", "Pasadena", "Santa Monica"),
+    ("GA", "Canton"): ("Woodstock", "Holly Springs"),
+}
 
 GA_SNIPPET = "\n".join([
-    '<!-- Google tag (gtag.js) -->',
-    '<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>',
-    '<script>',
-    '  window.dataLayer = window.dataLayer || [];',
-    "  function gtag(){dataLayer.push(arguments);}",
-    "  gtag('js', new Date());",
-    "  gtag('config', 'G-2K8JWH5ZKY');",
-    '</script>',
+    '<script src="/js/analytics-loader.js"></script>',
 ])
 
 ABBR_TO_NAME = {
@@ -149,6 +155,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -157,7 +164,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p style="font-size:13px;color:var(--text-dim);"><a href="/">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; <a href="../states/{state_slug}.html">{state_name}</a> &rsaquo; {city_name}</p>
   <h1 style="font-size:30px;">Median Home Price in {city_name}, {state}</h1>
   <p>The median home value in <b>{city_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
-  <p><a href="../cities.html#city={map_city}">View {city_name} on the interactive city map &rarr;</a></p>
+  {map_link}
+  <p><a class="button-link" href="../compare.html#places={compare_id}">Compare {city_name} with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -175,9 +183,13 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   </div>
 </div>
 
+{history_section}
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>{comparison}</p>
 </div>
+
+{local_comparison_section}
 
 {income_section}
 
@@ -342,18 +354,68 @@ def meta_description(name, state, value, yoy_sentence, income, comparison_name):
     return description if len(description) <= 158 else base
 
 
+def local_comparison_section(city, eligible_by_location):
+    """Use only same-county, same-month peers with a published city profile."""
+    peer_names = PILOT_PEERS.get((city.get("state"), city.get("name")), ())
+    value = city.get("value")
+    county = city.get("county")
+    as_of = city.get("as_of")
+    if not peer_names or not county or not as_of or not isinstance(value, (int, float)) or value <= 0:
+        return ""
+
+    items = []
+    for peer_name in peer_names:
+        peer = eligible_by_location.get((city["state"], county, peer_name))
+        if not peer or peer.get("state") != city["state"] or peer.get("county") != county:
+            continue
+        peer_value = peer.get("value")
+        if peer.get("as_of") != as_of or not isinstance(peer_value, (int, float)) or peer_value <= 0:
+            continue
+        difference = (peer_value / value - 1) * 100
+        if abs(difference) < 0.05:
+            comparison = "about the same as {}".format(escape(city["name"]))
+        else:
+            comparison = "{:.1f}% {} than {}".format(
+                abs(difference), "higher" if difference > 0 else "lower", escape(city["name"])
+            )
+        items.append(
+            '  <li><a href="{}-{}.html">{}</a>: <b>{}</b> ({})</li>'.format(
+                city["state"].lower(), slugify(peer["name"]), escape(peer["name"]),
+                fmt_money(peer_value), comparison,
+            )
+        )
+
+    if not items:
+        return ""
+    return (
+        '<section class="hero local-comparison" style="text-align:left;max-width:760px;">\n'
+        '  <h2 style="font-size:20px;">How do other {county} cities compare with {name}?</h2>\n'
+        '  <p>These published city profiles use Zillow ZHVI typical home values '
+        'for the same reporting month ({as_of}):</p>\n'
+        '  <ul>\n{items}\n  </ul>\n'
+        '  <p style="font-size:13px;color:var(--text-dim);">These are citywide typical '
+        'values, not individual listing or sale prices.</p>\n'
+        '</section>'
+    ).format(
+        county=escape(county), name=escape(city["name"]), as_of=escape(as_of),
+        items="\n".join(items),
+    )
+
+
 def build():
     for p in (CITY_PATH, COUNTY_PATH, CITY_CRIME_PATH):
         if not p.exists():
             sys.exit("ERROR: {} not found.".format(p))
 
     cities = json.loads(CITY_PATH.read_text())["cities"]
+    city_candidates = city_candidates_by_key(cities)
     counties = json.loads(COUNTY_PATH.read_text())["counties"]
     crime = json.loads(CITY_CRIME_PATH.read_text())["cities"]
     income = (
         json.loads(CITY_INCOME_PATH.read_text()).get("cities", {})
         if CITY_INCOME_PATH.exists() else {}
     )
+    history = load_history_series(CITY_HISTORY_PATH)
 
     # county lookup by (state, normalized county name) so each city can be
     # compared against, and linked to, its own county page
@@ -366,7 +428,7 @@ def build():
     for c in cities:
         if c.get("value") is None or not c.get("name") or not c.get("state"):
             continue
-        cr = crime.get("{}|{}".format(c["state"], normalize_place(c["name"])))
+        cr = match_city_source(c, crime, city_candidates)
         if not cr or (cr.get("population") or 0) < MIN_POPULATION:
             continue
         eligible.append((c, cr))
@@ -383,8 +445,20 @@ def build():
         st: statistics.median([c["value"] for c, _ in grp]) for st, grp in by_state.items()
     }
 
+    # Profile slugs retain the highest-priced same-name city in each state.
+    # Use that exact deduplication for pilot links so a displayed peer value
+    # can never describe a different city than its destination profile.
+    canonical_eligible = {}
+    for c, _ in sorted(eligible, key=lambda pair: pair[0]["value"], reverse=True):
+        canonical_eligible.setdefault((c["state"], slugify(c["name"])), c)
+    eligible_by_location = {
+        (c["state"], c.get("county"), c["name"]): c
+        for c in canonical_eligible.values()
+    }
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     urls = []
+    expected_filenames = set()
     seen = set()
 
     for st, grp in by_state.items():
@@ -399,8 +473,9 @@ def build():
             seen.add(slug)
 
             filename = slug + ".html"
+            expected_filenames.add(filename)
             canonical = "{}/cities/{}".format(SITE_URL, filename)
-            income_rec = income.get("{}|{}".format(state, normalize_place(name)))
+            income_rec = match_city_source(c, income, city_candidates, allow_city_suffix=True)
             yoy = c.get("yoy_pct")
             as_of = c.get("as_of", "")
 
@@ -462,7 +537,12 @@ def build():
                 canonical=canonical,
                 site_url=SITE_URL,
                 city_name=name,
-                map_city=quote_plus("{}, {}".format(name, state)),
+                map_link=(
+                    '<p><a href="../cities.html#city={}">View {} on the interactive city map &rarr;</a></p>'.format(
+                        quote_plus("{}, {}".format(name, state)), escape(name)
+                    ) if isinstance(c.get("lat"), (int, float)) and isinstance(c.get("lon"), (int, float)) else ""
+                ),
+                compare_id=quote_plus("city:{}-{}".format(state.lower(), slugify(name))),
                 state=state,
                 state_name=state_name,
                 state_slug=state_slug,
@@ -472,6 +552,7 @@ def build():
                 as_of=as_of,
                 yoy_sentence=yoy_sentence,
                 comparison=comparison,
+                local_comparison_section=local_comparison_section(c, eligible_by_location),
                 income_section=income_section(name, value, income_rec),
                 crime_section=crime_section(name, cr, national_violent),
                 faq_section=faq_section(
@@ -480,10 +561,19 @@ def build():
                                         county_rec["value"] if county_rec else None,
                                         smed),
                 nearby_section=nearby_section,
+                history_section=render_history_section(
+                    safe_city_history(c, history, city_candidates),
+                    "{}, {}".format(name, state),
+                ),
             )
             (OUT_DIR / filename).write_text(html, encoding="utf-8")
             urls.append(canonical)
 
+    prune_stale_html(
+        OUT_DIR,
+        expected_filenames,
+        minimum_expected=MIN_EXPECTED_PROFILES,
+    )
     return urls
 
 
