@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Burlington, WA (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Burlington, WA</h1>
   <p>The median home value in <b>Burlington, WA</b> is <b>$538,793</b> as of 2026-08-31, up 0.87% from a year earlier.</p>
   <p><a href="../cities.html#city=Burlington%2C+WA">View Burlington on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Awa-burlington">Compare Burlington with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value decreased by 1.2%, from <b>$545,608</b> in May 2026 to <b>$538,793</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$538,793 &ndash; $546,740</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Burlington, WA typical home value from May 2026 to Aug 2026">
+      <title>Burlington, WA typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,53.8 247.3,33.4 472.7,88.8 698.0,176.6" />
+        <circle cx="22.0" cy="53.8" r="4" />
+        <circle cx="698.0" cy="176.6" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Burlington, WA monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$545,608</td><td>+1.2%</td></tr>
+      <tr><td>Jun 2026</td><td>$546,740</td><td>+1.2%</td></tr>
+      <tr><td>Jul 2026</td><td>$543,667</td><td>+1.1%</td></tr>
+      <tr><td>Aug 2026</td><td>$538,793</td><td>+0.9%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Burlington ranks #72 of 118 <a href="../states/washington.html">Washington</a> cities tracked here by median home value, and sits 7.2% below the state's city median of $580,901. It sits in <a href="../counties/wa-skagit-county.html">Skagit County</a>, where the county-wide median is $578,908.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">

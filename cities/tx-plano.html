@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Plano, TX (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Plano, TX</h1>
   <p>The median home value in <b>Plano, TX</b> is <b>$493,092</b> as of 2026-08-31, down 3.83% from a year earlier.</p>
   <p><a href="../cities.html#city=Plano%2C+TX">View Plano on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Atx-plano">Compare Plano with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value decreased by 2.6%, from <b>$506,472</b> in May 2026 to <b>$493,092</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$493,092 &ndash; $506,472</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Plano, TX typical home value from May 2026 to Aug 2026">
+      <title>Plano, TX typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,33.4 247.3,55.7 472.7,105.6 698.0,176.6" />
+        <circle cx="22.0" cy="33.4" r="4" />
+        <circle cx="698.0" cy="176.6" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Plano, TX monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$506,472</td><td>-5.5%</td></tr>
+      <tr><td>Jun 2026</td><td>$504,391</td><td>-5.1%</td></tr>
+      <tr><td>Jul 2026</td><td>$499,723</td><td>-4.4%</td></tr>
+      <tr><td>Aug 2026</td><td>$493,092</td><td>-3.8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p>Plano ranks #30 of 346 <a href="../states/texas.html">Texas</a> cities tracked here by median home value, and sits 82.6% above the state's city median of $270,046. It sits in <a href="../counties/tx-collin-county.html">Collin County</a>, where the county-wide median is $475,341.</p>
+  <p>Plano ranks #30 of 344 <a href="../states/texas.html">Texas</a> cities tracked here by median home value, and sits 82.4% above the state's city median of $270,349. It sits in <a href="../counties/tx-collin-county.html">Collin County</a>, where the county-wide median is $475,341.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -98,7 +127,7 @@
 
 <div class="content-section" style="padding-top:0;max-width:760px;margin:0 auto;">
   <h2 style="font-size:20px;">Common questions about Plano</h2>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in Plano, TX?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In Plano, that value is <b>$493,092</b>. That's down 3.83% from a year earlier. It is about 82.6% above the typical Texas city tracked here.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in Plano, TX?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In Plano, that value is <b>$493,092</b>. That's down 3.83% from a year earlier. It is about 82.4% above the typical Texas city tracked here.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Plano expensive compared to the surrounding area?</h3><p>Homes in Plano are more expensive than Collin County as a whole, where the median is $475,341 &mdash; a difference of about 3.7%.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Plano affordable?</h3><p>Median household income here is <b>$112,253</b>, so the typical home value is about <b>4.4&times;</b> annual household income. This ratio is a broad comparison measure, not a mortgage-payment estimate.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Plano a safe place to live?</h3><p>Plano police reported <b>152</b> violent crimes per 100,000 residents, covering a population of about 291,463. Crime rates are one input among many &mdash; they vary block to block within a city, and this figure is a citywide average.</p></div>

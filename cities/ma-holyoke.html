@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Holyoke, MA (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Holyoke, MA</h1>
   <p>The median home value in <b>Holyoke, MA</b> is <b>$334,317</b> as of 2026-08-31, up 4.32% from a year earlier.</p>
   <p><a href="../cities.html#city=Holyoke%2C+MA">View Holyoke on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Ama-holyoke">Compare Holyoke with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.3%, from <b>$333,169</b> in May 2026 to <b>$334,317</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$333,169 &ndash; $337,618</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Holyoke, MA typical home value from May 2026 to Aug 2026">
+      <title>Holyoke, MA typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,38.6 698.0,139.6" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="139.6" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Holyoke, MA monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$333,169</td><td>+3.6%</td></tr>
+      <tr><td>Jun 2026</td><td>$337,618</td><td>+3.9%</td></tr>
+      <tr><td>Jul 2026</td><td>$337,457</td><td>+4.1%</td></tr>
+      <tr><td>Aug 2026</td><td>$334,317</td><td>+4.3%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Holyoke ranks #128 of 134 <a href="../states/massachusetts.html">Massachusetts</a> cities tracked here by median home value, and sits 49.3% below the state's city median of $659,775. It sits in <a href="../counties/ma-hampden-county.html">Hampden County</a>, where the county-wide median is $354,728.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">

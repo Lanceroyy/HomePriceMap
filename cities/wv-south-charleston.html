@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in South Charleston, WV (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in South Charleston, WV</h1>
   <p>The median home value in <b>South Charleston, WV</b> is <b>$175,312</b> as of 2026-08-31, up 5.29% from a year earlier.</p>
   <p><a href="../cities.html#city=South+Charleston%2C+WV">View South Charleston on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Awv-south-charleston">Compare South Charleston with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 1.9%, from <b>$171,993</b> in May 2026 to <b>$175,312</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$171,993 &ndash; $178,178</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="South Charleston, WV typical home value from May 2026 to Aug 2026">
+      <title>South Charleston, WV typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,113.0 698.0,99.8" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="99.8" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>South Charleston, WV monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$171,993</td><td>+4.0%</td></tr>
+      <tr><td>Jun 2026</td><td>$178,178</td><td>+5.0%</td></tr>
+      <tr><td>Jul 2026</td><td>$174,739</td><td>+5.3%</td></tr>
+      <tr><td>Aug 2026</td><td>$175,312</td><td>+5.3%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>South Charleston ranks #6 of 20 <a href="../states/west-virginia.html">West Virginia</a> cities tracked here by median home value, and sits 12.8% above the state's city median of $155,384. It sits in <a href="../counties/wv-kanawha-county.html">Kanawha County</a>, where the county-wide median is $154,872.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">

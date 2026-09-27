@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Middlesex County, NJ (2026) | Home Price Map</title>
@@ -49,6 +42,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -77,7 +71,40 @@
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Middlesex County ranks 11th out of 21 counties in NJ by median home price, and is +150.2% above the U.S. national median of $235,072. Within NJ, the typical county has a median home value of $588,036, making Middlesex County in line with the NJ state median.</p>
   <p><a href="../counties.html#fips=34023">View Middlesex County on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=county%3A34023">Compare Middlesex County with another place</a></p>
 </div>
+
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.1%, from <b>$587,181</b> in May 2026 to <b>$588,036</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$587,181 &ndash; $592,229</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Middlesex County, NJ typical home value from May 2026 to Aug 2026">
+      <title>Middlesex County, NJ typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,43.0 698.0,152.3" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="152.3" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Middlesex County, NJ monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$587,181</td><td>+3.0%</td></tr>
+      <tr><td>Jun 2026</td><td>$592,229</td><td>+2.7%</td></tr>
+      <tr><td>Jul 2026</td><td>$591,891</td><td>+2.8%</td></tr>
+      <tr><td>Aug 2026</td><td>$588,036</td><td>+3.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -89,8 +116,8 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in Middlesex County</h2>
-  <p>Reporting agencies in Middlesex County recorded a violent crime rate of <b>289</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>1,391</b> per 100,000.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Based on 16 reporting cities covering 282,450 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+  <p>Reporting agencies in Middlesex County recorded a violent crime rate of <b>304</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>1,446</b> per 100,000.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on 15 reporting cities covering 267,719 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
 </div>
 
 
@@ -98,13 +125,13 @@
   <h2 style="font-size:20px;">Common questions about Middlesex County</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">How much does a house cost in Middlesex County, NJ?</h3><p>The median home value in Middlesex County is <b>$588,036</b>. That's up 3.12% from a year earlier. That is about 150.2% above the U.S. national county median of $235,072, and makes Middlesex County the 11th most expensive of 21 counties in New Jersey.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Middlesex County affordable?</h3><p>Median household income here is <b>$111,549</b>, so a typical home costs about <b>5.3&times;</b> annual household earnings &mdash; expensive compared with other U.S. counties.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Middlesex County a safe place to live?</h3><p>Reporting police departments in Middlesex County recorded <b>289</b> violent crimes per 100,000 residents. That figure covers 282,450 residents across 16 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Middlesex County a safe place to live?</h3><p>Reporting police departments in Middlesex County recorded <b>304</b> violent crimes per 100,000 residents. That figure covers 267,719 residents across 15 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
 </div>
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities in Middlesex County</h2>
-  <p><a href="../cities/nj-metuchen.html">Metuchen</a> &middot; <a href="../cities/nj-matawan.html">Matawan</a> &middot; <a href="../cities/nj-milltown.html">Milltown</a> &middot; <a href="../cities/nj-highland-park.html">Highland Park</a> &middot; <a href="../cities/nj-south-plainfield.html">South Plainfield</a> &middot; <a href="../cities/nj-spotswood.html">Spotswood</a> &middot; <a href="../cities/nj-carteret.html">Carteret</a> &middot; <a href="../cities/nj-middlesex.html">Middlesex</a> &middot; <a href="../cities/nj-south-river.html">South River</a> &middot; <a href="../cities/nj-dunellen.html">Dunellen</a> &middot; <a href="../cities/nj-south-amboy.html">South Amboy</a> &middot; <a href="../cities/nj-perth-amboy.html">Perth Amboy</a></p>
+  <p><a href="../cities/nj-metuchen.html">Metuchen</a> &middot; <a href="../cities/nj-matawan.html">Matawan</a> &middot; <a href="../cities/nj-milltown.html">Milltown</a> &middot; <a href="../cities/nj-highland-park.html">Highland Park</a> &middot; <a href="../cities/nj-south-plainfield.html">South Plainfield</a> &middot; <a href="../cities/nj-spotswood.html">Spotswood</a> &middot; <a href="../cities/nj-carteret.html">Carteret</a> &middot; <a href="../cities/nj-south-river.html">South River</a> &middot; <a href="../cities/nj-dunellen.html">Dunellen</a> &middot; <a href="../cities/nj-south-amboy.html">South Amboy</a> &middot; <a href="../cities/nj-perth-amboy.html">Perth Amboy</a> &middot; <a href="../cities/nj-jamesburg.html">Jamesburg</a></p>
 </div>
 
 

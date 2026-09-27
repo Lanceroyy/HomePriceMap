@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Fayetteville, TN (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Fayetteville, TN</h1>
   <p>The median home value in <b>Fayetteville, TN</b> is <b>$255,791</b> as of 2026-08-31, up 3.0% from a year earlier.</p>
   <p><a href="../cities.html#city=Fayetteville%2C+TN">View Fayetteville on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Atn-fayetteville">Compare Fayetteville with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.4%, from <b>$254,810</b> in May 2026 to <b>$255,791</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$254,810 &ndash; $258,632</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Fayetteville, TN typical home value from May 2026 to Aug 2026">
+      <title>Fayetteville, TN typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,137.5 698.0,139.8" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="139.8" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Fayetteville, TN monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$254,810</td><td>+4.6%</td></tr>
+      <tr><td>Jun 2026</td><td>$258,632</td><td>+4.1%</td></tr>
+      <tr><td>Jul 2026</td><td>$255,854</td><td>+3.3%</td></tr>
+      <tr><td>Aug 2026</td><td>$255,791</td><td>+3.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Fayetteville ranks #64 of 89 <a href="../states/tennessee.html">Tennessee</a> cities tracked here by median home value, and sits 18.4% below the state's city median of $313,361. It sits in <a href="../counties/tn-lincoln-county.html">Lincoln County</a>, where the county-wide median is $265,339.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">

@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Mentor, OH (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Mentor, OH</h1>
   <p>The median home value in <b>Mentor, OH</b> is <b>$277,706</b> as of 2026-08-31, up 3.62% from a year earlier.</p>
   <p><a href="../cities.html#city=Mentor%2C+OH">View Mentor on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Aoh-mentor">Compare Mentor with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.1%, from <b>$277,329</b> in May 2026 to <b>$277,706</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$277,329 &ndash; $280,580</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Mentor, OH typical home value from May 2026 to Aug 2026">
+      <title>Mentor, OH typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,91.9 698.0,160.0" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="160.0" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Mentor, OH monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$277,329</td><td>+3.9%</td></tr>
+      <tr><td>Jun 2026</td><td>$280,580</td><td>+3.7%</td></tr>
+      <tr><td>Jul 2026</td><td>$279,252</td><td>+3.6%</td></tr>
+      <tr><td>Aug 2026</td><td>$277,706</td><td>+3.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p>Mentor ranks #80 of 212 <a href="../states/ohio.html">Ohio</a> cities tracked here by median home value, and sits 12.5% above the state's city median of $246,834. It sits in <a href="../counties/oh-lake-county.html">Lake County</a>, where the county-wide median is $251,852.</p>
+  <p>Mentor ranks #78 of 204 <a href="../states/ohio.html">Ohio</a> cities tracked here by median home value, and sits 12.5% above the state's city median of $246,834. It sits in <a href="../counties/oh-lake-county.html">Lake County</a>, where the county-wide median is $251,852.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -107,7 +136,7 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities with similar home prices in OH</h2>
-  <p><a href="oh-trenton.html">Trenton</a> &middot; <a href="oh-port-clinton.html">Port Clinton</a> &middot; <a href="oh-lancaster.html">Lancaster</a> &middot; <a href="oh-north-olmsted.html">North Olmsted</a> &middot; <a href="oh-obetz.html">Obetz</a> &middot; <a href="oh-butler.html">Butler</a> &middot; <a href="oh-brookville.html">Brookville</a> &middot; <a href="oh-germantown.html">Germantown</a></p>
+  <p><a href="oh-trenton.html">Trenton</a> &middot; <a href="oh-port-clinton.html">Port Clinton</a> &middot; <a href="oh-lancaster.html">Lancaster</a> &middot; <a href="oh-north-olmsted.html">North Olmsted</a> &middot; <a href="oh-obetz.html">Obetz</a> &middot; <a href="oh-brookville.html">Brookville</a> &middot; <a href="oh-germantown.html">Germantown</a> &middot; <a href="oh-canal-fulton.html">Canal Fulton</a></p>
 </div>
 
 

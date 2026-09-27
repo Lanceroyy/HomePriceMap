@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Oakland County, MI (2026) | Home Price Map</title>
@@ -49,6 +42,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -77,7 +71,40 @@
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Oakland County ranks 9th out of 83 counties in MI by median home price, and is +56.7% above the U.S. national median of $235,072. Within MI, the typical county has a median home value of $226,891, making Oakland County +62.3% above the MI state median.</p>
   <p><a href="../counties.html#fips=26125">View Oakland County on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=county%3A26125">Compare Oakland County with another place</a></p>
 </div>
+
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value decreased by 1.3%, from <b>$373,127</b> in May 2026 to <b>$368,287</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$368,287 &ndash; $376,424</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Oakland County, MI typical home value from May 2026 to Aug 2026">
+      <title>Oakland County, MI typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,91.4 247.3,33.4 472.7,87.0 698.0,176.6" />
+        <circle cx="22.0" cy="91.4" r="4" />
+        <circle cx="698.0" cy="176.6" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Oakland County, MI monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$373,127</td><td>+3.0%</td></tr>
+      <tr><td>Jun 2026</td><td>$376,424</td><td>+2.9%</td></tr>
+      <tr><td>Jul 2026</td><td>$373,377</td><td>+2.6%</td></tr>
+      <tr><td>Aug 2026</td><td>$368,287</td><td>+2.5%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -89,8 +116,8 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in Oakland County</h2>
-  <p>Reporting agencies in Oakland County recorded a violent crime rate of <b>243</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>1,080</b> per 100,000.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Based on 32 reporting cities covering 810,194 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+  <p>Reporting agencies in Oakland County recorded a violent crime rate of <b>247</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>1,100</b> per 100,000.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on 31 reporting cities covering 791,029 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
 </div>
 
 
@@ -98,13 +125,13 @@
   <h2 style="font-size:20px;">Common questions about Oakland County</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">How much does a house cost in Oakland County, MI?</h3><p>The median home value in Oakland County is <b>$368,287</b>. That's up 2.5% from a year earlier. That is about 56.7% above the U.S. national county median of $235,072, and makes Oakland County the 9th most expensive of 83 counties in Michigan.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Oakland County affordable?</h3><p>Median household income here is <b>$97,760</b>, so a typical home costs about <b>3.8&times;</b> annual household earnings &mdash; moderately expensive compared with other U.S. counties.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Oakland County a safe place to live?</h3><p>Reporting police departments in Oakland County recorded <b>243</b> violent crimes per 100,000 residents. That figure covers 810,194 residents across 32 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Oakland County a safe place to live?</h3><p>Reporting police departments in Oakland County recorded <b>247</b> violent crimes per 100,000 residents. That figure covers 791,029 residents across 31 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
 </div>
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities in Oakland County</h2>
-  <p><a href="../cities/mi-birmingham.html">Birmingham</a> &middot; <a href="../cities/mi-beverly-hills.html">Beverly Hills</a> &middot; <a href="../cities/mi-huntington-woods.html">Huntington Woods</a> &middot; <a href="../cities/mi-rochester.html">Rochester</a> &middot; <a href="../cities/mi-milford.html">Milford</a> &middot; <a href="../cities/mi-south-lyon.html">South Lyon</a> &middot; <a href="../cities/mi-novi.html">Novi</a> &middot; <a href="../cities/mi-rochester-hills.html">Rochester Hills</a> &middot; <a href="../cities/mi-troy.html">Troy</a> &middot; <a href="../cities/mi-springfield.html">Springfield</a> &middot; <a href="../cities/mi-oxford.html">Oxford</a> &middot; <a href="../cities/mi-farmington-hills.html">Farmington Hills</a></p>
+  <p><a href="../cities/mi-birmingham.html">Birmingham</a> &middot; <a href="../cities/mi-beverly-hills.html">Beverly Hills</a> &middot; <a href="../cities/mi-huntington-woods.html">Huntington Woods</a> &middot; <a href="../cities/mi-rochester.html">Rochester</a> &middot; <a href="../cities/mi-milford.html">Milford</a> &middot; <a href="../cities/mi-south-lyon.html">South Lyon</a> &middot; <a href="../cities/mi-novi.html">Novi</a> &middot; <a href="../cities/mi-rochester-hills.html">Rochester Hills</a> &middot; <a href="../cities/mi-troy.html">Troy</a> &middot; <a href="../cities/mi-farmington-hills.html">Farmington Hills</a> &middot; <a href="../cities/mi-wixom.html">Wixom</a> &middot; <a href="../cities/mi-farmington.html">Farmington</a></p>
 </div>
 
 

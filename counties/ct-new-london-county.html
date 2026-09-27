@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in New London County, CT (2026) | Home Price Map</title>
@@ -49,6 +42,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -77,22 +71,55 @@
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>New London County ranks 3rd out of 8 counties in CT by median home price, and is +84.3% above the U.S. national median of $235,072. Within CT, the typical county has a median home value of $419,973, making New London County +3.1% above the CT state median.</p>
   <p><a href="../counties.html#fips=09011">View New London County on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=county%3A09011">Compare New London County with another place</a></p>
 </div>
+
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 1.6%, from <b>$426,271</b> in May 2026 to <b>$433,146</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$426,271 &ndash; $436,179</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="New London County, CT typical home value from May 2026 to Aug 2026">
+      <title>New London County, CT typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,51.0 698.0,77.3" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="77.3" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>New London County, CT monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$426,271</td><td>+6.4%</td></tr>
+      <tr><td>Jun 2026</td><td>$436,179</td><td>+6.6%</td></tr>
+      <tr><td>Jul 2026</td><td>$434,962</td><td>+6.6%</td></tr>
+      <tr><td>Aug 2026</td><td>$433,146</td><td>+6.8%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in New London County</h2>
-  <p>Reporting agencies in New London County recorded a violent crime rate of <b>139</b> per 100,000 residents in 2024 &mdash; lower than most counties nationally. Property crime runs at <b>1,202</b> per 100,000.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Based on 6 reporting cities covering 143,271 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+  <p>Reporting agencies in New London County recorded a violent crime rate of <b>150</b> per 100,000 residents in 2024 &mdash; lower than most counties nationally. Property crime runs at <b>1,254</b> per 100,000.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on 5 reporting cities covering 115,344 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
 </div>
 
 
 <div class="content-section" style="padding-top:0;max-width:760px;margin:0 auto;">
   <h2 style="font-size:20px;">Common questions about New London County</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">How much does a house cost in New London County, CT?</h3><p>The median home value in New London County is <b>$433,146</b>. That's up 6.84% from a year earlier. That is about 84.3% above the U.S. national county median of $235,072, and makes New London County the 3rd most expensive of 8 counties in Connecticut.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is New London County a safe place to live?</h3><p>Reporting police departments in New London County recorded <b>139</b> violent crimes per 100,000 residents. That figure covers 143,271 residents across 6 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is New London County a safe place to live?</h3><p>Reporting police departments in New London County recorded <b>150</b> violent crimes per 100,000 residents. That figure covers 115,344 residents across 5 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
 </div>
 
 

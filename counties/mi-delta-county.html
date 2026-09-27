@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Delta County, MI (2026) | Home Price Map</title>
@@ -49,6 +42,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -77,7 +71,40 @@
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Delta County ranks 52nd out of 83 counties in MI by median home price, and is -11.7% below the U.S. national median of $235,072. Within MI, the typical county has a median home value of $226,891, making Delta County -8.5% below the MI state median.</p>
   <p><a href="../counties.html#fips=26041">View Delta County on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=county%3A26041">Compare Delta County with another place</a></p>
 </div>
+
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 2.7%, from <b>$201,999</b> in May 2026 to <b>$207,510</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$201,999 &ndash; $208,169</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Delta County, MI typical home value from May 2026 to Aug 2026">
+      <title>Delta County, MI typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,132.9 472.7,33.4 698.0,48.7" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="48.7" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Delta County, MI monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$201,999</td><td>+9.8%</td></tr>
+      <tr><td>Jun 2026</td><td>$203,879</td><td>+9.4%</td></tr>
+      <tr><td>Jul 2026</td><td>$208,169</td><td>+9.0%</td></tr>
+      <tr><td>Aug 2026</td><td>$207,510</td><td>+9.2%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -89,8 +116,8 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in Delta County</h2>
-  <p>Reporting agencies in Delta County recorded a violent crime rate of <b>273</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>1,084</b> per 100,000.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Based on 3 reporting cities covering 43,561 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+  <p>Reporting agencies in Delta County recorded a violent crime rate of <b>262</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>1,544</b> per 100,000.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on 2 reporting cities covering 17,553 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
 </div>
 
 
@@ -98,13 +125,13 @@
   <h2 style="font-size:20px;">Common questions about Delta County</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">How much does a house cost in Delta County, MI?</h3><p>The median home value in Delta County is <b>$207,510</b>. That's up 9.18% from a year earlier. That is about 11.7% below the U.S. national county median of $235,072, and makes Delta County the 52nd most expensive of 83 counties in Michigan.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Delta County affordable?</h3><p>Median household income here is <b>$57,809</b>, so a typical home costs about <b>3.6&times;</b> annual household earnings &mdash; moderately expensive compared with other U.S. counties.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Delta County a safe place to live?</h3><p>Reporting police departments in Delta County recorded <b>273</b> violent crimes per 100,000 residents. That figure covers 43,561 residents across 3 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Delta County a safe place to live?</h3><p>Reporting police departments in Delta County recorded <b>262</b> violent crimes per 100,000 residents. That figure covers 17,553 residents across 2 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
 </div>
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities in Delta County</h2>
-  <p><a href="../cities/mi-garden.html">Garden</a> &middot; <a href="../cities/mi-gladstone.html">Gladstone</a> &middot; <a href="../cities/mi-escanaba.html">Escanaba</a></p>
+  <p><a href="../cities/mi-gladstone.html">Gladstone</a> &middot; <a href="../cities/mi-escanaba.html">Escanaba</a></p>
 </div>
 
 

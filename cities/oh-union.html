@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Union, OH (2026) | Home Price Map</title>
-<meta name="description" content="The median home value in Union, OH is $211,389, up 2.99% from a year earlier. That's about 2.9x local household income.">
+<meta name="description" content="The median home value in Union, OH is $211,389, up 2.99% from a year earlier. See local crime rates and how it compares to Montgomery County.">
 <link rel="canonical" href="https://homepricemap.us/cities/oh-union.html">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
@@ -20,11 +13,11 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homepricemap.us/cities/oh-union.html">
 <meta property="og:title" content="Median Home Price in Union, OH (2026) | Home Price Map">
-<meta property="og:description" content="The median home value in Union, OH is $211,389, up 2.99% from a year earlier. That's about 2.9x local household income.">
+<meta property="og:description" content="The median home value in Union, OH is $211,389, up 2.99% from a year earlier. See local crime rates and how it compares to Montgomery County.">
 <meta property="og:image" content="https://homepricemap.us/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Median Home Price in Union, OH (2026) | Home Price Map">
-<meta name="twitter:description" content="The median home value in Union, OH is $211,389, up 2.99% from a year earlier. That's about 2.9x local household income.">
+<meta name="twitter:description" content="The median home value in Union, OH is $211,389, up 2.99% from a year earlier. See local crime rates and how it compares to Montgomery County.">
 <meta name="twitter:image" content="https://homepricemap.us/assets/og-image.jpg">
 <script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
 <link rel="stylesheet" href="../css/style.css">
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -58,7 +52,8 @@
   <p style="font-size:13px;color:var(--text-dim);"><a href="/">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; <a href="../states/ohio.html">Ohio</a> &rsaquo; Union</p>
   <h1 style="font-size:30px;">Median Home Price in Union, OH</h1>
   <p>The median home value in <b>Union, OH</b> is <b>$211,389</b> as of 2026-08-31, up 2.99% from a year earlier.</p>
-  <p><a href="../cities.html#city=Union%2C+OH">View Union on the interactive city map &rarr;</a></p>
+  
+  <p><a class="button-link" href="../compare.html#places=city%3Aoh-union">Compare Union with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,16 +71,14 @@
   </div>
 </div>
 
-<div class="hero" style="text-align:left;max-width:760px;">
-  <p>Union ranks #144 of 212 <a href="../states/ohio.html">Ohio</a> cities tracked here by median home value, and sits 14.4% below the state's city median of $246,834. It sits in <a href="../counties/oh-montgomery-county.html">Montgomery County</a>, where the county-wide median is $204,593.</p>
-</div>
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
-  <h2 style="font-size:20px;">Housing affordability in Union</h2>
-  <p>Median household income in Union is <b>$73,353</b>, so the typical home value is about <b>2.9&times;</b> annual household income. This is a simple price-to-income benchmark rather than a monthly payment estimate; it does not account for mortgage rates, down payments, taxes or insurance.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Household income comes from the U.S. Census Bureau's ACS 5-Year Estimates, table B19013 (<a href="../methodology.html">how the affordability measure works</a>).</p>
+  <p>Union ranks #139 of 204 <a href="../states/ohio.html">Ohio</a> cities tracked here by median home value, and sits 14.4% below the state's city median of $246,834. It sits in <a href="../counties/oh-montgomery-county.html">Montgomery County</a>, where the county-wide median is $204,593.</p>
 </div>
+
+
+
 
 
 
@@ -100,14 +93,13 @@
   <h2 style="font-size:20px;">Common questions about Union</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in Union, OH?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In Union, that value is <b>$211,389</b>. That's up 2.99% from a year earlier. It is about 14.4% below the typical Ohio city tracked here.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Union expensive compared to the surrounding area?</h3><p>Homes in Union are more expensive than Montgomery County as a whole, where the median is $204,593 &mdash; a difference of about 3.3%.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Union affordable?</h3><p>Median household income here is <b>$73,353</b>, so the typical home value is about <b>2.9&times;</b> annual household income. This ratio is a broad comparison measure, not a mortgage-payment estimate.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Union a safe place to live?</h3><p>Union police reported <b>86</b> violent crimes per 100,000 residents, covering a population of about 6,977. Crime rates are one input among many &mdash; they vary block to block within a city, and this figure is a citywide average.</p></div>
 </div>
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities with similar home prices in OH</h2>
-  <p><a href="oh-genoa.html">Genoa</a> &middot; <a href="oh-cleveland-heights.html">Cleveland Heights</a> &middot; <a href="oh-new-philadelphia.html">New Philadelphia</a> &middot; <a href="oh-huber-heights.html">Huber Heights</a> &middot; <a href="oh-eastlake.html">Eastlake</a> &middot; <a href="oh-sheffield-lake.html">Sheffield Lake</a> &middot; <a href="oh-fairborn.html">Fairborn</a> &middot; <a href="oh-urbana.html">Urbana</a></p>
+  <p><a href="oh-hillsboro.html">Hillsboro</a> &middot; <a href="oh-cleveland-heights.html">Cleveland Heights</a> &middot; <a href="oh-new-philadelphia.html">New Philadelphia</a> &middot; <a href="oh-huber-heights.html">Huber Heights</a> &middot; <a href="oh-eastlake.html">Eastlake</a> &middot; <a href="oh-sheffield-lake.html">Sheffield Lake</a> &middot; <a href="oh-fairborn.html">Fairborn</a> &middot; <a href="oh-urbana.html">Urbana</a></p>
 </div>
 
 

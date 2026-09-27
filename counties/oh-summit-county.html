@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Summit County, OH (2026) | Home Price Map</title>
@@ -49,6 +42,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -77,7 +71,40 @@
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Summit County ranks 40th out of 88 counties in OH by median home price, and is -2.3% below the U.S. national median of $235,072. Within OH, the typical county has a median home value of $219,740, making Summit County +4.6% above the OH state median.</p>
   <p><a href="../counties.html#fips=39153">View Summit County on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=county%3A39153">Compare Summit County with another place</a></p>
 </div>
+
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.3%, from <b>$229,036</b> in May 2026 to <b>$229,742</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$229,036 &ndash; $232,716</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Summit County, OH typical home value from May 2026 to Aug 2026">
+      <title>Summit County, OH typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,106.0 698.0,149.1" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="149.1" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Summit County, OH monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$229,036</td><td>+4.3%</td></tr>
+      <tr><td>Jun 2026</td><td>$232,716</td><td>+4.3%</td></tr>
+      <tr><td>Jul 2026</td><td>$230,850</td><td>+4.1%</td></tr>
+      <tr><td>Aug 2026</td><td>$229,742</td><td>+3.9%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -89,8 +116,8 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in Summit County</h2>
-  <p>Reporting agencies in Summit County recorded a violent crime rate of <b>466</b> per 100,000 residents in 2024 &mdash; higher than most counties nationally. Property crime runs at <b>2,163</b> per 100,000.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Based on 13 reporting cities covering 389,472 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+  <p>Reporting agencies in Summit County recorded a violent crime rate of <b>470</b> per 100,000 residents in 2024 &mdash; higher than most counties nationally. Property crime runs at <b>2,160</b> per 100,000.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on 12 reporting cities covering 385,267 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
 </div>
 
 
@@ -98,7 +125,7 @@
   <h2 style="font-size:20px;">Common questions about Summit County</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">How much does a house cost in Summit County, OH?</h3><p>The median home value in Summit County is <b>$229,742</b>. That's up 3.9% from a year earlier. That is about 2.3% below the U.S. national county median of $235,072, and makes Summit County the 40th most expensive of 88 counties in Ohio.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Summit County affordable?</h3><p>Median household income here is <b>$71,622</b>, so a typical home costs about <b>3.2&times;</b> annual household earnings &mdash; moderately expensive compared with other U.S. counties.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Summit County a safe place to live?</h3><p>Reporting police departments in Summit County recorded <b>466</b> violent crimes per 100,000 residents. That figure covers 389,472 residents across 13 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Summit County a safe place to live?</h3><p>Reporting police departments in Summit County recorded <b>470</b> violent crimes per 100,000 residents. That figure covers 385,267 residents across 12 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
 </div>
 
 

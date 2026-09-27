@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Cordele, GA (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Cordele, GA</h1>
   <p>The median home value in <b>Cordele, GA</b> is <b>$141,185</b> as of 2026-08-31, up 3.86% from a year earlier.</p>
   <p><a href="../cities.html#city=Cordele%2C+GA">View Cordele on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Aga-cordele">Compare Cordele with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.2%, from <b>$140,838</b> in May 2026 to <b>$141,185</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$139,315 &ndash; $144,622</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Cordele, GA typical home value from May 2026 to Aug 2026">
+      <title>Cordele, GA typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,135.5 247.3,33.4 472.7,176.6 698.0,126.1" />
+        <circle cx="22.0" cy="135.5" r="4" />
+        <circle cx="698.0" cy="126.1" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Cordele, GA monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$140,838</td><td>+1.1%</td></tr>
+      <tr><td>Jun 2026</td><td>$144,622</td><td>+2.7%</td></tr>
+      <tr><td>Jul 2026</td><td>$139,315</td><td>+3.4%</td></tr>
+      <tr><td>Aug 2026</td><td>$141,185</td><td>+3.9%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Cordele ranks #94 of 98 <a href="../states/georgia.html">Georgia</a> cities tracked here by median home value, and sits 53.9% below the state's city median of $305,964. It sits in <a href="../counties/ga-crisp-county.html">Crisp County</a>, where the county-wide median is $140,968.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">

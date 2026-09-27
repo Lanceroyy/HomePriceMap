@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Iowa Park, TX (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Iowa Park, TX</h1>
   <p>The median home value in <b>Iowa Park, TX</b> is <b>$200,901</b> as of 2026-08-31, up 7.3% from a year earlier.</p>
   <p><a href="../cities.html#city=Iowa+Park%2C+TX">View Iowa Park on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Atx-iowa-park">Compare Iowa Park with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.1%, from <b>$200,743</b> in May 2026 to <b>$200,901</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$200,743 &ndash; $202,050</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Iowa Park, TX typical home value from May 2026 to Aug 2026">
+      <title>Iowa Park, TX typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,176.6 247.3,33.4 472.7,75.1 698.0,159.3" />
+        <circle cx="22.0" cy="176.6" r="4" />
+        <circle cx="698.0" cy="159.3" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Iowa Park, TX monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$200,743</td><td>+5.3%</td></tr>
+      <tr><td>Jun 2026</td><td>$202,050</td><td>+6.4%</td></tr>
+      <tr><td>Jul 2026</td><td>$201,670</td><td>+7.1%</td></tr>
+      <tr><td>Aug 2026</td><td>$200,901</td><td>+7.3%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p>Iowa Park ranks #275 of 346 <a href="../states/texas.html">Texas</a> cities tracked here by median home value, and sits 25.6% below the state's city median of $270,046. It sits in <a href="../counties/tx-wichita-county.html">Wichita County</a>, where the county-wide median is $172,034.</p>
+  <p>Iowa Park ranks #274 of 344 <a href="../states/texas.html">Texas</a> cities tracked here by median home value, and sits 25.7% below the state's city median of $270,349. It sits in <a href="../counties/tx-wichita-county.html">Wichita County</a>, where the county-wide median is $172,034.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -91,14 +120,14 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in Iowa Park</h2>
-  <p>Iowa Park police recorded a violent crime rate of <b>106</b> per 100,000 residents in 2024 &mdash; around the middle of the range for reporting cities. Property crime runs at <b>683</b> per 100,000.</p>
+  <p>Iowa Park police recorded a violent crime rate of <b>106</b> per 100,000 residents in 2024 &mdash; lower than most cities that report to the FBI. Property crime runs at <b>683</b> per 100,000.</p>
   <p style="font-size:13px;color:var(--text-dim);">Reported by the city's own police department to the FBI's Uniform Crime Reporting Program (<a href="../methodology.html">what this covers</a>).</p>
 </div>
 
 
 <div class="content-section" style="padding-top:0;max-width:760px;margin:0 auto;">
   <h2 style="font-size:20px;">Common questions about Iowa Park</h2>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in Iowa Park, TX?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In Iowa Park, that value is <b>$200,901</b>. That's up 7.3% from a year earlier. It is about 25.6% below the typical Texas city tracked here.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in Iowa Park, TX?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In Iowa Park, that value is <b>$200,901</b>. That's up 7.3% from a year earlier. It is about 25.7% below the typical Texas city tracked here.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Iowa Park expensive compared to the surrounding area?</h3><p>Homes in Iowa Park are more expensive than Wichita County as a whole, where the median is $172,034 &mdash; a difference of about 16.8%.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Iowa Park affordable?</h3><p>Median household income here is <b>$66,622</b>, so the typical home value is about <b>3.0&times;</b> annual household income. This ratio is a broad comparison measure, not a mortgage-payment estimate.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Iowa Park a safe place to live?</h3><p>Iowa Park police reported <b>106</b> violent crimes per 100,000 residents, covering a population of about 6,589. Crime rates are one input among many &mdash; they vary block to block within a city, and this figure is a citywide average.</p></div>
@@ -107,7 +136,7 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities with similar home prices in TX</h2>
-  <p><a href="tx-monahans.html">Monahans</a> &middot; <a href="tx-carthage.html">Carthage</a> &middot; <a href="tx-harlingen.html">Harlingen</a> &middot; <a href="tx-palestine.html">Palestine</a> &middot; <a href="tx-dalhart.html">Dalhart</a> &middot; <a href="tx-clute.html">Clute</a> &middot; <a href="tx-brownsville.html">Brownsville</a> &middot; <a href="tx-sansom-park.html">Sansom Park</a></p>
+  <p><a href="tx-monahans.html">Monahans</a> &middot; <a href="tx-carthage.html">Carthage</a> &middot; <a href="tx-harlingen.html">Harlingen</a> &middot; <a href="tx-palestine.html">Palestine</a> &middot; <a href="tx-dalhart.html">Dalhart</a> &middot; <a href="tx-clute.html">Clute</a> &middot; <a href="tx-brownsville.html">Brownsville</a> &middot; <a href="tx-waco.html">Waco</a></p>
 </div>
 
 

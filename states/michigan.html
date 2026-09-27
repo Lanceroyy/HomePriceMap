@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -116,35 +110,35 @@
 </div>
 
 
-<div class="content-section" style="padding-top:0;"><h2>Crime Rates by County in Michigan</h2><p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">Violent crime rates below are a population-weighted average of each county's reporting cities from the FBI's Uniform Crime Reporting Program, covering 50 of 83 tracked counties in Michigan. Counties with no FBI-reporting city aren't shown.</p></div><div class="content-section" style="padding-top:0;">
+<div class="content-section" style="padding-top:0;"><h2>Crime Rates by County in Michigan</h2><p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">Violent crime rates below are a population-weighted average of each county's reporting cities from the FBI's Uniform Crime Reporting Program, covering 46 of 83 tracked counties in Michigan. Counties with no FBI-reporting city aren't shown.</p></div><div class="content-section" style="padding-top:0;">
   <h2>Safest Counties in Michigan (Lowest Violent Crime Rate)</h2>
   <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>1. <a href="../counties/mi-houghton-county.html">Houghton County</a></span><b class="figure" style="color:var(--accent-2);">107 /100k</b></div>
 <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>2. <a href="../counties/mi-emmet-county.html">Emmet County</a></span><b class="figure" style="color:var(--accent-2);">112 /100k</b></div>
 <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>3. <a href="../counties/mi-midland-county.html">Midland County</a></span><b class="figure" style="color:var(--accent-2);">127 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>4. <a href="../counties/mi-lapeer-county.html">Lapeer County</a></span><b class="figure" style="color:var(--accent-2);">137 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>5. <a href="../counties/mi-livingston-county.html">Livingston County</a></span><b class="figure" style="color:var(--accent-2);">139 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>6. <a href="../counties/mi-alcona-county.html">Alcona County</a></span><b class="figure" style="color:var(--accent-2);">141 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>7. <a href="../counties/mi-oceana-county.html">Oceana County</a></span><b class="figure" style="color:var(--accent-2);">159 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>8. <a href="../counties/mi-marquette-county.html">Marquette County</a></span><b class="figure" style="color:var(--accent-2);">169 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>9. <a href="../counties/mi-allegan-county.html">Allegan County</a></span><b class="figure" style="color:var(--accent-2);">170 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>10. <a href="../counties/mi-gogebic-county.html">Gogebic County</a></span><b class="figure" style="color:var(--accent-2);">186 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>4. <a href="../counties/mi-livingston-county.html">Livingston County</a></span><b class="figure" style="color:var(--accent-2);">139 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>5. <a href="../counties/mi-oceana-county.html">Oceana County</a></span><b class="figure" style="color:var(--accent-2);">149 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>6. <a href="../counties/mi-allegan-county.html">Allegan County</a></span><b class="figure" style="color:var(--accent-2);">170 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>7. <a href="../counties/mi-huron-county.html">Huron County</a></span><b class="figure" style="color:var(--accent-2);">186 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>8. <a href="../counties/mi-marquette-county.html">Marquette County</a></span><b class="figure" style="color:var(--accent-2);">187 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>9. <a href="../counties/mi-muskegon-county.html">Muskegon County</a></span><b class="figure" style="color:var(--accent-2);">195 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>10. <a href="../counties/mi-lapeer-county.html">Lapeer County</a></span><b class="figure" style="color:var(--accent-2);">200 /100k</b></div>
 </div>
 <div class="content-section" style="padding-top:0;">
   <h2>Most Dangerous Counties in Michigan (Highest Violent Crime Rate)</h2>
-  <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>1. <a href="../counties/mi-saginaw-county.html">Saginaw County</a></span><b class="figure" style="color:var(--warn);">1,072 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>2. <a href="../counties/mi-wayne-county.html">Wayne County</a></span><b class="figure" style="color:var(--warn);">1,010 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>3. <a href="../counties/mi-ingham-county.html">Ingham County</a></span><b class="figure" style="color:var(--warn);">914 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>4. <a href="../counties/mi-calhoun-county.html">Calhoun County</a></span><b class="figure" style="color:var(--warn);">893 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>5. <a href="../counties/mi-tuscola-county.html">Tuscola County</a></span><b class="figure" style="color:var(--warn);">863 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>6. <a href="../counties/mi-jackson-county.html">Jackson County</a></span><b class="figure" style="color:var(--warn);">816 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>7. <a href="../counties/mi-kalamazoo-county.html">Kalamazoo County</a></span><b class="figure" style="color:var(--warn);">791 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>8. <a href="../counties/mi-berrien-county.html">Berrien County</a></span><b class="figure" style="color:var(--warn);">720 /100k</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>9. <a href="../counties/mi-genesee-county.html">Genesee County</a></span><b class="figure" style="color:var(--warn);">687 /100k</b></div>
+  <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>1. <a href="../counties/mi-saginaw-county.html">Saginaw County</a></span><b class="figure" style="color:var(--warn);">1,934 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>2. <a href="../counties/mi-calhoun-county.html">Calhoun County</a></span><b class="figure" style="color:var(--warn);">1,063 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>3. <a href="../counties/mi-jackson-county.html">Jackson County</a></span><b class="figure" style="color:var(--warn);">1,062 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>4. <a href="../counties/mi-wayne-county.html">Wayne County</a></span><b class="figure" style="color:var(--warn);">1,036 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>5. <a href="../counties/mi-ingham-county.html">Ingham County</a></span><b class="figure" style="color:var(--warn);">924 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>6. <a href="../counties/mi-genesee-county.html">Genesee County</a></span><b class="figure" style="color:var(--warn);">909 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>7. <a href="../counties/mi-tuscola-county.html">Tuscola County</a></span><b class="figure" style="color:var(--warn);">863 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>8. <a href="../counties/mi-kalamazoo-county.html">Kalamazoo County</a></span><b class="figure" style="color:var(--warn);">844 /100k</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>9. <a href="../counties/mi-berrien-county.html">Berrien County</a></span><b class="figure" style="color:var(--warn);">777 /100k</b></div>
 <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>10. <a href="../counties/mi-kent-county.html">Kent County</a></span><b class="figure" style="color:var(--warn);">633 /100k</b></div>
 </div>
 
 
-<div class="content-section" style="padding-top:0;"><h2>Home Prices in Michigan Cities</h2><p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">HomePriceMap has standalone pages for 148 Michigan cities with both a current Zillow home value and enough FBI reporting coverage for a meaningful local profile. Among those tracked cities, the median home value is $259,330.</p></div><div class="content-section" style="padding-top:0;">
+<div class="content-section" style="padding-top:0;"><h2>Home Prices in Michigan Cities</h2><p style="color:var(--text-dim);font-size:13px;line-height:1.6;margin:0;">HomePriceMap has standalone pages for 131 Michigan cities with both a current Zillow home value and enough FBI reporting coverage for a meaningful local profile. Among those tracked cities, the median home value is $260,312.</p></div><div class="content-section" style="padding-top:0;">
   <h2>Highest-Priced Tracked Cities in Michigan</h2>
   <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>1. <a href="../cities/mi-birmingham.html">Birmingham</a></span><b class="figure" style="color:var(--accent-2);">$749,411</b></div>
 <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>2. <a href="../cities/mi-east-grand-rapids.html">East Grand Rapids</a></span><b class="figure" style="color:var(--accent-2);">$686,439</b></div>
@@ -157,8 +151,8 @@
   <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>1. <a href="../cities/mi-flint.html">Flint</a></span><b class="figure" style="color:var(--accent-2);">$65,250</b></div>
 <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>2. <a href="../cities/mi-detroit.html">Detroit</a></span><b class="figure" style="color:var(--accent-2);">$77,199</b></div>
 <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>3. <a href="../cities/mi-inkster.html">Inkster</a></span><b class="figure" style="color:var(--accent-2);">$108,211</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>4. <a href="../cities/mi-mount-morris.html">Mount Morris</a></span><b class="figure" style="color:var(--accent-2);">$118,223</b></div>
-<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>5. <a href="../cities/mi-saginaw.html">Saginaw</a></span><b class="figure" style="color:var(--accent-2);">$135,222</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>4. <a href="../cities/mi-saginaw.html">Saginaw</a></span><b class="figure" style="color:var(--accent-2);">$135,222</b></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>5. <a href="../cities/mi-pontiac.html">Pontiac</a></span><b class="figure" style="color:var(--accent-2);">$139,885</b></div>
 </div>
 
 
@@ -253,9 +247,8 @@
   </div>
 </details>
 <details class="region-directory">
-  <summary>All tracked cities in Michigan (148)</summary>
+  <summary>All tracked cities in Michigan (131)</summary>
   <div class="region-directory-links">
-<a href="../cities/mi-addison.html">Addison</a>
 <a href="../cities/mi-adrian.html">Adrian</a>
 <a href="../cities/mi-albion.html">Albion</a>
 <a href="../cities/mi-allegan.html">Allegan</a>
@@ -263,9 +256,7 @@
 <a href="../cities/mi-alma.html">Alma</a>
 <a href="../cities/mi-alpena.html">Alpena</a>
 <a href="../cities/mi-ann-arbor.html">Ann Arbor</a>
-<a href="../cities/mi-argentine.html">Argentine</a>
 <a href="../cities/mi-auburn-hills.html">Auburn Hills</a>
-<a href="../cities/mi-bath.html">Bath</a>
 <a href="../cities/mi-battle-creek.html">Battle Creek</a>
 <a href="../cities/mi-belding.html">Belding</a>
 <a href="../cities/mi-benton-harbor.html">Benton Harbor</a>
@@ -273,7 +264,6 @@
 <a href="../cities/mi-beverly-hills.html">Beverly Hills</a>
 <a href="../cities/mi-big-rapids.html">Big Rapids</a>
 <a href="../cities/mi-birmingham.html">Birmingham</a>
-<a href="../cities/mi-bridgeport.html">Bridgeport</a>
 <a href="../cities/mi-brighton.html">Brighton</a>
 <a href="../cities/mi-burton.html">Burton</a>
 <a href="../cities/mi-cadillac.html">Cadillac</a>
@@ -281,22 +271,17 @@
 <a href="../cities/mi-charlotte.html">Charlotte</a>
 <a href="../cities/mi-chelsea.html">Chelsea</a>
 <a href="../cities/mi-clawson.html">Clawson</a>
-<a href="../cities/mi-clayton.html">Clayton</a>
-<a href="../cities/mi-clinton.html">Clinton</a>
 <a href="../cities/mi-clinton-township.html">Clinton Township</a>
 <a href="../cities/mi-coldwater.html">Coldwater</a>
-<a href="../cities/mi-coloma.html">Coloma</a>
 <a href="../cities/mi-davison.html">Davison</a>
 <a href="../cities/mi-dearborn.html">Dearborn</a>
 <a href="../cities/mi-dearborn-heights.html">Dearborn Heights</a>
 <a href="../cities/mi-detroit.html">Detroit</a>
-<a href="../cities/mi-dewitt.html">Dewitt</a>
 <a href="../cities/mi-dowagiac.html">Dowagiac</a>
 <a href="../cities/mi-east-grand-rapids.html">East Grand Rapids</a>
 <a href="../cities/mi-east-lansing.html">East Lansing</a>
 <a href="../cities/mi-eastpointe.html">Eastpointe</a>
 <a href="../cities/mi-eaton-rapids.html">Eaton Rapids</a>
-<a href="../cities/mi-emmett.html">Emmett</a>
 <a href="../cities/mi-escanaba.html">Escanaba</a>
 <a href="../cities/mi-farmington.html">Farmington</a>
 <a href="../cities/mi-farmington-hills.html">Farmington Hills</a>
@@ -307,7 +292,6 @@
 <a href="../cities/mi-flushing.html">Flushing</a>
 <a href="../cities/mi-frankenmuth.html">Frankenmuth</a>
 <a href="../cities/mi-fraser.html">Fraser</a>
-<a href="../cities/mi-garden.html">Garden</a>
 <a href="../cities/mi-garden-city.html">Garden City</a>
 <a href="../cities/mi-gladstone.html">Gladstone</a>
 <a href="../cities/mi-grand-blanc.html">Grand Blanc</a>
@@ -332,11 +316,12 @@
 <a href="../cities/mi-huntington-woods.html">Huntington Woods</a>
 <a href="../cities/mi-inkster.html">Inkster</a>
 <a href="../cities/mi-ionia.html">Ionia</a>
+<a href="../cities/mi-ishpeming.html">Ishpeming</a>
 <a href="../cities/mi-jackson.html">Jackson</a>
 <a href="../cities/mi-kalamazoo.html">Kalamazoo</a>
 <a href="../cities/mi-kentwood.html">Kentwood</a>
 <a href="../cities/mi-lansing.html">Lansing</a>
-<a href="../cities/mi-lincoln.html">Lincoln</a>
+<a href="../cities/mi-lapeer.html">Lapeer</a>
 <a href="../cities/mi-lincoln-park.html">Lincoln Park</a>
 <a href="../cities/mi-livonia.html">Livonia</a>
 <a href="../cities/mi-ludington.html">Ludington</a>
@@ -351,8 +336,6 @@
 <a href="../cities/mi-midland.html">Midland</a>
 <a href="../cities/mi-milan.html">Milan</a>
 <a href="../cities/mi-milford.html">Milford</a>
-<a href="../cities/mi-montrose.html">Montrose</a>
-<a href="../cities/mi-mount-morris.html">Mount Morris</a>
 <a href="../cities/mi-mount-pleasant.html">Mount Pleasant</a>
 <a href="../cities/mi-new-baltimore.html">New Baltimore</a>
 <a href="../cities/mi-niles.html">Niles</a>
@@ -360,9 +343,7 @@
 <a href="../cities/mi-norton-shores.html">Norton Shores</a>
 <a href="../cities/mi-novi.html">Novi</a>
 <a href="../cities/mi-oak-park.html">Oak Park</a>
-<a href="../cities/mi-oscoda.html">Oscoda</a>
 <a href="../cities/mi-owosso.html">Owosso</a>
-<a href="../cities/mi-oxford.html">Oxford</a>
 <a href="../cities/mi-petoskey.html">Petoskey</a>
 <a href="../cities/mi-plymouth.html">Plymouth</a>
 <a href="../cities/mi-pontiac.html">Pontiac</a>
@@ -376,16 +357,12 @@
 <a href="../cities/mi-romulus.html">Romulus</a>
 <a href="../cities/mi-roseville.html">Roseville</a>
 <a href="../cities/mi-royal-oak.html">Royal Oak</a>
-<a href="../cities/mi-royal-oak-township.html">Royal Oak Township</a>
 <a href="../cities/mi-saginaw.html">Saginaw</a>
 <a href="../cities/mi-saline.html">Saline</a>
-<a href="../cities/mi-shelby.html">Shelby</a>
 <a href="../cities/mi-shelby-township.html">Shelby Township</a>
 <a href="../cities/mi-south-lyon.html">South Lyon</a>
 <a href="../cities/mi-southfield.html">Southfield</a>
 <a href="../cities/mi-southgate.html">Southgate</a>
-<a href="../cities/mi-spring-arbor.html">Spring Arbor</a>
-<a href="../cities/mi-springfield.html">Springfield</a>
 <a href="../cities/mi-sterling-heights.html">Sterling Heights</a>
 <a href="../cities/mi-taylor.html">Taylor</a>
 <a href="../cities/mi-tecumseh.html">Tecumseh</a>

@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Eaton, OH (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Eaton, OH</h1>
   <p>The median home value in <b>Eaton, OH</b> is <b>$257,697</b> as of 2026-08-31, up 8.61% from a year earlier.</p>
   <p><a href="../cities.html#city=Eaton%2C+OH">View Eaton on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Aoh-eaton">Compare Eaton with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 1.5%, from <b>$253,998</b> in May 2026 to <b>$257,697</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$253,414 &ndash; $257,697</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Eaton, OH typical home value from May 2026 to Aug 2026">
+      <title>Eaton, OH typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,157.0 247.3,176.6 472.7,97.3 698.0,33.4" />
+        <circle cx="22.0" cy="157.0" r="4" />
+        <circle cx="698.0" cy="33.4" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Eaton, OH monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$253,998</td><td>+7.9%</td></tr>
+      <tr><td>Jun 2026</td><td>$253,414</td><td>+7.9%</td></tr>
+      <tr><td>Jul 2026</td><td>$255,786</td><td>+8.1%</td></tr>
+      <tr><td>Aug 2026</td><td>$257,697</td><td>+8.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p>Eaton ranks #94 of 212 <a href="../states/ohio.html">Ohio</a> cities tracked here by median home value, and sits 4.4% above the state's city median of $246,834. It sits in <a href="../counties/oh-preble-county.html">Preble County</a>, where the county-wide median is $239,156.</p>
+  <p>Eaton ranks #90 of 204 <a href="../states/ohio.html">Ohio</a> cities tracked here by median home value, and sits 4.4% above the state's city median of $246,834. It sits in <a href="../counties/oh-preble-county.html">Preble County</a>, where the county-wide median is $239,156.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -107,7 +136,7 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;">Cities with similar home prices in OH</h2>
-  <p><a href="oh-wooster.html">Wooster</a> &middot; <a href="oh-deer-park.html">Deer Park</a> &middot; <a href="oh-clayton.html">Clayton</a> &middot; <a href="oh-poland.html">Poland</a> &middot; <a href="oh-xenia.html">Xenia</a> &middot; <a href="oh-columbiana.html">Columbiana</a> &middot; <a href="oh-norton.html">Norton</a> &middot; <a href="oh-kent.html">Kent</a></p>
+  <p><a href="oh-miamisburg.html">Miamisburg</a> &middot; <a href="oh-wooster.html">Wooster</a> &middot; <a href="oh-deer-park.html">Deer Park</a> &middot; <a href="oh-clayton.html">Clayton</a> &middot; <a href="oh-xenia.html">Xenia</a> &middot; <a href="oh-columbiana.html">Columbiana</a> &middot; <a href="oh-norton.html">Norton</a> &middot; <a href="oh-kent.html">Kent</a></p>
 </div>
 
 

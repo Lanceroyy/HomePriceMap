@@ -1,18 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Pingree Grove, IL (2026) | Home Price Map</title>
-<meta name="description" content="The median home value in Pingree Grove, IL is $374,323, up 2.69% from a year earlier. That's about 3.3x local household income.">
+<meta name="description" content="The median home value in Pingree Grove, IL is $374,323, up 2.69% from a year earlier. See local crime rates and how it compares to Kane County.">
 <link rel="canonical" href="https://homepricemap.us/cities/il-pingree-grove.html">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
@@ -20,11 +13,11 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homepricemap.us/cities/il-pingree-grove.html">
 <meta property="og:title" content="Median Home Price in Pingree Grove, IL (2026) | Home Price Map">
-<meta property="og:description" content="The median home value in Pingree Grove, IL is $374,323, up 2.69% from a year earlier. That's about 3.3x local household income.">
+<meta property="og:description" content="The median home value in Pingree Grove, IL is $374,323, up 2.69% from a year earlier. See local crime rates and how it compares to Kane County.">
 <meta property="og:image" content="https://homepricemap.us/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Median Home Price in Pingree Grove, IL (2026) | Home Price Map">
-<meta name="twitter:description" content="The median home value in Pingree Grove, IL is $374,323, up 2.69% from a year earlier. That's about 3.3x local household income.">
+<meta name="twitter:description" content="The median home value in Pingree Grove, IL is $374,323, up 2.69% from a year earlier. See local crime rates and how it compares to Kane County.">
 <meta name="twitter:image" content="https://homepricemap.us/assets/og-image.jpg">
 <script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
 <link rel="stylesheet" href="../css/style.css">
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in Pingree Grove, IL</h1>
   <p>The median home value in <b>Pingree Grove, IL</b> is <b>$374,323</b> as of 2026-08-31, up 2.69% from a year earlier.</p>
   <p><a href="../cities.html#city=Pingree+Grove%2C+IL">View Pingree Grove on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Ail-pingree-grove">Compare Pingree Grove with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,16 +71,44 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value decreased by 0.6%, from <b>$376,660</b> in May 2026 to <b>$374,323</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$374,323 &ndash; $378,992</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Pingree Grove, IL typical home value from May 2026 to Aug 2026">
+      <title>Pingree Grove, IL typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,104.9 247.3,33.4 472.7,33.8 698.0,176.6" />
+        <circle cx="22.0" cy="104.9" r="4" />
+        <circle cx="698.0" cy="176.6" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Pingree Grove, IL monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$376,660</td><td>+2.1%</td></tr>
+      <tr><td>Jun 2026</td><td>$378,992</td><td>+2.2%</td></tr>
+      <tr><td>Jul 2026</td><td>$378,979</td><td>+2.5%</td></tr>
+      <tr><td>Aug 2026</td><td>$374,323</td><td>+2.7%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Pingree Grove ranks #91 of 279 <a href="../states/illinois.html">Illinois</a> cities tracked here by median home value, and sits 18.2% above the state's city median of $316,708. It sits in <a href="../counties/il-kane-county.html">Kane County</a>, where the county-wide median is $384,462.</p>
 </div>
 
 
-<div class="hero" style="text-align:left;max-width:760px;">
-  <h2 style="font-size:20px;">Housing affordability in Pingree Grove</h2>
-  <p>Median household income in Pingree Grove is <b>$114,294</b>, so the typical home value is about <b>3.3&times;</b> annual household income. This is a simple price-to-income benchmark rather than a monthly payment estimate; it does not account for mortgage rates, down payments, taxes or insurance.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Household income comes from the U.S. Census Bureau's ACS 5-Year Estimates, table B19013 (<a href="../methodology.html">how the affordability measure works</a>).</p>
-</div>
+
 
 
 
@@ -100,7 +123,6 @@
   <h2 style="font-size:20px;">Common questions about Pingree Grove</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in Pingree Grove, IL?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In Pingree Grove, that value is <b>$374,323</b>. That's up 2.69% from a year earlier. It is about 18.2% above the typical Illinois city tracked here.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Pingree Grove expensive compared to the surrounding area?</h3><p>Homes in Pingree Grove are cheaper than Kane County as a whole, where the median is $384,462 &mdash; a difference of about 2.6%.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Pingree Grove affordable?</h3><p>Median household income here is <b>$114,294</b>, so the typical home value is about <b>3.3&times;</b> annual household income. This ratio is a broad comparison measure, not a mortgage-payment estimate.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Pingree Grove a safe place to live?</h3><p>Pingree Grove police reported <b>9</b> violent crimes per 100,000 residents, covering a population of about 11,395. Crime rates are one input among many &mdash; they vary block to block within a city, and this figure is a citywide average.</p></div>
 </div>
 

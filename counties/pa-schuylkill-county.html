@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in Schuylkill County, PA (2026) | Home Price Map</title>
@@ -49,6 +42,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -77,7 +71,40 @@
 <div class="hero" style="text-align:left;max-width:760px;">
   <p>Schuylkill County ranks 52nd out of 67 counties in PA by median home price, and is -28.9% below the U.S. national median of $235,072. Within PA, the typical county has a median home value of $233,681, making Schuylkill County -28.4% below the PA state median.</p>
   <p><a href="../counties.html#fips=42107">View Schuylkill County on the interactive county map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=county%3A42107">Compare Schuylkill County with another place</a></p>
 </div>
+
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value decreased by 0.6%, from <b>$168,308</b> in May 2026 to <b>$167,243</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$167,130 &ndash; $169,641</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="Schuylkill County, PA typical home value from May 2026 to Aug 2026">
+      <title>Schuylkill County, PA typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,109.4 247.3,33.4 472.7,176.6 698.0,170.1" />
+        <circle cx="22.0" cy="109.4" r="4" />
+        <circle cx="698.0" cy="170.1" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>Schuylkill County, PA monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$168,308</td><td>+4.8%</td></tr>
+      <tr><td>Jun 2026</td><td>$169,641</td><td>+5.0%</td></tr>
+      <tr><td>Jul 2026</td><td>$167,130</td><td>+4.7%</td></tr>
+      <tr><td>Aug 2026</td><td>$167,243</td><td>+4.5%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -89,8 +116,8 @@
 
 <div class="hero" style="text-align:left;max-width:760px;">
   <h2 style="font-size:20px;">Crime in Schuylkill County</h2>
-  <p>Reporting agencies in Schuylkill County recorded a violent crime rate of <b>174</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>857</b> per 100,000.</p>
-  <p style="font-size:13px;color:var(--text-dim);">Based on 10 reporting cities covering 49,582 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
+  <p>Reporting agencies in Schuylkill County recorded a violent crime rate of <b>186</b> per 100,000 residents in 2024 &mdash; around the middle of the national range. Property crime runs at <b>915</b> per 100,000.</p>
+  <p style="font-size:13px;color:var(--text-dim);">Based on 9 reporting cities covering 46,232 residents (<a href="../methodology.html">FBI UCR data &mdash; what this covers</a>).</p>
 </div>
 
 
@@ -98,7 +125,7 @@
   <h2 style="font-size:20px;">Common questions about Schuylkill County</h2>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">How much does a house cost in Schuylkill County, PA?</h3><p>The median home value in Schuylkill County is <b>$167,243</b>. That's up 4.5% from a year earlier. That is about 28.9% below the U.S. national county median of $235,072, and makes Schuylkill County the 52nd most expensive of 67 counties in Pennsylvania.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Schuylkill County affordable?</h3><p>Median household income here is <b>$68,313</b>, so a typical home costs about <b>2.4&times;</b> annual household earnings &mdash; relatively affordable compared with other U.S. counties.</p></div>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Schuylkill County a safe place to live?</h3><p>Reporting police departments in Schuylkill County recorded <b>174</b> violent crimes per 100,000 residents. That figure covers 49,582 residents across 10 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is Schuylkill County a safe place to live?</h3><p>Reporting police departments in Schuylkill County recorded <b>186</b> violent crimes per 100,000 residents. That figure covers 46,232 residents across 9 reporting cities, so it reflects the county's incorporated areas rather than every community within its borders.</p></div>
 </div>
 
 

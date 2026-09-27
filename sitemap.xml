@@ -4,6 +4,7 @@
   <url><loc>https://homepricemap.us/counties.html</loc></url>
   <url><loc>https://homepricemap.us/cities.html</loc></url>
   <url><loc>https://homepricemap.us/states.html</loc></url>
+  <url><loc>https://homepricemap.us/compare.html</loc></url>
   <url><loc>https://homepricemap.us/about.html</loc></url>
   <url><loc>https://homepricemap.us/methodology.html</loc></url>
   <url><loc>https://homepricemap.us/contact.html</loc></url>
@@ -3480,7 +3481,6 @@
   <url><loc>https://homepricemap.us/cities/ca-lawndale.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ca-lemon-grove.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ca-lemoore.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ca-lincoln-village.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ca-lincoln.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ca-lindsay.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ca-livermore.html</loc></url>
@@ -3981,7 +3981,6 @@
   <url><loc>https://homepricemap.us/cities/ia-waukee.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ia-waverly.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ia-webster-city.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ia-webster.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ia-west-des-moines.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ia-windsor-heights.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ia-winterset.html</loc></url>
@@ -4754,7 +4753,6 @@
   <url><loc>https://homepricemap.us/cities/me-winslow.html</loc></url>
   <url><loc>https://homepricemap.us/cities/me-winthrop.html</loc></url>
   <url><loc>https://homepricemap.us/cities/me-yarmouth.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-addison.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-adrian.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-albion.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-allegan.html</loc></url>
@@ -4762,9 +4760,7 @@
   <url><loc>https://homepricemap.us/cities/mi-alma.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-alpena.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-ann-arbor.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-argentine.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-auburn-hills.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-bath.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-battle-creek.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-belding.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-benton-harbor.html</loc></url>
@@ -4772,7 +4768,6 @@
   <url><loc>https://homepricemap.us/cities/mi-beverly-hills.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-big-rapids.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-birmingham.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-bridgeport.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-brighton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-burton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-cadillac.html</loc></url>
@@ -4780,22 +4775,17 @@
   <url><loc>https://homepricemap.us/cities/mi-charlotte.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-chelsea.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-clawson.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-clayton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-clinton-township.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-clinton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-coldwater.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-coloma.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-davison.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-dearborn-heights.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-dearborn.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-detroit.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-dewitt.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-dowagiac.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-east-grand-rapids.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-east-lansing.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-eastpointe.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-eaton-rapids.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-emmett.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-escanaba.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-farmington-hills.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-farmington.html</loc></url>
@@ -4807,7 +4797,6 @@
   <url><loc>https://homepricemap.us/cities/mi-frankenmuth.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-fraser.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-garden-city.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-garden.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-gladstone.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-grand-blanc.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-grand-haven.html</loc></url>
@@ -4831,12 +4820,13 @@
   <url><loc>https://homepricemap.us/cities/mi-huntington-woods.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-inkster.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-ionia.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/mi-ishpeming.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-jackson.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-kalamazoo.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-kentwood.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-lansing.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/mi-lapeer.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-lincoln-park.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-lincoln.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-livonia.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-ludington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-madison-heights.html</loc></url>
@@ -4850,8 +4840,6 @@
   <url><loc>https://homepricemap.us/cities/mi-midland.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-milan.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-milford.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-montrose.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-mount-morris.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-mount-pleasant.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-new-baltimore.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-niles.html</loc></url>
@@ -4859,9 +4847,7 @@
   <url><loc>https://homepricemap.us/cities/mi-norton-shores.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-novi.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-oak-park.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-oscoda.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-owosso.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-oxford.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-petoskey.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-plymouth.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-pontiac.html</loc></url>
@@ -4874,17 +4860,13 @@
   <url><loc>https://homepricemap.us/cities/mi-rockford.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-romulus.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-roseville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-royal-oak-township.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-royal-oak.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-saginaw.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-saline.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-shelby-township.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-shelby.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-south-lyon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-southfield.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-southgate.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-spring-arbor.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/mi-springfield.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-sterling-heights.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-taylor.html</loc></url>
   <url><loc>https://homepricemap.us/cities/mi-tecumseh.html</loc></url>
@@ -5361,9 +5343,7 @@
   <url><loc>https://homepricemap.us/cities/nh-wolfeboro.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-absecon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-allendale.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-andover.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-audubon.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-barnegat.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-barrington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-beachwood.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-bellmawr.html</loc></url>
@@ -5374,6 +5354,7 @@
   <url><loc>https://homepricemap.us/cities/nj-blairstown-township.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-bloomingdale.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-bogota.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/nj-boonton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-bordentown-township.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-bridgeton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-brigantine.html</loc></url>
@@ -5381,17 +5362,14 @@
   <url><loc>https://homepricemap.us/cities/nj-butler.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-caldwell.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-carlstadt.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-carneys-point.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-carteret.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-chatham.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-clayton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-clementon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-cliffside-park.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-clifton.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-clinton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-closter.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-collingswood.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-cranford.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-dover.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-dumont.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-dunellen.html</loc></url>
@@ -5408,12 +5386,10 @@
   <url><loc>https://homepricemap.us/cities/nj-fairview.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-fanwood.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-florence-township.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-florence.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-florham-park.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-fort-lee.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-franklin-lakes.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-franklin.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-freehold.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-garfield.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-garwood.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-glassboro.html</loc></url>
@@ -5440,8 +5416,6 @@
   <url><loc>https://homepricemap.us/cities/nj-kenilworth.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-keyport.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-kinnelon.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-lakewood.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-lebanon-borough.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-leonia.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-lincoln-park.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-lindenwold.html</loc></url>
@@ -5455,7 +5429,6 @@
   <url><loc>https://homepricemap.us/cities/nj-matawan.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-maywood.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-metuchen.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-middlesex.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-midland-park.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-milltown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-millville.html</loc></url>
@@ -5485,7 +5458,6 @@
   <url><loc>https://homepricemap.us/cities/nj-paterson.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-paulsboro.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-pemberton-township.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-pennsville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-perth-amboy.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-phillipsburg.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-pine-hill.html</loc></url>
@@ -5522,11 +5494,8 @@
   <url><loc>https://homepricemap.us/cities/nj-stratford.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-summit.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-tenafly.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-toms-river.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-totowa.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-trenton.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-union-city.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/nj-union.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-vineland.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-voorhees-township.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nj-waldwick.html</loc></url>
@@ -5579,96 +5548,41 @@
   <url><loc>https://homepricemap.us/cities/nv-sparks.html</loc></url>
   <url><loc>https://homepricemap.us/cities/nv-winnemucca.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-albany.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-amityville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-auburn.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-baldwinsville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-batavia.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-beacon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-binghamton.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-briarcliff-manor.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-brockport.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-bronxville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-buffalo.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-canton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-cohoes.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-cortland.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-croton-on-hudson.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-deer-park.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-depew.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-dobbs-ferry.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-dunkirk.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-east-rochester.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-elmira.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-elmsford.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-endicott.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-fairport.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-floral-park.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-freeport.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-fulton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-geneva.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-glen-cove.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-glens-falls.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-gloversville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-goshen.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-hastings-on-hudson.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-haverstraw.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-hempstead.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-hudson-falls.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-hudson.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-ilion.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-irvington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-jamestown.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-larchmont.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-long-beach.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-lynbrook.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-massena.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-medina.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-middletown.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-monroe.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-monticello.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-mount-vernon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-new-rochelle.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-new-windsor.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-new-york.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-newark.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-newburgh.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-niagara-falls.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-north-tonawanda.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-northport.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-ogdensburg.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-old-westbury.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-oneida.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-peekskill.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-pelham.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-plattsburgh.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-pleasantville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-port-chester.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-port-jervis.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-port-washington.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-potsdam.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-rensselaer.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-riverhead.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-rochester.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-rockville-centre.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-rome.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-rye-brook.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-saratoga-springs.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-schenectady.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-scotia.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-seneca-falls.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-southold.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-spring-valley.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-stony-point.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-suffern.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-syracuse.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-tarrytown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-troy.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-tuckahoe.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-utica.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-wallkill.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-wappingers-falls.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-warwick.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ny-washingtonville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-watertown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-watervliet.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ny-white-plains.html</loc></url>
@@ -5684,10 +5598,8 @@
   <url><loc>https://homepricemap.us/cities/oh-austintown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-avon-lake.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-avon.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-bainbridge.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-barberton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-beachwood.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-beaver.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-beavercreek.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-bedford-heights.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-bedford.html</loc></url>
@@ -5705,7 +5617,6 @@
   <url><loc>https://homepricemap.us/cities/oh-brunswick.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-bryan.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-bucyrus.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-butler.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-cambridge.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-canal-fulton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-canfield.html</loc></url>
@@ -5748,7 +5659,6 @@
   <url><loc>https://homepricemap.us/cities/oh-gahanna.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-galion.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-garfield-heights.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-genoa.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-germantown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-girard.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-grafton.html</loc></url>
@@ -5819,7 +5729,6 @@
   <url><loc>https://homepricemap.us/cities/oh-perrysburg.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-pickerington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-piqua.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-poland.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-port-clinton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-portsmouth.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-powell.html</loc></url>
@@ -5845,7 +5754,6 @@
   <url><loc>https://homepricemap.us/cities/oh-streetsboro.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-strongsville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-struthers.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-sugarcreek.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-sylvania.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-tallmadge.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-toledo.html</loc></url>
@@ -5855,7 +5763,6 @@
   <url><loc>https://homepricemap.us/cities/oh-troy.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-twinsburg.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-uhrichsville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/oh-union-city.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-union.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-uniontown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/oh-university-heights.html</loc></url>
@@ -6026,7 +5933,6 @@
   <url><loc>https://homepricemap.us/cities/pa-bethel-park.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-bethlehem.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-birdsboro.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-bloomsburg.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-brentwood.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-bridgeport.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-bristol.html</loc></url>
@@ -6050,7 +5956,6 @@
   <url><loc>https://homepricemap.us/cities/pa-coraopolis.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-corry.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-crafton.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-dallas.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-downingtown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-dubois.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-duquesne.html</loc></url>
@@ -6069,12 +5974,10 @@
   <url><loc>https://homepricemap.us/cities/pa-hanover.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-harrisburg.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-hatboro.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-hatfield.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-hazleton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-hellertown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-hermitage.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-hollidaysburg.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-horsham.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-huntingdon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-indiana.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-jeannette.html</loc></url>
@@ -6089,7 +5992,6 @@
   <url><loc>https://homepricemap.us/cities/pa-lititz.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-lock-haven.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-lower-burrell.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-luzerne.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-mckeesport.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-meadville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-mechanicsburg.html</loc></url>
@@ -6102,9 +6004,9 @@
   <url><loc>https://homepricemap.us/cities/pa-monessen.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-monongahela.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-monroeville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-montgomery.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-moosic.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-morrisville.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/pa-mount-carmel.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-munhall.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-murrysville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-nanticoke.html</loc></url>
@@ -6122,11 +6024,11 @@
   <url><loc>https://homepricemap.us/cities/pa-oxford.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-palmerton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-parkesburg.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-patton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-perkasie.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-philadelphia.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-phoenixville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-pittsburgh.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/pa-pittston.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-pleasant-hills.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-plymouth.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-pottstown.html</loc></url>
@@ -6136,7 +6038,6 @@
   <url><loc>https://homepricemap.us/cities/pa-quakertown.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-reading.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-ridley-park.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/pa-salisbury.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-sayre.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-schuylkill-haven.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-scranton.html</loc></url>
@@ -6160,6 +6061,7 @@
   <url><loc>https://homepricemap.us/cities/pa-west-chester.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-west-hazleton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-west-mifflin.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/pa-wilkes-barre.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-wyomissing.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-yeadon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/pa-york.html</loc></url>
@@ -6535,7 +6437,6 @@
   <url><loc>https://homepricemap.us/cities/tx-leon-valley.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-levelland.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-lewisville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/tx-liberty-city.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-liberty-hill.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-liberty.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-lindale.html</loc></url>
@@ -6628,7 +6529,6 @@
   <url><loc>https://homepricemap.us/cities/tx-san-juan.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-san-marcos.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-sanger.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/tx-sansom-park.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-santa-fe.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-schertz.html</loc></url>
   <url><loc>https://homepricemap.us/cities/tx-seabrook.html</loc></url>
@@ -6696,7 +6596,6 @@
   <url><loc>https://homepricemap.us/cities/ut-farmington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-grantsville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-harrisville.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ut-heber-city.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-herriman.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-hurricane.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-kanab.html</loc></url>
@@ -6734,7 +6633,6 @@
   <url><loc>https://homepricemap.us/cities/ut-springville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-sunset.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-syracuse.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/ut-taylorsville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-tooele.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-vernal.html</loc></url>
   <url><loc>https://homepricemap.us/cities/ut-washington.html</loc></url>
@@ -6759,7 +6657,6 @@
   <url><loc>https://homepricemap.us/cities/va-danville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/va-dumfries.html</loc></url>
   <url><loc>https://homepricemap.us/cities/va-emporia.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/va-fairfax.html</loc></url>
   <url><loc>https://homepricemap.us/cities/va-falls-church.html</loc></url>
   <url><loc>https://homepricemap.us/cities/va-farmville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/va-franklin.html</loc></url>
@@ -6811,6 +6708,7 @@
   <url><loc>https://homepricemap.us/cities/vt-milton.html</loc></url>
   <url><loc>https://homepricemap.us/cities/vt-montpelier.html</loc></url>
   <url><loc>https://homepricemap.us/cities/vt-northfield.html</loc></url>
+  <url><loc>https://homepricemap.us/cities/vt-rutland.html</loc></url>
   <url><loc>https://homepricemap.us/cities/vt-shelburne.html</loc></url>
   <url><loc>https://homepricemap.us/cities/vt-south-burlington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/vt-springfield.html</loc></url>
@@ -7016,11 +6914,9 @@
   <url><loc>https://homepricemap.us/cities/wi-onalaska.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-oregon.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-oshkosh.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/wi-pewaukee.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-platteville.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-pleasant-prairie.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-plover.html</loc></url>
-  <url><loc>https://homepricemap.us/cities/wi-plymouth.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-port-washington.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-portage.html</loc></url>
   <url><loc>https://homepricemap.us/cities/wi-racine.html</loc></url>

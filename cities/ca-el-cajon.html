@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2K8JWH5ZKY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-2K8JWH5ZKY');
-</script>
+<script src="/js/analytics-loader.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Median Home Price in El Cajon, CA (2026) | Home Price Map</title>
@@ -50,6 +43,7 @@
     <a href="../counties.html">Counties</a>
     <a href="../cities.html">Cities</a>
     <a href="../states.html">States</a>
+    <a href="../compare.html">Compare</a>
     <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
   </nav>
 </header>
@@ -59,6 +53,7 @@
   <h1 style="font-size:30px;">Median Home Price in El Cajon, CA</h1>
   <p>The median home value in <b>El Cajon, CA</b> is <b>$817,309</b> as of 2026-08-31, down 0.45% from a year earlier.</p>
   <p><a href="../cities.html#city=El+Cajon%2C+CA">View El Cajon on the interactive city map &rarr;</a></p>
+  <p><a class="button-link" href="../compare.html#places=city%3Aca-el-cajon">Compare El Cajon with another place</a></p>
 </div>
 
 <div class="choice-grid profile-stats">
@@ -76,9 +71,43 @@
   </div>
 </div>
 
+
+<section class="history-section" aria-labelledby="history-heading">
+  <h2 id="history-heading">Home value history</h2>
+  <p>The typical home value increased by 0.5%, from <b>$813,495</b> in May 2026 to <b>$817,309</b> in Aug 2026.</p>
+  <div class="history-chart-wrap">
+    <div class="history-chart-range" aria-hidden="true"><span>Observed range</span><b>$812,181 &ndash; $817,309</b></div>
+    <svg class="history-chart" viewBox="0 0 720 210" role="img" aria-label="El Cajon, CA typical home value from May 2026 to Aug 2026">
+      <title>El Cajon, CA typical home value from May 2026 to Aug 2026</title>
+      <line class="history-grid-line" x1="22" y1="22" x2="22" y2="188" />
+      <line class="history-grid-line" x1="22" y1="188" x2="698" y2="188" />
+      <polyline class="history-line" points="22.0,139.9 247.3,66.3 472.7,176.6 698.0,33.4" />
+        <circle cx="22.0" cy="139.9" r="4" />
+        <circle cx="698.0" cy="33.4" r="4" />
+    </svg>
+    <div class="history-chart-labels" aria-hidden="true"><span>May 2026</span><span>Aug 2026</span></div>
+  </div>
+  <p class="history-note">Monthly Zillow Home Value Index snapshots retained by HomePriceMap. A short history is shown now and grows automatically as each new monthly release arrives.</p>
+  <div class="sr-only">
+    <table class="history-table">
+      <caption>El Cajon, CA monthly home value history</caption>
+      <thead><tr><th scope="col">Month</th><th scope="col">Typical home value</th><th scope="col">Year-over-year change</th></tr></thead>
+      <tbody>
+      <tr><td>May 2026</td><td>$813,495</td><td>-1.7%</td></tr>
+      <tr><td>Jun 2026</td><td>$816,132</td><td>-1.4%</td></tr>
+      <tr><td>Jul 2026</td><td>$812,181</td><td>-1.0%</td></tr>
+      <tr><td>Aug 2026</td><td>$817,309</td><td>-0.5%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
 <div class="hero" style="text-align:left;max-width:760px;">
-  <p>El Cajon ranks #172 of 396 <a href="../states/california.html">California</a> cities tracked here by median home value, and sits 8.2% above the state's city median of $755,474. It sits in <a href="../counties/ca-san-diego-county.html">San Diego County</a>, where the county-wide median is $930,800.</p>
+  <p>El Cajon ranks #172 of 395 <a href="../states/california.html">California</a> cities tracked here by median home value, and sits 8.0% above the state's city median of $756,744. It sits in <a href="../counties/ca-san-diego-county.html">San Diego County</a>, where the county-wide median is $930,800.</p>
 </div>
+
+
 
 
 <div class="hero" style="text-align:left;max-width:760px;">
@@ -98,7 +127,7 @@
 
 <div class="content-section" style="padding-top:0;max-width:760px;margin:0 auto;">
   <h2 style="font-size:20px;">Common questions about El Cajon</h2>
-  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in El Cajon, CA?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In El Cajon, that value is <b>$817,309</b>. That's down 0.45% from a year earlier. It is about 8.2% above the typical California city tracked here.</p></div>
+  <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">What is the average home price in El Cajon, CA?</h3><p>People often call this an average home price, but the figure shown here is Zillow's typical home value (ZHVI), not a simple arithmetic average. In El Cajon, that value is <b>$817,309</b>. That's down 0.45% from a year earlier. It is about 8.0% above the typical California city tracked here.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is El Cajon expensive compared to the surrounding area?</h3><p>Homes in El Cajon are cheaper than San Diego County as a whole, where the median is $930,800 &mdash; a difference of about 12.2%.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is El Cajon affordable?</h3><p>Median household income here is <b>$67,511</b>, so the typical home value is about <b>12.1&times;</b> annual household income. This ratio is a broad comparison measure, not a mortgage-payment estimate.</p></div>
   <div class="faq-item"><h3 style="font-size:15px;margin:0 0 4px;">Is El Cajon a safe place to live?</h3><p>El Cajon police reported <b>434</b> violent crimes per 100,000 residents, covering a population of about 101,983. Crime rates are one input among many &mdash; they vary block to block within a city, and this figure is a citywide average.</p></div>
