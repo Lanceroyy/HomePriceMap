@@ -55,6 +55,24 @@ class DiscoveryFeatureTests(unittest.TestCase):
         self.assertIn('href="compare.html"', html)
         self.assertIn('src="js/place-search.js"', html)
 
+    def test_missing_pages_offer_root_relative_navigation_without_being_indexed(self):
+        html = (ROOT / "404.html").read_text(encoding="utf-8")
+        self.assertIn('<meta name="robots" content="noindex, follow">', html)
+        self.assertEqual(1, html.count("<h1>"))
+        self.assertIn('role="combobox"', html)
+        self.assertIn('aria-controls="notFoundSearchResults"', html)
+        self.assertIn('id="notFoundSearchResults"', html)
+        self.assertIn('href="/css/style.css"', html)
+        self.assertIn('src="/js/place-search.js"', html)
+        self.assertIn('src="/js/analytics-loader.js"', html)
+        for route in ("/", "/cities.html", "/counties.html", "/states.html", "/compare.html"):
+            self.assertIn('href="{}"'.format(route), html)
+        self.assertNotIn('rel="canonical"', html)
+        self.assertNotIn('http-equiv="refresh"', html)
+        self.assertNotIn("adsbygoogle", html)
+        for builder in ("scripts/state_pages_builder.py", "scripts/seo_pages_builder.py"):
+            self.assertNotIn('SITE_URL + "/404.html"', (ROOT / builder).read_text(encoding="utf-8"))
+
     def test_search_controller_covers_keyboard_and_failure_states(self):
         script = (ROOT / "js" / "place-search.js").read_text(encoding="utf-8")
 

@@ -89,6 +89,13 @@ class MobileLayoutTests(unittest.TestCase):
             mobile_styles,
         )
 
+    def test_narrow_reading_page_navigation_wraps_without_changing_map_headers(self):
+        stylesheet = (ROOT / "css" / "style.css").read_text(encoding="utf-8")
+        narrow_styles = css_block(stylesheet, "@media (max-width: 440px)")
+        self.assertIn("html:not(.map-page) header.topbar { flex-wrap: wrap; gap: 8px; }", narrow_styles)
+        self.assertIn("html:not(.map-page) header.topbar nav { width: 100%; justify-content: space-between; }", narrow_styles)
+        self.assertIn("margin-left: 0;", narrow_styles)
+
 
 if __name__ == "__main__":
     unittest.main()

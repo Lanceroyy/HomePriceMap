@@ -55,6 +55,31 @@ class CityPilotTests(unittest.TestCase):
         self.assertIn('href="ga-holly-springs.html"', html)
         self.assertNotIn("Pasadena", html)
 
+    def test_beverly_hills_ca_adds_only_published_local_peers(self):
+        target = city("Beverly Hills", "CA", "Los Angeles County", 4_000_000)
+        peers = [
+            self.la,
+            city("Santa Monica", "CA", "Los Angeles County", 2_000_000),
+            city("West Hollywood", "CA", "Los Angeles County", 1_200_000),
+        ]
+        eligible = {(p["state"], p["county"], p["name"]): p for p in peers}
+        html = local_comparison_section(target, eligible)
+        self.assertIn('href="ca-los-angeles.html"', html)
+        self.assertIn("75.0% lower than Beverly Hills", html)
+        self.assertIn('href="ca-santa-monica.html"', html)
+        self.assertIn("50.0% lower than Beverly Hills", html)
+        self.assertIn('href="ca-west-hollywood.html"', html)
+        self.assertIn("70.0% lower than Beverly Hills", html)
+        self.assertEqual("", local_comparison_section(
+            city("Beverly Hills", "MI", "Oakland County", 600_000), eligible
+        ))
+        peers[1]["as_of"] = "2026-06-30"
+        peers[2]["county"] = "Orange County"
+        html = local_comparison_section(target, eligible)
+        self.assertIn("Los Angeles</a>", html)
+        self.assertNotIn("Santa Monica</a>", html)
+        self.assertNotIn("West Hollywood</a>", html)
+
     def test_wrong_county_stale_month_and_unpublished_peers_are_omitted(self):
         self.eligible[("CA", "Los Angeles County", "Pasadena")]["county"] = "Orange County"
         self.eligible[("CA", "Los Angeles County", "Santa Monica")]["as_of"] = "2026-06-30"

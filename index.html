@@ -50,7 +50,7 @@
     <label class="sr-only" for="homePlaceSearch">Search for a city or county</label>
     <input id="homePlaceSearch" type="search" role="combobox" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="homePlaceSearchResults" aria-describedby="homePlaceSearchHelp" placeholder="Search a city or county">
     <ul id="homePlaceSearchResults" class="place-search-results" role="listbox" hidden></ul>
-    <p id="homePlaceSearchHelp" class="field-help">Type at least two characters, then choose a published profile.</p>
+    <p id="homePlaceSearchHelp" class="field-help">Try a city or county with its state, such as Los Angeles, California. Choose a result to open its profile.</p>
   </div>
   <p class="field-help">Explore examples: <a href="cities/ca-los-angeles.html">Los Angeles, CA</a> &middot; <a href="cities/ga-canton.html">Canton, GA</a></p>
   <p class="home-finder-compare"><a href="compare.html">Or compare two or three places side by side &rarr;</a></p>
@@ -135,7 +135,7 @@
 window.HomePriceSearch.attach(
   document.getElementById('homePlaceSearch'),
   document.getElementById('homePlaceSearchResults'),
-  { onSelect: place => { window.location.href = place.url; } }
+  { surface: 'homepage', onSelect: place => { window.location.href = place.url; } }
 );
 
 async function loadStats() {

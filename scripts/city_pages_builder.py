@@ -53,10 +53,11 @@ SITE_URL = "https://homepricemap.us"
 MIN_POPULATION = 5000
 MIN_EXPECTED_PROFILES = 3000
 
-# These two profiles already have measurable search interest. The named peers
+# These profiles already have measurable search interest. The named peers
 # are a deliberately small local-context pilot, not a template for every city.
 PILOT_PEERS = {
     ("CA", "Los Angeles"): ("Long Beach", "Pasadena", "Santa Monica"),
+    ("CA", "Beverly Hills"): ("Los Angeles", "Santa Monica", "West Hollywood"),
     ("GA", "Canton"): ("Woodstock", "Holly Springs"),
 }
 

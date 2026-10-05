@@ -2,6 +2,21 @@
   "use strict";
 
   const CATALOG_URL = "/data/place_index.json";
+  const STATE_NAMES = {
+    AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas",
+    CA: "California", CO: "Colorado", CT: "Connecticut", DE: "Delaware",
+    DC: "District of Columbia", FL: "Florida", GA: "Georgia", HI: "Hawaii",
+    ID: "Idaho", IL: "Illinois", IN: "Indiana", IA: "Iowa",
+    KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine",
+    MD: "Maryland", MA: "Massachusetts", MI: "Michigan", MN: "Minnesota",
+    MS: "Mississippi", MO: "Missouri", MT: "Montana", NE: "Nebraska",
+    NV: "Nevada", NH: "New Hampshire", NJ: "New Jersey", NM: "New Mexico",
+    NY: "New York", NC: "North Carolina", ND: "North Dakota", OH: "Ohio",
+    OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island",
+    SC: "South Carolina", SD: "South Dakota", TN: "Tennessee", TX: "Texas",
+    UT: "Utah", VT: "Vermont", VA: "Virginia", WA: "Washington",
+    WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
+  };
   let catalogPromise;
 
   function normalize(value) {
@@ -17,8 +32,8 @@
     return `${place.name}, ${place.state}`;
   }
 
-  function searchableText(place) {
-    return normalize(`${place.name} ${place.state} ${place.type} ${place.county || ""}`);
+  function primaryText(place) {
+    return normalize(`${place.name} ${place.state} ${STATE_NAMES[place.state] || ""} ${place.type}`);
   }
 
   async function loadCatalog() {
@@ -32,11 +47,18 @@
           if (!payload || !Array.isArray(payload.places)) {
             throw new Error("Place catalog has an invalid format");
           }
-          return payload.places.map((place) => ({
-            ...place,
-            _label: labelFor(place),
-            _search: searchableText(place),
-          }));
+          return payload.places.map((place) => {
+            const primary = primaryText(place);
+            const searchable = `${primary} ${normalize(place.county)}`.trim();
+            return {
+              ...place,
+              _label: labelFor(place),
+              _primary: primary,
+              _search: searchable,
+              _primaryWords: primary.split(" "),
+              _words: searchable.split(" "),
+            };
+          });
         })
         .catch((error) => {
           catalogPromise = null;
@@ -46,22 +68,28 @@
     return catalogPromise;
   }
 
-  function score(place, query) {
+  function score(place, query, tokens) {
     const name = normalize(place.name);
     const label = normalize(place._label);
     if (name === query) return 0;
     if (name.startsWith(query)) return 1;
     if (label.startsWith(query)) return 2;
-    if (place._search.split(" ").some((word) => word.startsWith(query))) return 3;
-    if (place._search.includes(query)) return 4;
+    if (place._words.some((word) => word.startsWith(query))) return 3;
+    if (place._primary.includes(query)) return 4;
+    // People use full states and either word order. County association is a
+    // useful fallback, but must not outrank the place they actually named.
+    if (tokens.every((token) => place._primaryWords.some((word) => word.startsWith(token)))) return 5;
+    if (place._search.includes(query)) return 6;
+    if (tokens.every((token) => place._words.some((word) => word.startsWith(token)))) return 7;
     return Number.POSITIVE_INFINITY;
   }
 
   function findMatches(places, rawQuery, limit) {
     const query = normalize(rawQuery);
     if (query.length < 2) return [];
+    const tokens = query.split(" ");
     return places
-      .map((place) => ({ place, rank: score(place, query) }))
+      .map((place) => ({ place, rank: score(place, query, tokens) }))
       .filter((item) => Number.isFinite(item.rank))
       .sort((a, b) =>
         a.rank - b.rank ||
@@ -75,10 +103,11 @@
 
   function attach(input, results, options) {
     if (!input || !results) throw new Error("Place search requires an input and results list");
-    const settings = Object.assign({ limit: 8, onSelect: null }, options || {});
+    const settings = Object.assign({ limit: 8, surface: "finder", onSelect: null }, options || {});
     let matches = [];
     let activeIndex = -1;
     let requestNumber = 0;
+    let blurTimer;
 
     function setExpanded(expanded) {
       input.setAttribute("aria-expanded", expanded ? "true" : "false");
@@ -116,8 +145,21 @@
     }
 
     function select(place) {
+      requestNumber += 1;
+      matches = [];
       input.value = place._label;
       setExpanded(false);
+      // Measure useful selections, not keystrokes or potentially private text.
+      try {
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "place_search_select", {
+            place_id: place.id,
+            place_type: place.type,
+            state: place.state,
+            search_surface: settings.surface,
+          });
+        }
+      } catch (error) { /* analytics must never prevent navigation */ }
       if (typeof settings.onSelect === "function") settings.onSelect(place);
     }
 
@@ -157,8 +199,10 @@
     async function update() {
       const query = input.value.trim();
       const currentRequest = ++requestNumber;
+      matches = [];
+      activeIndex = -1;
+      input.removeAttribute("aria-activedescendant");
       if (normalize(query).length < 2) {
-        matches = [];
         setExpanded(false);
         return;
       }
@@ -197,9 +241,14 @@
         setExpanded(false);
       }
     });
-    input.addEventListener("blur", () => window.setTimeout(() => setExpanded(false), 120));
+    input.addEventListener("blur", () => {
+      requestNumber += 1;
+      blurTimer = window.setTimeout(() => setExpanded(false), 120);
+    });
     input.addEventListener("focus", () => {
+      window.clearTimeout(blurTimer);
       if (matches.length) setExpanded(true);
+      else update();
     });
 
     return { loadCatalog, update };

@@ -193,6 +193,7 @@
   }
 
   window.HomePriceSearch.attach(searchInput, searchResults, {
+    surface: "comparison",
     onSelect: (place) => addPlace(place, true),
   });
   copyButton.addEventListener("click", copyComparison);

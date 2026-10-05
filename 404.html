@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, follow">
+<title>Page not found | HomePriceMap</title>
+<script src="/js/analytics-loader.js"></script>
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="stylesheet" href="/css/style.css">
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">Home<span>Price</span>Map</a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/counties.html">Counties</a>
+    <a href="/cities.html">Cities</a>
+    <a href="/states.html">States</a>
+    <a href="/compare.html">Compare</a>
+    <button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode">Dark</button>
+  </nav>
+</header>
+<main>
+  <div class="hero">
+    <p class="eyebrow">404 · Page not found</p>
+    <h1>Let's find the right place.</h1>
+    <p>This page is unavailable. The link may be outdated, or a profile may have been retired because its source data could not be matched reliably.</p>
+  </div>
+  <section class="home-finder" aria-labelledby="notFoundHeading">
+    <h2 id="notFoundHeading">Search current city and county profiles</h2>
+    <p>Find a published profile with home values, affordability, crime context, and monthly history where available.</p>
+    <div class="place-search">
+      <label class="sr-only" for="notFoundSearch">Search for a city or county</label>
+      <input id="notFoundSearch" type="search" role="combobox" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="notFoundSearchResults" aria-describedby="notFoundSearchHelp" placeholder="Search a city or county">
+      <ul id="notFoundSearchResults" class="place-search-results" role="listbox" hidden></ul>
+      <p id="notFoundSearchHelp" class="field-help">Try a city or county with its state name or abbreviation.</p>
+    </div>
+    <p class="home-finder-compare">Can't find a profile? <a href="/cities.html">Explore the city map</a> or <a href="/states.html">browse by state</a>.</p>
+  </section>
+</main>
+<footer class="site-footer">
+  <a href="/">HomePriceMap home</a> &middot; <a href="/methodology.html">Data &amp; Methodology</a> &middot; <a href="/contact.html">Contact</a> &middot; <a href="/privacy-policy.html">Privacy Policy</a>
+</footer>
+<script src="/js/place-search.js"></script>
+<script>
+window.HomePriceSearch.attach(
+  document.getElementById('notFoundSearch'),
+  document.getElementById('notFoundSearchResults'),
+  { surface: 'not_found', onSelect: place => { window.location.href = place.url; } }
+);
+</script>
+</body>
+</html>

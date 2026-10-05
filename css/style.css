@@ -993,6 +993,15 @@ footer.site-footer {
   .history-chart-wrap { padding: 8px 4px; }
 }
 
+@media (max-width: 440px) {
+  /* Reading pages can use two header rows. Keep map headers on one row:
+     their available map height depends on the fixed mobile header height. */
+  html:not(.map-page) header.topbar { flex-wrap: wrap; gap: 8px; }
+  html:not(.map-page) header.topbar nav { width: 100%; justify-content: space-between; }
+  html:not(.map-page) header.topbar nav a,
+  html:not(.map-page) .theme-toggle { margin-left: 0; }
+}
+
 @media (max-width: 380px) {
   /* At 320px the full brand plus four nav links otherwise wraps to a second
      line, invalidating the map-height calculation and crowding both panels. */
