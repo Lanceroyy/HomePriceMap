@@ -1,0 +1,775 @@
+{
+  "as_of": "2026-08-31",
+  "captured_on": "2026-10-06",
+  "source": "Zillow ZHVI and ACS B19013, as joined to published HomePriceMap profiles",
+  "county": {
+    "id": "county:06037",
+    "name": "Los Angeles County",
+    "state": "CA",
+    "url": "/counties/ca-los-angeles-county.html",
+    "value": 873008,
+    "as_of": "2026-08-31"
+  },
+  "cities": [
+    {
+      "id": "city:ca-beverly-hills",
+      "name": "Beverly Hills",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-beverly-hills.html",
+      "value": 3667785,
+      "as_of": "2026-08-31",
+      "income": 132977
+    },
+    {
+      "id": "city:ca-manhattan-beach",
+      "name": "Manhattan Beach",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-manhattan-beach.html",
+      "value": 3286680,
+      "as_of": "2026-08-31",
+      "income": 204306
+    },
+    {
+      "id": "city:ca-malibu",
+      "name": "Malibu",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-malibu.html",
+      "value": 3155914,
+      "as_of": "2026-08-31",
+      "income": 194421
+    },
+    {
+      "id": "city:ca-san-marino",
+      "name": "San Marino",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-san-marino.html",
+      "value": 2794267,
+      "as_of": "2026-08-31",
+      "income": 214167
+    },
+    {
+      "id": "city:ca-palos-verdes-estates",
+      "name": "Palos Verdes Estates",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-palos-verdes-estates.html",
+      "value": 2711796,
+      "as_of": "2026-08-31",
+      "income": 242014
+    },
+    {
+      "id": "city:ca-hermosa-beach",
+      "name": "Hermosa Beach",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-hermosa-beach.html",
+      "value": 2256891,
+      "as_of": "2026-08-31",
+      "income": 166442
+    },
+    {
+      "id": "city:ca-rolling-hills-estates",
+      "name": "Rolling Hills Estates",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-rolling-hills-estates.html",
+      "value": 1860850,
+      "as_of": "2026-08-31",
+      "income": 191895
+    },
+    {
+      "id": "city:ca-rancho-palos-verdes",
+      "name": "Rancho Palos Verdes",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-rancho-palos-verdes.html",
+      "value": 1786583,
+      "as_of": "2026-08-31",
+      "income": 179623
+    },
+    {
+      "id": "city:ca-el-segundo",
+      "name": "El Segundo",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-el-segundo.html",
+      "value": 1720531,
+      "as_of": "2026-08-31",
+      "income": 150737
+    },
+    {
+      "id": "city:ca-south-pasadena",
+      "name": "South Pasadena",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-south-pasadena.html",
+      "value": 1693233,
+      "as_of": "2026-08-31",
+      "income": 127175
+    },
+    {
+      "id": "city:ca-calabasas",
+      "name": "Calabasas",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-calabasas.html",
+      "value": 1688461,
+      "as_of": "2026-08-31",
+      "income": 165288
+    },
+    {
+      "id": "city:ca-santa-monica",
+      "name": "Santa Monica",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-santa-monica.html",
+      "value": 1667060,
+      "as_of": "2026-08-31",
+      "income": 114885
+    },
+    {
+      "id": "city:ca-redondo-beach",
+      "name": "Redondo Beach",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-redondo-beach.html",
+      "value": 1473182,
+      "as_of": "2026-08-31",
+      "income": 150245
+    },
+    {
+      "id": "city:ca-sierra-madre",
+      "name": "Sierra Madre",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-sierra-madre.html",
+      "value": 1389137,
+      "as_of": "2026-08-31",
+      "income": 143547
+    },
+    {
+      "id": "city:ca-la-habra-heights",
+      "name": "La Habra Heights",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-la-habra-heights.html",
+      "value": 1384110,
+      "as_of": "2026-08-31",
+      "income": 179583
+    },
+    {
+      "id": "city:ca-arcadia",
+      "name": "Arcadia",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-arcadia.html",
+      "value": 1381933,
+      "as_of": "2026-08-31",
+      "income": 113516
+    },
+    {
+      "id": "city:ca-agoura-hills",
+      "name": "Agoura Hills",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-agoura-hills.html",
+      "value": 1234398,
+      "as_of": "2026-08-31",
+      "income": 171302
+    },
+    {
+      "id": "city:ca-pasadena",
+      "name": "Pasadena",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-pasadena.html",
+      "value": 1187354,
+      "as_of": "2026-08-31",
+      "income": 105192
+    },
+    {
+      "id": "city:ca-glendale",
+      "name": "Glendale",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-glendale.html",
+      "value": 1180773,
+      "as_of": "2026-08-31",
+      "income": 88393
+    },
+    {
+      "id": "city:ca-burbank",
+      "name": "Burbank",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-burbank.html",
+      "value": 1176932,
+      "as_of": "2026-08-31",
+      "income": null
+    },
+    {
+      "id": "city:ca-walnut",
+      "name": "Walnut",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-walnut.html",
+      "value": 1170403,
+      "as_of": "2026-08-31",
+      "income": 129449
+    },
+    {
+      "id": "city:ca-torrance",
+      "name": "Torrance",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-torrance.html",
+      "value": 1104855,
+      "as_of": "2026-08-31",
+      "income": 116217
+    },
+    {
+      "id": "city:ca-san-gabriel",
+      "name": "San Gabriel",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-san-gabriel.html",
+      "value": 1098283,
+      "as_of": "2026-08-31",
+      "income": 90488
+    },
+    {
+      "id": "city:ca-cerritos",
+      "name": "Cerritos",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-cerritos.html",
+      "value": 1088827,
+      "as_of": "2026-08-31",
+      "income": 135439
+    },
+    {
+      "id": "city:ca-claremont",
+      "name": "Claremont",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-claremont.html",
+      "value": 1017826,
+      "as_of": "2026-08-31",
+      "income": 125647
+    },
+    {
+      "id": "city:ca-diamond-bar",
+      "name": "Diamond Bar",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-diamond-bar.html",
+      "value": 1007680,
+      "as_of": "2026-08-31",
+      "income": 108281
+    },
+    {
+      "id": "city:ca-monrovia",
+      "name": "Monrovia",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-monrovia.html",
+      "value": 979520,
+      "as_of": "2026-08-31",
+      "income": 96021
+    },
+    {
+      "id": "city:ca-west-hollywood",
+      "name": "West Hollywood",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-west-hollywood.html",
+      "value": 975189,
+      "as_of": "2026-08-31",
+      "income": 96995
+    },
+    {
+      "id": "city:ca-la-verne",
+      "name": "La Verne",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-la-verne.html",
+      "value": 939385,
+      "as_of": "2026-08-31",
+      "income": 103761
+    },
+    {
+      "id": "city:ca-los-angeles",
+      "name": "Los Angeles",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-los-angeles.html",
+      "value": 929572,
+      "as_of": "2026-08-31",
+      "income": 81939
+    },
+    {
+      "id": "city:ca-alhambra",
+      "name": "Alhambra",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-alhambra.html",
+      "value": 916065,
+      "as_of": "2026-08-31",
+      "income": 88024
+    },
+    {
+      "id": "city:ca-monterey-park",
+      "name": "Monterey Park",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-monterey-park.html",
+      "value": 911771,
+      "as_of": "2026-08-31",
+      "income": 81855
+    },
+    {
+      "id": "city:ca-san-dimas",
+      "name": "San Dimas",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-san-dimas.html",
+      "value": 908559,
+      "as_of": "2026-08-31",
+      "income": 105321
+    },
+    {
+      "id": "city:ca-lomita",
+      "name": "Lomita",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-lomita.html",
+      "value": 906797,
+      "as_of": "2026-08-31",
+      "income": 93810
+    },
+    {
+      "id": "city:ca-rosemead",
+      "name": "Rosemead",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-rosemead.html",
+      "value": 899017,
+      "as_of": "2026-08-31",
+      "income": 73566
+    },
+    {
+      "id": "city:ca-la-mirada",
+      "name": "La Mirada",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-la-mirada.html",
+      "value": 879254,
+      "as_of": "2026-08-31",
+      "income": 109288
+    },
+    {
+      "id": "city:ca-glendora",
+      "name": "Glendora",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-glendora.html",
+      "value": 878756,
+      "as_of": "2026-08-31",
+      "income": 113569
+    },
+    {
+      "id": "city:ca-lakewood",
+      "name": "Lakewood",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-lakewood.html",
+      "value": 872166,
+      "as_of": "2026-08-31",
+      "income": 119177
+    },
+    {
+      "id": "city:ca-hawthorne",
+      "name": "Hawthorne",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-hawthorne.html",
+      "value": 868408,
+      "as_of": "2026-08-31",
+      "income": 75848
+    },
+    {
+      "id": "city:ca-artesia",
+      "name": "Artesia",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-artesia.html",
+      "value": 868250,
+      "as_of": "2026-08-31",
+      "income": 101004
+    },
+    {
+      "id": "city:ca-long-beach",
+      "name": "Long Beach",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-long-beach.html",
+      "value": 850917,
+      "as_of": "2026-08-31",
+      "income": 87430
+    },
+    {
+      "id": "city:ca-west-covina",
+      "name": "West Covina",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-west-covina.html",
+      "value": 835555,
+      "as_of": "2026-08-31",
+      "income": 101065
+    },
+    {
+      "id": "city:ca-montebello",
+      "name": "Montebello",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-montebello.html",
+      "value": 817744,
+      "as_of": "2026-08-31",
+      "income": 79971
+    },
+    {
+      "id": "city:ca-whittier",
+      "name": "Whittier",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-whittier.html",
+      "value": 815758,
+      "as_of": "2026-08-31",
+      "income": 97201
+    },
+    {
+      "id": "city:ca-bellflower",
+      "name": "Bellflower",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-bellflower.html",
+      "value": 798074,
+      "as_of": "2026-08-31",
+      "income": 78722
+    },
+    {
+      "id": "city:ca-covina",
+      "name": "Covina",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-covina.html",
+      "value": 793863,
+      "as_of": "2026-08-31",
+      "income": 98671
+    },
+    {
+      "id": "city:ca-santa-clarita",
+      "name": "Santa Clarita",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-santa-clarita.html",
+      "value": 787700,
+      "as_of": "2026-08-31",
+      "income": 123062
+    },
+    {
+      "id": "city:ca-duarte",
+      "name": "Duarte",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-duarte.html",
+      "value": 786383,
+      "as_of": "2026-08-31",
+      "income": 105483
+    },
+    {
+      "id": "city:ca-carson",
+      "name": "Carson",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-carson.html",
+      "value": 785721,
+      "as_of": "2026-08-31",
+      "income": 108703
+    },
+    {
+      "id": "city:ca-gardena",
+      "name": "Gardena",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-gardena.html",
+      "value": 779150,
+      "as_of": "2026-08-31",
+      "income": 84803
+    },
+    {
+      "id": "city:ca-santa-fe-springs",
+      "name": "Santa Fe Springs",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-santa-fe-springs.html",
+      "value": 778917,
+      "as_of": "2026-08-31",
+      "income": 88238
+    },
+    {
+      "id": "city:ca-lawndale",
+      "name": "Lawndale",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-lawndale.html",
+      "value": 774951,
+      "as_of": "2026-08-31",
+      "income": 85441
+    },
+    {
+      "id": "city:ca-norwalk",
+      "name": "Norwalk",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-norwalk.html",
+      "value": 756744,
+      "as_of": "2026-08-31",
+      "income": 100085
+    },
+    {
+      "id": "city:ca-el-monte",
+      "name": "El Monte",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-el-monte.html",
+      "value": 752694,
+      "as_of": "2026-08-31",
+      "income": 68030
+    },
+    {
+      "id": "city:ca-south-el-monte",
+      "name": "South El Monte",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-south-el-monte.html",
+      "value": 750221,
+      "as_of": "2026-08-31",
+      "income": 72990
+    },
+    {
+      "id": "city:ca-inglewood",
+      "name": "Inglewood",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-inglewood.html",
+      "value": 749827,
+      "as_of": "2026-08-31",
+      "income": 72750
+    },
+    {
+      "id": "city:ca-pico-rivera",
+      "name": "Pico Rivera",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-pico-rivera.html",
+      "value": 747422,
+      "as_of": "2026-08-31",
+      "income": 88201
+    },
+    {
+      "id": "city:ca-san-fernando",
+      "name": "San Fernando",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-san-fernando.html",
+      "value": 736478,
+      "as_of": "2026-08-31",
+      "income": 83024
+    },
+    {
+      "id": "city:ca-la-puente",
+      "name": "La Puente",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-la-puente.html",
+      "value": 715860,
+      "as_of": "2026-08-31",
+      "income": 86602
+    },
+    {
+      "id": "city:ca-baldwin-park",
+      "name": "Baldwin Park",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-baldwin-park.html",
+      "value": 711396,
+      "as_of": "2026-08-31",
+      "income": 80663
+    },
+    {
+      "id": "city:ca-azusa",
+      "name": "Azusa",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-azusa.html",
+      "value": 708527,
+      "as_of": "2026-08-31",
+      "income": 90721
+    },
+    {
+      "id": "city:ca-signal-hill",
+      "name": "Signal Hill",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-signal-hill.html",
+      "value": 698818,
+      "as_of": "2026-08-31",
+      "income": 113298
+    },
+    {
+      "id": "city:ca-south-gate",
+      "name": "South Gate",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-south-gate.html",
+      "value": 692930,
+      "as_of": "2026-08-31",
+      "income": 74571
+    },
+    {
+      "id": "city:ca-commerce",
+      "name": "Commerce",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-commerce.html",
+      "value": 691449,
+      "as_of": "2026-08-31",
+      "income": 77064
+    },
+    {
+      "id": "city:ca-bell-gardens",
+      "name": "Bell Gardens",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-bell-gardens.html",
+      "value": 685371,
+      "as_of": "2026-08-31",
+      "income": 62298
+    },
+    {
+      "id": "city:ca-lynwood",
+      "name": "Lynwood",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-lynwood.html",
+      "value": 684690,
+      "as_of": "2026-08-31",
+      "income": 74844
+    },
+    {
+      "id": "city:ca-bell",
+      "name": "Bell",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-bell.html",
+      "value": 682720,
+      "as_of": "2026-08-31",
+      "income": 61020
+    },
+    {
+      "id": "city:ca-pomona",
+      "name": "Pomona",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-pomona.html",
+      "value": 682283,
+      "as_of": "2026-08-31",
+      "income": 79479
+    },
+    {
+      "id": "city:ca-cudahy",
+      "name": "Cudahy",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-cudahy.html",
+      "value": 678935,
+      "as_of": "2026-08-31",
+      "income": 56615
+    },
+    {
+      "id": "city:ca-huntington-park",
+      "name": "Huntington Park",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-huntington-park.html",
+      "value": 663724,
+      "as_of": "2026-08-31",
+      "income": 59996
+    },
+    {
+      "id": "city:ca-hawaiian-gardens",
+      "name": "Hawaiian Gardens",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-hawaiian-gardens.html",
+      "value": 651467,
+      "as_of": "2026-08-31",
+      "income": 76341
+    },
+    {
+      "id": "city:ca-paramount",
+      "name": "Paramount",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-paramount.html",
+      "value": 647068,
+      "as_of": "2026-08-31",
+      "income": 75250
+    },
+    {
+      "id": "city:ca-maywood",
+      "name": "Maywood",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-maywood.html",
+      "value": 642096,
+      "as_of": "2026-08-31",
+      "income": 60943
+    },
+    {
+      "id": "city:ca-compton",
+      "name": "Compton",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-compton.html",
+      "value": 638376,
+      "as_of": "2026-08-31",
+      "income": 78465
+    },
+    {
+      "id": "city:ca-palmdale",
+      "name": "Palmdale",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-palmdale.html",
+      "value": 499832,
+      "as_of": "2026-08-31",
+      "income": 81770
+    },
+    {
+      "id": "city:ca-lancaster",
+      "name": "Lancaster",
+      "state": "CA",
+      "county": "Los Angeles County",
+      "url": "/cities/ca-lancaster.html",
+      "value": 461962,
+      "as_of": "2026-08-31",
+      "income": 81511
+    }
+  ]
+}

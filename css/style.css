@@ -592,6 +592,27 @@ header.topbar nav a.active { color: var(--text); }
   font-variant-numeric: tabular-nums;
 }
 
+/* These bars compare dollar levels, unlike the centered growth chart above. */
+.analysis-price-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) 105px;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+  font-size: 13px;
+}
+.analysis-price-track { height: 13px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.analysis-price-bar { display: block; height: 100%; background: var(--accent); }
+.analysis-price-value { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.analysis-price-county { border-top: 1px dashed var(--text-dim); padding-top: 12px; }
+.analysis-price-county .analysis-price-bar { background: var(--text-dim); }
+.analysis-snapshot { color: var(--text-dim); font-size: 13px; }
+@media (max-width: 500px) {
+  .analysis-price-row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+  .analysis-price-track { grid-column: 1 / -1; grid-row: 2; }
+  .analysis-price-value { grid-column: 2; grid-row: 1; }
+}
+
 footer.site-footer {
   text-align: center;
   color: var(--text-dim);

@@ -34,7 +34,7 @@ jobs:
         run: python scripts/seo_pages_builder.py
 
       - name: Build published place search index
-        run: python scripts/place_index_builder.py
+        run: python scripts/place_index_builder.py --summary-output data/site_summary.json
 
       # Runs last of the page builders because it also writes sitemap.xml,
       # which globs the cities/ directory produced by the step above.
@@ -51,7 +51,7 @@ jobs:
           # temporarily shelves the just-generated data files so the pull
           # can apply cleanly, then restores them.
           git pull --rebase --autostash origin main
-          git add data/county_prices.json data/city_prices.json data/place_index.json data/history/ counties/ cities/ states/ states.html sitemap.xml robots.txt
+          git add data/site_summary.json data/county_prices.json data/city_prices.json data/place_index.json data/history/ counties/ cities/ states/ states.html sitemap.xml robots.txt
           if ! git diff --cached --quiet; then
             git commit -m "chore: daily home price data + SEO page refresh"
             git push

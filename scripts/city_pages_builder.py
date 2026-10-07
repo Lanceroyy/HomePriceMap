@@ -30,6 +30,7 @@ import re
 import statistics
 import sys
 import unicodedata
+from datetime import date
 from html import escape
 from pathlib import Path
 from urllib.parse import quote_plus
@@ -192,6 +193,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 {local_comparison_section}
 
+{targeted_context_section}
+
 {income_section}
 
 {crime_section}
@@ -351,8 +354,55 @@ def meta_description(name, state, value, yoy_sentence, income, comparison_name):
     else:
         tail = " See local crime rates and how it compares to {}.".format(comparison_name)
 
-    description = base + tail
-    return description if len(description) <= 158 else base
+    # Google truncates snippets to the device's available width, not a fixed
+    # character count. Keep distinctive context even for longer city names.
+    return base + tail
+
+
+def targeted_context_section(city, income, county_record):
+    """Interpret the two high-interest profiles without expanding the peer pilot."""
+    key = (city.get("state"), city.get("name"))
+    if key not in {("CA", "Beverly Hills"), ("CO", "Aspen")}:
+        return ""
+    value = city.get("value")
+    annual_income = (income or {}).get("median_household_income")
+    if not isinstance(value, (int, float)) or value <= 0 or not isinstance(annual_income, (int, float)) or annual_income <= 0:
+        return ""
+    try:
+        month = date.fromisoformat(city.get("as_of", "")).strftime("%B %Y")
+    except (TypeError, ValueError):
+        return ""
+    name = escape(city["name"])
+    capped = bool(income.get("top_coded"))
+    ratio = value / annual_income
+    context = (
+        "In {month}, {name}'s typical home value was <b>{value}</b>, "
+        "{bound}<b>{ratio:.1f}&times;</b> its ACS median annual household income of <b>{income}</b>. "
+        "That is a comparison of two area-level measures, not a required salary to buy a home. "
+        "The income figure describes local households, not just homebuyers; it does not measure "
+        "their savings, equity, or monthly housing costs."
+    ).format(month=month, name=name, value=fmt_money(value), ratio=ratio,
+             bound="no more than " if capped else "about ",
+             income=fmt_money(annual_income) + ("+" if capped else ""))
+    if (county_record and county_record.get("name") == city.get("county")
+            and county_record.get("state") == city.get("state")
+            and county_record.get("as_of") == city.get("as_of")
+            and isinstance(county_record.get("value"), (int, float)) and county_record["value"] > 0):
+        diff = (value / county_record["value"] - 1) * 100
+        relative = ("{:.1f}% {}".format(abs(diff), "above" if diff > 0 else "below")
+                    if abs(diff) >= .05 else "approximately equal to")
+        context += (
+            ' The city value is {relative} the same-month <a href="../counties/{state}-{slug}.html">'
+            '{county}</a> figure of {value}. A county aggregate is not an average of the city '
+            'values listed here, and does not describe every neighborhood.'
+        ).format(relative=relative, state=city["state"].lower(), slug=slugify(county_record["name"]),
+                 county=escape(county_record["name"]), value=fmt_money(county_record["value"]))
+    article = ('<p><a href="../los-angeles-county-home-price-gaps.html">'
+               'Why one Los Angeles County price hides very different city markets &rarr;</a></p>'
+               if key == ("CA", "Beverly Hills") else "")
+    return ('<section class="hero" style="text-align:left;max-width:760px;">'
+            '<h2 style="font-size:20px;">How to interpret {name}\'s home-price figure</h2>'
+            '<p>{context}</p>{article}</section>').format(name=name, context=context, article=article)
 
 
 def local_comparison_section(city, eligible_by_location):
@@ -531,10 +581,10 @@ def build():
             html = PAGE_TEMPLATE.format(
                 ga=GA_SNIPPET,
                 title="Median Home Price in {}, {} ({}) | Home Price Map".format(name, state, as_of[:4]),
-                description=meta_description(
+                description=escape(meta_description(
                     name, state, value, yoy_sentence, income_rec,
                     county_rec["name"] if county_rec else state_name,
-                ),
+                ), quote=True),
                 canonical=canonical,
                 site_url=SITE_URL,
                 city_name=name,
@@ -554,6 +604,7 @@ def build():
                 yoy_sentence=yoy_sentence,
                 comparison=comparison,
                 local_comparison_section=local_comparison_section(c, eligible_by_location),
+                targeted_context_section=targeted_context_section(c, income_rec, county_rec),
                 income_section=income_section(name, value, income_rec),
                 crime_section=crime_section(name, cr, national_violent),
                 faq_section=faq_section(

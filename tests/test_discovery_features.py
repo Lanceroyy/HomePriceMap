@@ -11,6 +11,7 @@ MAINTAINED_PAGES = (
     "contact.html",
     "counties.html",
     "home-price-trends-by-state-2026.html",
+    "los-angeles-county-home-price-gaps.html",
     "index.html",
     "methodology.html",
     "privacy-policy.html",
@@ -106,7 +107,7 @@ class DiscoveryFeatureTests(unittest.TestCase):
         missing = []
         for relative in MAINTAINED_PAGES + BUILDERS:
             text = (ROOT / relative).read_text(encoding="utf-8")
-            if not re.search(r'<a[^>]+href="(?:\.\./)?compare\.html"', text):
+            if not re.search(r'<a[^>]+href="(?:\.\./|/)?compare\.html"', text):
                 missing.append(relative)
         self.assertEqual([], missing)
 

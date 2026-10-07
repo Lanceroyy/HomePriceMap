@@ -74,11 +74,17 @@
   </a>
 </div>
 
-<div class="stat-strip" id="statStrip">
-  <div><b id="statCounties">—</b>counties tracked</div>
-  <div><b id="statCities">—</b>cities tracked</div>
-  <div><b id="statUpdated">—</b>last data refresh</div>
+<div class="stat-strip" id="statStrip" role="status" aria-live="polite">
+  <div><b id="statCounties">Loading&hellip;</b>counties with price data</div>
+  <div><b id="statCities">Loading&hellip;</b>cities with price data</div>
+  <div><b id="statUpdated">Loading&hellip;</b>last data refresh (UTC)</div>
 </div>
+
+<a class="article-feature" href="los-angeles-county-home-price-gaps.html">
+  <span class="kicker">New analysis &middot; August 2026 data</span>
+  <b>One county, an almost eightfold gap in city home values</b>
+  <span>Beverly Hills and Lancaster are in the same county, but their typical home values were $3.67 million and $462,000. See six city comparisons and the data behind them. &rarr;</span>
+</a>
 
 <a class="article-feature" href="cheapest-counties-arent-the-most-affordable.html">
   <span class="kicker">Analysis</span>
@@ -87,7 +93,7 @@
 </a>
 
 <a class="article-feature" href="home-price-trends-by-state-2026.html">
-  <span class="kicker">New analysis</span>
+  <span class="kicker">Analysis</span>
   <b>Home prices rose in 78% of counties &mdash; but not everywhere</b>
   <span>The median county gained 2.8% year over year, while Kentucky and Florida moved in the opposite direction. I compared all 3,071 tracked counties to see where the market is still climbing and where it is cooling. &rarr;</span>
 </a>
@@ -138,21 +144,7 @@ window.HomePriceSearch.attach(
   { surface: 'homepage', onSelect: place => { window.location.href = place.url; } }
 );
 
-async function loadStats() {
-  try {
-    const [c, ci] = await Promise.all([
-      fetch('data/county_prices.json').then(r => r.json()),
-      fetch('data/city_prices.json').then(r => r.json()),
-    ]);
-    document.getElementById('statCounties').textContent = c.count.toLocaleString();
-    document.getElementById('statCities').textContent = ci.count.toLocaleString();
-    const d = new Date(c.updated);
-    document.getElementById('statUpdated').textContent = isNaN(d) ? c.updated : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-  } catch (e) {
-    console.error('Failed to load stats', e);
-  }
-}
-loadStats();
 </script>
+<script src="js/home-stats.js"></script>
 </body>
 </html>

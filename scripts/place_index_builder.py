@@ -149,14 +149,34 @@ def write_catalog(catalog, output_path=DEFAULT_OUTPUT):
     )
 
 
+def build_summary(data_dir=DEFAULT_DATA_DIR):
+    """Homepage coverage counters should not require downloading the price feeds.
+
+    Count priced source records, not published profiles: the interactive map
+    covers more cities than qualify for an individual page.
+    """
+    data_dir = Path(data_dir)
+    counties = _read_required(data_dir / "county_prices.json")
+    cities = _read_required(data_dir / "city_prices.json")
+    return {
+        "county_count": sum(r.get("value") is not None for r in counties.get("counties", {}).values()),
+        "city_count": sum(r.get("value") is not None for r in cities.get("cities", [])),
+        "updated": counties.get("updated") or cities.get("updated"),
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--summary-output", type=Path,
+                        help="Also write compact homepage stats to this explicit path")
     args = parser.parse_args(argv)
 
     catalog = build_catalog(args.data_dir)
     write_catalog(catalog, args.output)
+    if args.summary_output:
+        write_catalog(build_summary(args.data_dir), args.summary_output)
     print("Generated {} with {:,} published places.".format(args.output, catalog["count"]))
     return 0
 

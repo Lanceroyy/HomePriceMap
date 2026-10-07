@@ -8,7 +8,7 @@ SCRIPTS = ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from city_pages_builder import local_comparison_section  # noqa: E402
+from city_pages_builder import local_comparison_section, targeted_context_section, meta_description  # noqa: E402
 
 
 def city(name, state, county, value, as_of="2026-07-31"):
@@ -22,6 +22,43 @@ def city(name, state, county, value, as_of="2026-07-31"):
 
 
 class CityPilotTests(unittest.TestCase):
+    def test_targeted_context_explains_income_without_a_payment_promise(self):
+        target = city('Aspen', 'CO', 'Pitkin County', 3_000_000)
+        income = {'median_household_income': 75000}
+        county = {'name': 'Pitkin County', 'state': 'CO', 'value': 1_500_000, 'as_of': target['as_of']}
+        html = targeted_context_section(target, income, county)
+        self.assertIn('40.0', html)
+        self.assertIn('$75,000', html)
+        self.assertIn('100.0% above', html)
+        self.assertIn('July 2026', html)
+        self.assertIn('not a required salary', html)
+        self.assertIn('co-pitkin-county.html', html)
+        county['as_of'] = '2026-06-30'
+        self.assertNotIn('100.0% above', targeted_context_section(target, income, county))
+        county['as_of'] = target['as_of']
+        county['state'] = 'CA'
+        self.assertNotIn('100.0% above', targeted_context_section(target, income, county))
+
+    def test_targeted_context_is_limited_and_handles_missing_capped_income(self):
+        self.assertEqual('', targeted_context_section(city('Denver', 'CO', 'Denver County', 500000), {}, {}))
+        target = city('Beverly Hills', 'CA', 'Los Angeles County', 3_000_000)
+        self.assertEqual('', targeted_context_section(target, None, None))
+        self.assertEqual('', targeted_context_section(target, {'median_household_income':0}, None))
+        html = targeted_context_section(target, {'median_household_income':250000, 'top_coded':True}, None)
+        self.assertIn('no more than', html)
+        self.assertIn('$250,000+', html)
+        self.assertIn('../los-angeles-county-home-price-gaps.html', html)
+
+    def test_long_descriptions_keep_distinctive_income_information(self):
+        name = 'A deliberately long city name used to test informative descriptions'
+        description = meta_description(name, 'CA', 1_000_000, 'up 2% from a year earlier.',
+                                       {'median_household_income':100000}, 'Los Angeles County')
+        self.assertIn('about 10.0x local household income', description)
+        capped = meta_description('Aspen', 'CO', 3_000_000, 'down 2% from a year earlier.',
+                                  {'median_household_income':250000, 'top_coded':True}, 'Pitkin County')
+        self.assertIn('down 2%', capped)
+        self.assertIn('no more than 12.0x', capped)
+
     def setUp(self):
         self.la = city("Los Angeles", "CA", "Los Angeles County", 1_000_000)
         self.canton = city("Canton", "GA", "Cherokee County", 500_000)
