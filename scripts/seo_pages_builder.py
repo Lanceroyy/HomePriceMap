@@ -22,7 +22,8 @@ import unicodedata
 from pathlib import Path
 from urllib.parse import quote_plus
 
-from profile_components import load_history_series, prune_stale_html, render_history_section
+from profile_components import load_history_series, prune_stale_html, render_history_section, render_data_freshness
+from page_provenance import PageProvenance
 
 ROOT = Path(__file__).resolve().parent.parent
 MIN_EXPECTED_PROFILES = 2500
@@ -143,8 +144,10 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <div class="hero" style="text-align:left;max-width:760px;">
   <p style="font-size:13px;color:var(--text-dim);"><a href="/">Home</a> &rsaquo; <a href="../counties.html">Counties</a> &rsaquo; {county_name}, {state}</p>
   <h1 style="font-size:30px;">Median Home Price in {county_name}, {state}</h1>
-  <p>The median home value in <b>{county_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
+  <p>The median home value in <b>{county_name}, {state}</b> is <b>{value_fmt}</b>, {yoy_sentence}</p>
 </div>
+
+{freshness_section}
 
 <div class="choice-grid profile-stats">
   <div class="choice-card" style="text-align:center;">
@@ -181,7 +184,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="../about.html">About</a>
   &middot; <a href="../methodology.html">Data &amp; Methodology</a>
   &middot; <a href="../contact.html">Contact</a>
@@ -494,6 +497,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
         slug_by_fips[c["fips"]] = slug
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    page_writer = PageProvenance(ROOT)
     urls = []
     expected_filenames = set()
 
@@ -504,6 +508,8 @@ def build_pages(county_data, crime_data=None, income_data=None):
         value = c["value"]
         yoy = c.get("yoy_pct")
         as_of = c.get("as_of", "")
+        if not isinstance(as_of, str):
+            as_of = ""
         slug = slug_by_fips[fips]
         filename = slug + ".html"
         expected_filenames.add(filename)
@@ -601,7 +607,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
             state=state,
             value_fmt=fmt_money(value),
             yoy_fmt=fmt_pct(yoy),
-            as_of=as_of,
+            freshness_section=render_data_freshness(counties=[c]),
             yoy_sentence=yoy_sentence,
             national_rank=n_rank,
             national_total=national_total,
@@ -623,7 +629,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
             nearby_section=nearby_section,
         )
 
-        (OUT_DIR / filename).write_text(html, encoding="utf-8")
+        page_writer.write(OUT_DIR / filename, html)
         urls.append(canonical)
 
     prune_stale_html(
@@ -631,6 +637,7 @@ def build_pages(county_data, crime_data=None, income_data=None):
         expected_filenames,
         minimum_expected=MIN_EXPECTED_PROFILES,
     )
+    page_writer.save()
     return urls
 
 

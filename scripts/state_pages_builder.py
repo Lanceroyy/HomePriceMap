@@ -26,6 +26,11 @@ import statistics
 import sys
 import unicodedata
 from pathlib import Path
+from urllib.parse import urlsplit
+from xml.sax.saxutils import escape
+
+from page_provenance import PageProvenance
+from profile_components import render_data_freshness
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / "data" / "county_prices.json"
@@ -163,6 +168,8 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
   <p>{intro}</p>
 </div>
 
+{freshness_section}
+
 {lists_section}
 
 {affordability_section}
@@ -181,7 +188,7 @@ STATE_PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="../about.html">About</a>
   &middot; <a href="../methodology.html">Data &amp; Methodology</a>
   &middot; <a href="../contact.html">Contact</a>
@@ -455,7 +462,7 @@ FAQ_BLOCK = """<div class="content-section" style="padding-top:0;">
   </div>
   <div class="faq-item">
     <h4>How do {state_name} home prices compare to the rest of the country?</h4>
-    <p>The typical (median) county in {state_name} has a home value of {state_median}, against {national_median} for the median U.S. county &mdash; {compare_phrase}. Figures come from Zillow's Home Value Index and are refreshed daily on this site.</p>
+    <p>The typical (median) county in {state_name} has a home value of {state_median}, against {national_median} for the median U.S. county &mdash; {compare_phrase}. Figures come from Zillow's monthly Home Value Index; this site checks for new data daily.</p>
   </div>
 </div>
 """
@@ -581,6 +588,7 @@ def build_state_pages(county_data, crime_data, income_data=None, city_data=None)
     cities_by_state = group_published_cities(city_data)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    page_writer = PageProvenance(ROOT)
     urls = []
     hub_rows = []
 
@@ -656,11 +664,14 @@ def build_state_pages(county_data, crime_data, income_data=None, city_data=None)
         slug = slugify(state_name)
         filename = slug + ".html"
         canonical = SITE_URL + "/states/" + filename
+        as_of = group[0].get("as_of", "")
+        if not isinstance(as_of, str):
+            as_of = ""
 
         html = STATE_PAGE_TEMPLATE.format(
             ga=GA_SNIPPET,
             title="Most Expensive & Cheapest Counties in {} ({}) | Home Price Map".format(
-                state_name, group[0].get("as_of", "")[:4]
+                state_name, as_of[:4]
             ),
             # Lead with the state's actual extremes rather than a generic
             # summary. These pages hold positions 6-12 in search but get very
@@ -686,6 +697,8 @@ def build_state_pages(county_data, crime_data, income_data=None, city_data=None)
             site_url=SITE_URL,
             state_name=state_name,
             intro=intro,
+            freshness_section=render_data_freshness(
+                counties=group, cities=cities_by_state.get(abbr) or None),
             lists_section=lists_section,
             affordability_section=affordability_section,
             crime_section=crime_section,
@@ -694,11 +707,12 @@ def build_state_pages(county_data, crime_data, income_data=None, city_data=None)
             faq_section=faq_section,
         )
 
-        (OUT_DIR / filename).write_text(html, encoding="utf-8")
+        page_writer.write(OUT_DIR / filename, html)
         urls.append(canonical)
         hub_rows.append((state_name, "states/" + filename, n))
 
-    build_hub_page(hub_rows)
+    build_hub_page(hub_rows, page_writer, county_records=items)
+    page_writer.save()
     return urls
 
 
@@ -745,6 +759,8 @@ HUB_TEMPLATE = """<!DOCTYPE html>
   <p>Pick a state to see its most expensive and most affordable counties, ranked by current median home value.</p>
 </div>
 
+{freshness_section}
+
 <div class="content-section" style="padding-top:0;">
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">
 {links}
@@ -753,7 +769,7 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="about.html">About</a>
   &middot; <a href="methodology.html">Data &amp; Methodology</a>
   &middot; <a href="contact.html">Contact</a>
@@ -765,15 +781,20 @@ HUB_TEMPLATE = """<!DOCTYPE html>
 """
 
 
-def build_hub_page(hub_rows):
+def build_hub_page(hub_rows, page_writer=None, county_records=None):
     links = "\n".join(
         '    <a class="choice-card" style="padding:12px 14px;" href="{href}">{name} <span style="color:var(--text-dim);font-size:12px;">({n})</span></a>'.format(
             href=href, name=name, n=n
         )
         for name, href, n in hub_rows
     )
-    html = HUB_TEMPLATE.format(ga=GA_SNIPPET, site_url=SITE_URL, links=links)
-    (ROOT / "states.html").write_text(html, encoding="utf-8")
+    html = HUB_TEMPLATE.format(ga=GA_SNIPPET, site_url=SITE_URL, links=links,
+                               freshness_section=render_data_freshness(
+                                   counties=county_records if county_records is not None else [], prefix=''))
+    writer = page_writer if page_writer is not None else PageProvenance(ROOT)
+    writer.write(ROOT / "states.html", html)
+    if page_writer is None:
+        writer.save()
 
 
 def build_sitemap(state_urls, county_data):
@@ -806,11 +827,24 @@ def build_sitemap(state_urls, county_data):
         SITE_URL + "/los-angeles-county-home-price-gaps.html",
     ]
     all_urls = static_urls + county_urls + city_urls + state_urls
+    provenance = PageProvenance(ROOT)
+    published_paths = []
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in all_urls:
-        lines.append("  <url><loc>" + u + "</loc></url>")
+        parts = urlsplit(u)
+        stamp = None
+        if parts.scheme == 'https' and parts.netloc == 'homepricemap.us' and not parts.query and not parts.fragment:
+            path = ROOT / (parts.path.lstrip('/') or 'index.html')
+            # A matching write receipt is required even for an existing date.
+            # Static pages without such evidence stay undated, not fresh today.
+            stamp = provenance.lastmod_for(path)
+            published_paths.append(path)
+        lastmod = '<lastmod>' + stamp + '</lastmod>' if stamp else ''
+        lines.append("  <url><loc>" + escape(u) + "</loc>" + lastmod + "</url>")
     lines.append("</urlset>")
     (ROOT / "sitemap.xml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    provenance.retain(published_paths)
+    provenance.save()
 
 
 def main():
