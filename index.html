@@ -5,20 +5,20 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4948007323848015" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Price Map — Median Home Values by County &amp; City</title>
-<meta name="description" content="Interactive map of median U.S. home prices by county and city, refreshed daily from Zillow Research data.">
+<title>U.S. Home Price Map by County &amp; City | HomePriceMap</title>
+<meta name="description" content="Explore Zillow's typical home values by city and county. Compare home prices, household income, crime data and price history—free, without signing up.">
 <link rel="canonical" href="https://homepricemap.us/">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" href="/assets/icon-512.png" sizes="512x512">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://homepricemap.us/">
-<meta property="og:title" content="Home Price Map — Median Home Values by County & City">
-<meta property="og:description" content="Interactive map of median U.S. home prices by county and city, refreshed daily from Zillow Research data.">
+<meta property="og:title" content="U.S. Home Price Map by County &amp; City | HomePriceMap">
+<meta property="og:description" content="Explore Zillow's typical home values by city and county. Compare home prices, household income, crime data and price history—free, without signing up.">
 <meta property="og:image" content="https://homepricemap.us/assets/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Home Price Map — Median Home Values by County & City">
-<meta name="twitter:description" content="Interactive map of median U.S. home prices by county and city, refreshed daily from Zillow Research data.">
+<meta name="twitter:title" content="U.S. Home Price Map by County &amp; City | HomePriceMap">
+<meta name="twitter:description" content="Explore Zillow's typical home values by city and county. Compare home prices, household income, crime data and price history—free, without signing up.">
 <meta name="twitter:image" content="https://homepricemap.us/assets/og-image.jpg">
 <script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t)d.setAttribute("data-theme",t);}catch(e){}function cur(){return d.getAttribute("data-theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}function label(){var b=document.querySelector(".theme-toggle");if(b)b.textContent=cur()==="dark"?"Light":"Dark";}window.toggleTheme=function(){var n=cur()==="dark"?"light":"dark";d.setAttribute("data-theme",n);try{localStorage.setItem("theme",n);}catch(e){}label();};document.addEventListener("DOMContentLoaded",label);})();</script>
 <link rel="stylesheet" href="css/style.css">
@@ -38,8 +38,10 @@
 </header>
 
 <div class="hero">
-  <h1>Median home prices, <span>mapped</span>.</h1>
-  <p>Explore current median home values across every U.S. county and thousands of cities. Data refreshes automatically every day from Zillow's public research data.</p>
+  <h1>U.S. home prices, <span>mapped</span>.</h1>
+  <p class="home-intro">Explore Zillow's typical home values across tracked U.S. counties and cities. Compare places, check affordability against local income, and see crime data and price history where available.</p>
+  <p class="home-data-freshness" role="status" aria-live="polite">County data: <b id="countyDataMonth">Loading&hellip;</b> &middot; City data: <b id="cityDataMonth">Loading&hellip;</b></p>
+  <p class="home-data-note">Checked daily. Zillow releases home-value data monthly; a daily check does not mean new daily prices.</p>
 </div>
 
 <section class="home-finder" aria-labelledby="homeFinderHeading">
@@ -60,7 +62,7 @@
   <a class="choice-card" href="counties.html">
     <span class="icon">🗺️</span>
     <h2>County Map</h2>
-    <p>A color-coded choropleth of median home values across all U.S. counties. Good for spotting regional trends and comparing metro areas.</p>
+    <p>A color-coded map of typical home values across tracked U.S. counties. Spot regional differences and compare places.</p>
   </a>
   <a class="choice-card" href="cities.html">
     <span class="icon">📍</span>
@@ -77,7 +79,7 @@
 <div class="stat-strip" id="statStrip" role="status" aria-live="polite">
   <div><b id="statCounties">Loading&hellip;</b>counties with price data</div>
   <div><b id="statCities">Loading&hellip;</b>cities with price data</div>
-  <div><b id="statUpdated">Loading&hellip;</b>last data refresh (UTC)</div>
+  <div><b id="statUpdated">Loading&hellip;</b>data retrieved (UTC), not the housing-data month</div>
 </div>
 
 <a class="article-feature" href="los-angeles-county-home-price-gaps.html">
@@ -93,20 +95,20 @@
 </a>
 
 <a class="article-feature" href="home-price-trends-by-state-2026.html">
-  <span class="kicker">Analysis</span>
+  <span class="kicker">Analysis &middot; July 2026 data</span>
   <b>Home prices rose in 78% of counties &mdash; but not everywhere</b>
-  <span>The median county gained 2.8% year over year, while Kentucky and Florida moved in the opposite direction. I compared all 3,071 tracked counties to see where the market is still climbing and where it is cooling. &rarr;</span>
+  <span>In July 2026, the median county gained 2.8% year over year, while Kentucky and Florida moved in the opposite direction. See the findings from that 3,071-county snapshot. &rarr;</span>
 </a>
 
 <section class="content-section">
   <h2>Understanding median home prices</h2>
-  <p>Home prices are one of the clearest signals of how a local economy and housing market are actually doing, but they're also easy to get wrong when you only see a single national headline number. The truth is that home values vary enormously from one county to the next, and even between neighboring cities in the same metro area. HomePriceMap exists to make that variation visible: instead of a single national average, you get a color-coded, searchable map of median home values for every U.S. county and thousands of individual cities and towns, so you can compare the place you live, the place you're moving to, or the place you're just curious about.</p>
+  <p>Home values can vary sharply between counties and even between cities in the same metro area. HomePriceMap makes those differences easier to explore with searchable maps of Zillow's typical home values for tracked U.S. counties and thousands of cities and towns. Start with the place you live or one you're considering, then compare its home values, household income and price history with other places. Coverage varies by dataset; a place with a map value may not have enough matched data for a full profile.</p>
 
   <h3>What "median home value" actually means</h3>
   <p>The figures on this site come from Zillow Research's Zillow Home Value Index (ZHVI), which tracks the typical value of homes that fall in the 35th to 65th percentile range for a given region — in plain terms, the broad middle of the market, not the cheapest fixer-uppers or the most expensive luxury listings. Zillow smooths and seasonally adjusts the raw data, which is why the numbers here tend to be more stable month-to-month than a simple average of recent sale prices would be.</p>
 
   <h3>How often is this updated</h3>
-  <p>An automated job checks for new data every day. Zillow itself typically republishes ZHVI figures once a month, usually around the 16th, so most days this just confirms the numbers haven't changed — but whenever a new month's data is released, it shows up here automatically, usually within 24 hours.</p>
+  <p>An automated job checks Zillow's source files daily, but ZHVI home values are released monthly, not daily. The county and city months above come from the observations in those files, independently of when we retrieved them. A month range means records cover different source months. If a month is unavailable, check the dated individual profiles rather than treating the retrieval date as a housing-data date. Historical analyses keep their original snapshot dates.</p>
 
   <h3>Frequently asked questions</h3>
   <div class="faq-item">
@@ -129,7 +131,7 @@
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="about.html">About</a>
   &middot; <a href="methodology.html">Data &amp; Methodology</a>
   &middot; <a href="contact.html">Contact</a>
