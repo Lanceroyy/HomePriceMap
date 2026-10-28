@@ -1,4 +1,6 @@
 import json
+from html import unescape
+import re
 import sys
 import tempfile
 import unittest
@@ -15,15 +17,36 @@ class HomeStatsTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.data = Path(self.tmp.name)
         self.counties = {'updated': '2026-10-05T07:40:35.228667Z', 'count': 999,
-                         'counties': {'01': {'value': 200000}, '02': {'value': None}}}
+                         'counties': {'01': {'value': 200000, 'as_of': '2026-08-31'}, '02': {'value': None}}}
         self.cities = {'updated': '2026-10-04T00:00:00Z', 'count': 999,
-                       'cities': [{'value': 300000}, {'value': 400000}, {'value': None}]}
+                       'cities': [{'value': 300000, 'as_of': '2026-09-30'},
+                                  {'value': 400000, 'as_of': '2026-09-30'}, {'value': None}]}
         for filename, payload in [('county_prices.json', self.counties), ('city_prices.json', self.cities)]:
             (self.data / filename).write_text(json.dumps(payload), encoding='utf-8')
 
     def test_counts_actual_priced_records_not_metadata(self):
-        self.assertEqual({'county_count': 1, 'city_count': 2, 'updated': self.counties['updated']},
+        self.assertEqual({'county_count': 1, 'city_count': 2, 'updated': self.counties['updated'],
+                          'county_data_period': {'oldest': '2026-08-31', 'newest': '2026-08-31'},
+                          'city_data_period': {'oldest': '2026-09-30', 'newest': '2026-09-30'}},
                          build_summary(self.data))
+
+    def test_source_period_keeps_older_records_visible(self):
+        self.cities['cities'][0]['as_of'] = '2026-07-31'
+        (self.data / 'city_prices.json').write_text(json.dumps(self.cities))
+        self.assertEqual({'oldest': '2026-07-31', 'newest': '2026-09-30'},
+                         build_summary(self.data)['city_data_period'])
+
+    def test_unknown_or_invalid_source_dates_never_use_retrieval_date(self):
+        for stamp in (None, '', '2026-02-30', '20260930', '2026-09-30T00:00:00Z', 20260930):
+            self.cities['cities'][0]['as_of'] = stamp
+            (self.data / 'city_prices.json').write_text(json.dumps(self.cities))
+            with self.subTest(stamp=stamp):
+                summary = build_summary(self.data)
+                self.assertIsNone(summary['city_data_period'])
+                self.assertEqual(self.counties['updated'], summary['updated'])
+                self.assertIsNotNone(summary['county_data_period'])
+        (self.data / 'city_prices.json').write_text('{"cities":[]}')
+        self.assertIsNone(build_summary(self.data)['city_data_period'])
 
     def test_summary_is_small_and_round_trips(self):
         output = self.data / 'summary.json'
@@ -47,6 +70,25 @@ class HomeStatsTests(unittest.TestCase):
         self.assertNotIn('county_prices.json', home)
         self.assertNotIn('city_prices.json', home)
         self.assertIn('role="status"', home)
+
+    def test_home_copy_separates_source_month_from_daily_checks(self):
+        home = (ROOT / 'index.html').read_text(encoding='utf-8')
+        expected = 'U.S. Home Price Map by County & City | HomePriceMap'
+        title = re.search(r'<title>(.*?)</title>', home).group(1)
+        social = re.findall(r'<meta (?:property="og:title"|name="twitter:title") content="([^"]+)"', home)
+        self.assertEqual(expected, unescape(title))
+        self.assertEqual([expected, expected], [unescape(value) for value in social])
+        description = re.search(r'<meta name="description" content="([^"]+)"', home).group(1)
+        social_descriptions = re.findall(r'<meta (?:property="og:description"|name="twitter:description") content="([^"]+)"', home)
+        self.assertEqual([description, description], social_descriptions)
+        self.assertIn('typical home values', description)
+        self.assertIn('countyDataMonth', home)
+        self.assertIn('cityDataMonth', home)
+        self.assertIn('Checked daily', home)
+        self.assertIn('monthly', home)
+        self.assertNotIn('refreshed daily', home)
+        self.assertNotIn('every U.S. county', home)
+        self.assertIn('July 2026 data', home)
 
     def test_custom_catalog_output_does_not_implicitly_write_summary(self):
         # Empty sources still produce a valid empty catalog with no optional joins.
