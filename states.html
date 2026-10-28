@@ -42,6 +42,11 @@
   <p>Pick a state to see its most expensive and most affordable counties, ranked by current median home value.</p>
 </div>
 
+<section class="content-section data-freshness" style="padding-top:0;" aria-label="Data freshness">
+<p><b>County housing-data period:</b> September 2026. <a href="data/county_prices.json">County source retrieval/check time (UTC)</a> is recorded in the feed's <code>updated</code> field when available, not in the housing-data period.</p>
+<p class="history-note">Checked daily for new monthly Zillow releases, not new daily prices. Income and crime data are updated separately, not by the daily housing-data check. Unavailable means observation dates are missing or invalid.</p>
+</section>
+
 <div class="content-section" style="padding-top:0;">
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;">
     <a class="choice-card" style="padding:12px 14px;" href="states/alabama.html">Alabama <span style="color:var(--text-dim);font-size:12px;">(67)</span></a>
@@ -100,7 +105,7 @@
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="about.html">About</a>
   &middot; <a href="methodology.html">Data &amp; Methodology</a>
   &middot; <a href="contact.html">Contact</a>

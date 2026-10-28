@@ -54,6 +54,12 @@
   <p>HomePriceMap tracks 62 counties in New York. The typical (median) county in the state has a home value of $254,056, which is +10.1% above the U.S. national county median of $230,723. Below are the most expensive and most affordable counties in New York by current median home value.</p>
 </div>
 
+<section class="content-section data-freshness" style="padding-top:0;" aria-label="Data freshness">
+<p><b>County housing-data period:</b> September 2026. <a href="../data/county_prices.json">County source retrieval/check time (UTC)</a> is recorded in the feed's <code>updated</code> field when available, not in the housing-data period.</p>
+<p><b>City housing-data period:</b> September 2026. <a href="../data/city_prices.json">City source retrieval/check time (UTC)</a> is recorded in the feed's <code>updated</code> field when available, not in the housing-data period.</p>
+<p class="history-note">Checked daily for new monthly Zillow releases, not new daily prices. Income and crime data are updated separately, not by the daily housing-data check. Unavailable means observation dates are missing or invalid.</p>
+</section>
+
 <div class="content-section" style="padding-top:0;">
   <h2>Most Expensive Counties in New York</h2>
   <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span>1. <a href="../counties/ny-new-york-county.html">New York County</a></span><b class="figure" style="color:var(--accent-2);">$1,247,381</b></div>
@@ -289,7 +295,7 @@
   </div>
   <div class="faq-item">
     <h4>How do New York home prices compare to the rest of the country?</h4>
-    <p>The typical (median) county in New York has a home value of $254,056, against $230,723 for the median U.S. county &mdash; roughly 10.1% higher. Figures come from Zillow's Home Value Index and are refreshed daily on this site.</p>
+    <p>The typical (median) county in New York has a home value of $254,056, against $230,723 for the median U.S. county &mdash; roughly 10.1% higher. Figures come from Zillow's monthly Home Value Index; this site checks for new data daily.</p>
   </div>
 </div>
 
@@ -300,7 +306,7 @@
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="../about.html">About</a>
   &middot; <a href="../methodology.html">Data &amp; Methodology</a>
   &middot; <a href="../contact.html">Contact</a>
