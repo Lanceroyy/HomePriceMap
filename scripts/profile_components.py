@@ -1,4 +1,4 @@
-"""Shared static components for generated city and county profiles."""
+"""Shared static components for generated profiles and state pages."""
 from datetime import date
 from html import escape
 import json
@@ -12,6 +12,52 @@ def _money(value):
 def _month_label(iso_date):
     parsed = date.fromisoformat(iso_date)
     return parsed.strftime("%b %Y")
+
+
+def source_period_label(records):
+    """A collection's observation period is unknown if any priced row is undated."""
+    dates = []
+    for record in records or []:
+        if record.get('value') is None:
+            continue
+        stamp = record.get('as_of')
+        try:
+            parsed = date.fromisoformat(stamp) if isinstance(stamp, str) else None
+        except ValueError:
+            return 'Unavailable'
+        if parsed is None or parsed.isoformat() != stamp:
+            return 'Unavailable'
+        dates.append(parsed)
+    if not dates:
+        return 'Unavailable'
+    oldest, newest = min(dates), max(dates)
+    first, last = oldest.strftime('%B %Y'), newest.strftime('%B %Y')
+    return first if first == last else first + ' – ' + last
+
+
+def render_data_freshness(counties=None, cities=None, prefix='../'):
+    """Separate observation months from retrieval metadata without daily HTML churn.
+
+    Links expose the existing feed's check time on demand. Embedding a daily
+    fetch timestamp here would reset content-based lastmod with no new prices.
+    """
+    rows = []
+    for label, records, filename in (
+            ('County', counties, 'county_prices.json'), ('City', cities, 'city_prices.json')):
+        if records is None:
+            continue
+        href = escape(prefix + 'data/' + filename, quote=True)
+        rows.append('<p><b>{label} housing-data period:</b> {period}. '
+                    '<a href="{href}">{label} source retrieval/check time (UTC)</a> '
+                    'is recorded in the feed\'s <code>updated</code> field when available, '
+                    'not in the housing-data period.</p>'.format(
+                        label=label, period=escape(source_period_label(records)), href=href))
+    return ('<section class="content-section data-freshness" style="padding-top:0;" '
+            'aria-label="Data freshness">\n' + '\n'.join(rows) +
+            '\n<p class="history-note">Checked daily for new monthly Zillow releases, '
+            'not new daily prices. Income and crime data are updated separately, '
+            'not by the daily housing-data check. Unavailable means observation dates '
+            'are missing or invalid.</p>\n</section>')
 
 
 def _valid_points(points):

@@ -7,6 +7,7 @@ city_pages_builder.py. It joins the small set of facts needed by the browser so
 visitors never have to download all source datasets to compare two places.
 """
 import argparse
+from datetime import date
 import json
 from pathlib import Path
 
@@ -149,6 +150,23 @@ def write_catalog(catalog, output_path=DEFAULT_OUTPUT):
     )
 
 
+def _data_period(records):
+    dates = []
+    for record in records:
+        if record.get("value") is None:
+            continue
+        stamp = record.get("as_of")
+        try:
+            parsed = date.fromisoformat(stamp) if isinstance(stamp, str) else None
+        except ValueError:
+            return None
+        # Do not hide an undated priced record behind the newest dated one.
+        if parsed is None or parsed.isoformat() != stamp:
+            return None
+        dates.append(stamp)
+    return {"oldest": min(dates), "newest": max(dates)} if dates else None
+
+
 def build_summary(data_dir=DEFAULT_DATA_DIR):
     """Homepage coverage counters should not require downloading the price feeds.
 
@@ -162,6 +180,8 @@ def build_summary(data_dir=DEFAULT_DATA_DIR):
         "county_count": sum(r.get("value") is not None for r in counties.get("counties", {}).values()),
         "city_count": sum(r.get("value") is not None for r in cities.get("cities", [])),
         "updated": counties.get("updated") or cities.get("updated"),
+        "county_data_period": _data_period(counties.get("counties", {}).values()),
+        "city_data_period": _data_period(cities.get("cities", [])),
     }
 
 

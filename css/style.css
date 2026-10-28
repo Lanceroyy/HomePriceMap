@@ -210,6 +210,10 @@ header.topbar nav a.active { color: var(--text); }
   max-width: 620px;
   margin: 0 auto 36px;
 }
+.hero .home-intro { margin-bottom: 18px; }
+.hero .home-data-freshness { font-size: 14px; margin-bottom: 10px; }
+.hero .home-data-freshness b { color: var(--text); }
+.hero .home-data-note { font-size: 13px; margin-bottom: 0; }
 
 .choice-grid {
   display: grid;

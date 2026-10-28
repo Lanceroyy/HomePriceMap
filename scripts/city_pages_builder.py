@@ -36,7 +36,11 @@ from pathlib import Path
 from urllib.parse import quote_plus
 
 from city_identity import city_candidates_by_key, match_city_source, safe_city_history
-from profile_components import load_history_series, prune_stale_html, render_history_section
+from profile_components import (
+    load_history_series, prune_stale_html, render_history_section,
+    render_data_freshness, source_period_label,
+)
+from page_provenance import PageProvenance
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -165,10 +169,12 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <div class="hero" style="text-align:left;max-width:760px;">
   <p style="font-size:13px;color:var(--text-dim);"><a href="/">Home</a> &rsaquo; <a href="../states.html">States</a> &rsaquo; <a href="../states/{state_slug}.html">{state_name}</a> &rsaquo; {city_name}</p>
   <h1 style="font-size:30px;">Median Home Price in {city_name}, {state}</h1>
-  <p>The median home value in <b>{city_name}, {state}</b> is <b>{value_fmt}</b> as of {as_of}, {yoy_sentence}</p>
+  <p>The median home value in <b>{city_name}, {state}</b> is <b>{value_fmt}</b>, {yoy_sentence}</p>
   {map_link}
   <p><a class="button-link" href="../compare.html#places={compare_id}">Compare {city_name} with another place</a></p>
 </div>
+
+{freshness_section}
 
 <div class="choice-grid profile-stats">
   <div class="choice-card" style="text-align:center;">
@@ -205,7 +211,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
 <footer class="site-footer">
   Data source: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noopener">Zillow Research (ZHVI)</a>,
-  refreshed daily via automated job. Not affiliated with or endorsed by Zillow.
+  checked daily for new monthly data. Not affiliated with or endorsed by Zillow.
   &middot; <a href="../about.html">About</a>
   &middot; <a href="../methodology.html">Data &amp; Methodology</a>
   &middot; <a href="../contact.html">Contact</a>
@@ -508,6 +514,7 @@ def build():
     }
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    page_writer = PageProvenance(ROOT)
     urls = []
     expected_filenames = set()
     seen = set()
@@ -529,6 +536,8 @@ def build():
             income_rec = match_city_source(c, income, city_candidates, allow_city_suffix=True)
             yoy = c.get("yoy_pct")
             as_of = c.get("as_of", "")
+            if not isinstance(as_of, str):
+                as_of = ""
 
             if yoy is None:
                 yoy_sentence = "with no year-over-year comparison currently available."
@@ -600,10 +609,13 @@ def build():
                 value_fmt=fmt_money(value),
                 yoy_fmt=("n/a" if yoy is None else ("+" if yoy > 0 else "") + str(yoy) + "%"),
                 population_fmt=format(int(cr.get("population") or 0), ","),
-                as_of=as_of,
+                freshness_section=render_data_freshness(cities=[c]),
                 yoy_sentence=yoy_sentence,
                 comparison=comparison,
-                local_comparison_section=local_comparison_section(c, eligible_by_location),
+                local_comparison_section=(
+                    local_comparison_section(c, eligible_by_location)
+                    if source_period_label([c]) != 'Unavailable' else ''
+                ),
                 targeted_context_section=targeted_context_section(c, income_rec, county_rec),
                 income_section=income_section(name, value, income_rec),
                 crime_section=crime_section(name, cr, national_violent),
@@ -618,7 +630,7 @@ def build():
                     "{}, {}".format(name, state),
                 ),
             )
-            (OUT_DIR / filename).write_text(html, encoding="utf-8")
+            page_writer.write(OUT_DIR / filename, html)
             urls.append(canonical)
 
     prune_stale_html(
@@ -626,6 +638,7 @@ def build():
         expected_filenames,
         minimum_expected=MIN_EXPECTED_PROFILES,
     )
+    page_writer.save()
     return urls
 
 

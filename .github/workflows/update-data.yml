@@ -51,7 +51,7 @@ jobs:
           # temporarily shelves the just-generated data files so the pull
           # can apply cleanly, then restores them.
           git pull --rebase --autostash origin main
-          git add data/site_summary.json data/county_prices.json data/city_prices.json data/place_index.json data/history/ counties/ cities/ states/ states.html sitemap.xml robots.txt
+          git add data/site_summary.json data/county_prices.json data/city_prices.json data/place_index.json data/sitemap_page_provenance.json data/history/ counties/ cities/ states/ states.html sitemap.xml robots.txt
           if ! git diff --cached --quiet; then
             git commit -m "chore: daily home price data + SEO page refresh"
             git push
