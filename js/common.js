@@ -319,6 +319,8 @@ function showInfo(el, { title, value, yoy, crime, income, track, regionType, pro
   `;
 
   if (track) {
+    // A new selection should show its heading, not inherit the previous card's scroll.
+    el.scrollTop = 0;
     trackEvent("region_select", {
       region: title,
       region_type: type,

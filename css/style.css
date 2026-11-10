@@ -797,6 +797,9 @@ footer.site-footer {
   position: absolute;
   bottom: 14px;
   right: 14px;
+  /* Leave room for the top-right zoom buttons on short maps. */
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
   z-index: 800;
   background: var(--panel);
   border: 1px solid var(--border);
@@ -960,7 +963,8 @@ footer.site-footer {
   .panel {
     top: 8px;
     left: 8px;
-    right: 8px;
+    /* Keep the search panel clear of Leaflet's upper-right touch zoom buttons. */
+    right: 52px;
     width: auto;
     padding: 10px 12px;
   }
@@ -987,8 +991,7 @@ footer.site-footer {
     /* Above the info box, so an expanded legend overlays it cleanly
        instead of the two colliding. */
     z-index: 810;
-    max-height: 60vh;
-    overflow-y: auto;
+    max-height: min(60vh, calc(100% - 100px));
   }
   .legend-body { display: none; }
   .legend.open .legend-body { display: block; }
@@ -1025,6 +1028,14 @@ footer.site-footer {
   html:not(.map-page) header.topbar nav { width: 100%; justify-content: space-between; }
   html:not(.map-page) header.topbar nav a,
   html:not(.map-page) .theme-toggle { margin-left: 0; }
+}
+
+@media (max-height: 400px) {
+  .info-box {
+    /* Keep the bottom-anchored card below the search field on short maps. */
+    max-height: calc(100% - 120px);
+    overflow-y: auto;
+  }
 }
 
 @media (max-width: 380px) {
