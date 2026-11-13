@@ -118,14 +118,11 @@ const PRICE_BREAKS = [150000, 200000, 260000, 340000, 460000, 650000, 1000000];
 // rises monotonically, so "darker = cheaper" holds in greyscale or in print.
 const COLOR_RAMP = ["#440154", "#414487", "#2f6c8e", "#21918c", "#22a884", "#44bf70", "#7ad151", "#fde725"];
 
-// --- Mortgage-rate affiliate CTA -----------------------------------------
-// Set AFFILIATE_URL once you're approved for an affiliate program (e.g.
-// LendingTree, Credible, Rocket Mortgage). Leave it null and the CTA simply
-// won't render anywhere -- no broken/placeholder links go live by accident.
-// Takes priority over the house-plans CTA below when active, since a
-// mortgage-rate check is relevant everywhere, not just affordable markets.
-const AFFILIATE_URL = null; // e.g. "https://www.lendingtree.com/your-affiliate-id"
-const AFFILIATE_LABEL = "Check today's mortgage rates";
+// --- Mortgage Research Center affiliate CTA (via CJ) ---------------------
+// Keep the CJ tracking URL and supplied link text intact. Set the URL to
+// null to disable the placement if the creative or program terms change.
+const AFFILIATE_URL = "https://www.jdoqocy.com/click-101818616-17168355";
+const AFFILIATE_LABEL = "Get Matched with a Top Home Loan Lender";
 
 // --- House-plans affiliate CTA (Architectural Designs, via CJ) -----------
 // Only shown on affordable markets (median value at or below the
@@ -139,10 +136,11 @@ const HOUSEPLANS_MAX_VALUE = 300000;
 
 // data-* attributes feed the delegated click handler above, so each affiliate
 // click is attributed to the specific region and price that produced it.
-function affiliateCta(regionLabel, value, regionType, selectionMethod) {
+function affiliateCta(regionLabel, value, regionType, selectionMethod, showMortgage) {
   const attrs = `data-region="${escapeAttr(regionLabel)}" data-region-type="${escapeAttr(regionType)}" data-selection-method="${escapeAttr(selectionMethod || "preview")}" data-value="${value == null ? "" : Math.round(value)}"`;
-  if (AFFILIATE_URL) {
-    return `<a class="mortgage-cta" data-affiliate="mortgage" ${attrs} href="${AFFILIATE_URL}" target="_blank" rel="noopener sponsored">${AFFILIATE_LABEL} in ${regionLabel} &rarr;</a>`;
+  if (showMortgage) {
+    return `<p class="mortgage-disclosure">Home Price Map may earn a commission if you submit a request through this link.</p>
+      <a class="mortgage-cta" data-affiliate="mortgage" ${attrs} href="${AFFILIATE_URL}" target="_top" rel="sponsored">${AFFILIATE_LABEL}</a>`;
   }
   if (HOUSEPLANS_URL && value != null && value <= HOUSEPLANS_MAX_VALUE) {
     return `<a class="mortgage-cta" data-affiliate="house-plans" ${attrs} href="${HOUSEPLANS_URL}" target="_blank" rel="noopener sponsored">${HOUSEPLANS_LABEL} &rarr;</a>`;
@@ -307,15 +305,19 @@ function renderLegend(el, breaks) {
 function showInfo(el, { title, value, yoy, crime, income, track, regionType, profileUrl, shareUrl }) {
   const cls = yoy > 0 ? "up" : yoy < 0 ? "down" : "";
   const type = regionType || "region";
-  const ctaHtml = affiliateCta(title, value, type, track);
+  const incomeHtml = incomeBlock(income, value);
+  // Place the mortgage link below the figures for a deliberate selection.
+  const showMortgage = Boolean(AFFILIATE_URL && track && value != null && incomeHtml);
+  const ctaHtml = affiliateCta(title, value, type, track, showMortgage);
   el.innerHTML = `
     <div class="region-name">${title}</div>
     <div class="region-value">${fmtMoney(value)}</div>
     <div class="region-yoy ${cls}">${fmtYoy(yoy)} year-over-year</div>
-    ${incomeBlock(income, value)}
+    ${incomeHtml}
+    ${showMortgage ? ctaHtml : ""}
     ${crimeBlock(crime)}
     ${regionActions(title, type, profileUrl, shareUrl, track)}
-    ${ctaHtml}
+    ${showMortgage ? "" : ctaHtml}
   `;
 
   if (track) {
@@ -331,7 +333,7 @@ function showInfo(el, { title, value, yoy, crime, income, track, regionType, pro
     });
     if (ctaHtml) {
       trackEvent("affiliate_cta_view", {
-        affiliate: AFFILIATE_URL ? "mortgage" : "house-plans",
+        affiliate: showMortgage ? "mortgage" : "house-plans",
         region: title,
         region_type: type,
         region_value: value == null ? 0 : Math.round(value),

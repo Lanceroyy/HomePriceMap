@@ -793,6 +793,14 @@ footer.site-footer {
 }
 .mortgage-cta:hover { background: var(--accent-hover); text-decoration: none; }
 
+.mortgage-disclosure {
+  margin: 10px 0 0;
+  color: var(--text);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.mortgage-disclosure + .mortgage-cta { margin-top: 5px; }
+
 .legend {
   position: absolute;
   bottom: 14px;
